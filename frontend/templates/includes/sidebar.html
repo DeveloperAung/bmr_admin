@@ -1,0 +1,88 @@
+{% load static %}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_user_list' %}">
+                <i class="fa fa-users menu-icon"></i>
+                <span class="menu-title">Admin Users</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./pages/widgets/widgets.html">
+                <i class="fa fa-film menu-icon"></i>
+                <span class="menu-title">Media</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dhamma_class_list' %}">
+                <i class="fa fa-calendar menu-icon"></i>
+                <span class="menu-title">Dhamma Classes</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+               aria-controls="ui-basic">
+                <i class="fa fa-folder-open-o menu-icon"></i>
+                <span class="menu-title">Manage Posts</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/accordions.html">Weekly Activities</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/buttons.html">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/badges.html">Books</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/breadcrumbs.html">Travel Posts</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/dropdowns.html">Friday Activities</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/modals.html">Success Stories</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-advanced" aria-expanded="false"
+               aria-controls="ui-advanced">
+                <i class="fa fa-file-o menu-icon"></i>
+                <span class="menu-title">Single Pages</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-advanced">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home_setting_video_listing' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home_page_banner_list' %}">Home Banner</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'single_page_list' %}">Others</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
+               aria-controls="form-elements">
+                <i class="icon-cog menu-icon"></i>
+                <span class="menu-title">Settings</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="./pages/forms/basic_elements.html">Event Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/forms/advanced_elements.html">Event Sub Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/forms/validation.html">Post Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/forms/wizard.html">Donation Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./pages/forms/wizard.html">Donation Sub Categories</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact_us_list' %}">
+                <i class="fa fa-comments-o menu-icon"></i>
+                <span class="menu-title">Contact Us</span>
+            </a>
+        </li>
+    </ul>
+</nav>

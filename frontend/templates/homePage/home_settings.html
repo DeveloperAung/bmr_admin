@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Home Settings</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Index</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Home Setting Video Listing</h4>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="table-sorter-wrapper col-lg-12 table-responsive">
+              <table id="sortable-table-1" class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="sortStyle">Title<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">File Type<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Embed Code<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Edit<i class="ti-angle-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Live Stream Channel</td>
+                    <td>live video</td>
+                    <td>E28342KAFN</td>
+                    <td>
+                      <a href="{% url 'home_setting_video_edit' %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Video1</td>
+                    <td>home video</td>
+                    <td>E28342KAFN</td>
+                    <td>
+                      <a href="{% url 'home_setting_video_edit' %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Video2</td>
+                    <td>home video</td>
+                    <td>E28342KAFN</td>
+                    <td>
+                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Video3</td>
+                    <td>home video</td>
+                    <td>E28342KAFN</td>
+                    <td>
+                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {% include 'includes/pagination.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

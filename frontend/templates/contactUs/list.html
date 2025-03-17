@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Contact Us</a></li>
+    <li class="breadcrumb-item active" aria-current="page">All</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Contact Us</h4>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="table-sorter-wrapper col-lg-12 table-responsive">
+              <table id="sortable-table-1" class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="sortStyle">Name<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Email<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Subject<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Received at<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Replied at<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>QA Tester</td>
+                    <td>john@test.com</td>
+                    <td>Subject</td>
+                    <td>Subject</td>
+                    <td>123456789</td>
+                    <td>
+                      <a href="{% url 'contact_us_edit' %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></a>
+                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>QA Tester</td>
+                    <td>john@test.com</td>
+                    <td>Subject</td>
+                    <td>Subject</td>
+                    <td>123456789</td>
+                    <td>
+                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
+                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>QA Tester</td>
+                    <td>john@test.com</td>
+                    <td>Subject</td>
+                    <td>Subject</td>
+                    <td>123456789</td>
+                    <td>
+                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
+                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>QA Tester</td>
+                    <td>john@test.com</td>
+                    <td>Subject</td>
+                    <td>Subject</td>
+                    <td>123456789</td>
+                    <td>
+                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
+                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {% include 'includes/pagination.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
