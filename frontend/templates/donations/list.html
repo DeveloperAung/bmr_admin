@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Donations </a></li>
+    <li class="breadcrumb-item active" aria-current="page">All</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Donation List</h4>
+              </div>
+              <div class="col-md-6 float-end text-end">
+                <a class="btn btn-primary" href="{% url 'register_admin_user' %}"><i class="fa fa-plus"> Create New Donation</i></a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="table-sorter-wrapper col-lg-12 table-responsive">
+              <table id="sortable-table-1" class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="sortStyle">Name<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Amount<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Category<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Sub Category<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Remarks<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Event Date<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Zin Tun</td>
+                    <td>$100</td>
+                    <td>Meal</td>
+                    <td>Breakfast</td>
+                    <td>Breakfast</td>
+                    <td>2020-05-07</td>
+                    <td>
+                      <a href="{% url 'donation_edit' %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></a>
+                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {% include 'includes/pagination.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

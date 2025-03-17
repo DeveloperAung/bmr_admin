@@ -1,0 +1,31 @@
+from django.db import models
+
+from api.core.models import BaseModel
+from api.events.models import EventDate
+
+
+class DonationCategory(BaseModel):
+    title = models.CharField(max_length=250)
+    is_date_required = models.BooleanField(default=True)
+    is_multi_select_required = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class DonationSubCategory(BaseModel):
+    donation_category = models.ForeignKey(DonationCategory, on_delete=models.SET_NULL,
+                                          related_name='donation_sub_category')
+    title = models.CharField(max_length=250)
+
+    def __unicode__(self):
+        return self.title
+
+
+class Donation(BaseModel):
+    name = models.CharField(max_length=250)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
+    event = models.ForeignKey(EventDate, on_delete=models.SET_NULL, related_name='donation')
+    donation_sub_category = models.ForeignKey(DonationSubCategory, on_delete=models.SET_NULL)
+    remarks = models.TextField(blank=True, null=True)
+    

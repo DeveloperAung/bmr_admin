@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def donation_list(request):
+    return render(request, 'donations/list.html')
+
+
+def donation_edit(request):
+    return render(request, 'donations/create.html')
