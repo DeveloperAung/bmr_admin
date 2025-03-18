@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+API_BASE_URL = "http://127.0.0.1:8000"
 
 # Application definition
 
@@ -37,7 +41,82 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    "rest_framework_simplejwt",
+    "corsheaders",
+
+    'api.adminUsers',
+    'api.contactUs',
+    'api.donations',
+    'api.events',
+    'api.homePage',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DATETIME_FORMAT": "%d/%m/%Y %I:%M %p",
+    "DATE_FORMAT": "%d/%m/%Y",
+    "TIME_FORMAT": "%I:%M %p",
+}
+
+# JWT Settings (Custom Expiry)
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3*60),  # Short-lived access token
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Refresh token lasts 7 days
+    "ROTATE_REFRESH_TOKENS": True,  # Issue new refresh token every refresh
+    "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens
+    "AUTH_HEADER_TYPES": ("Bearer",),  # Use "Bearer <Token>"
+}
+
+# LOGGING START
+LOG_DIR = os.path.join(BASE_DIR, "logs")  # Set logs directory
+
+if not os.path.exists(LOG_DIR):  # Ensure logs directory exists
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(LOG_DIR, "api_errors.log"),  # Ensure correct path
+            "formatter": "verbose",
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file", "console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
+# LOGGING END
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +127,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'api.core.middleware.CurrentUserMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+]
+
+# CORS: Allow Frontend to Access API
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Frontend React/Vue/Angular app
+    "http://127.0.0.1:8000",  # Django frontend
 ]
 
 ROOT_URLCONF = 'bmr_admin.urls'
@@ -67,6 +153,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'adminUsers.AdminUser'
 
 WSGI_APPLICATION = 'bmr_admin.wsgi.application'
 

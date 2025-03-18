@@ -16,23 +16,32 @@
           <div class="card-title mt-4">
             <div class="d-flex justify-content-between row">
               <div class="col-md-6">
-                <h4>Reply to User</h4>
+                <h4>Reply to {{ data.name }}</h4>
               </div>
             </div>
           </div>
-          <form class="form-sample">
+          {% if data %}
+          <form class="form-sample" action="{% url 'contact_us_edit' data.uuid %}" method="post">
+            {% csrf_token %}
+            <h5>on {{ data.created_at }}, {{ data.name }} at {{ data.email }} wrote.. </h5>
+          {% else %}
+              <p style="color:red;">Error: Data is missing, cannot edit.</p>
+          {% endif %}
             <div class="row">
               <div class="form-group">
-                <label for="idPageTitle">Text Message</label>
-                <input type="text" class="form-control" id="idPageTitle" placeholder="Title">
+                <input type="text" class="form-control" id="idPageTitle" value="{{ data.message }}" readonly>
               </div>
               <div class="form-group">
-                <label for="idPageTitleMM">Reply Message</label>
-                <textarea rows="10" type="text" class="form-control" id="idPageTitleMM" placeholder="Title in MM"></textarea>
+                <label for="idReplyMessage">Reply Message</label>
+                <textarea rows="10" type="text" class="form-control" id="idReplyMessage" placeholder="Reply Message">{{ data.reply_message }}</textarea>
               </div>
             </div>
-            <button type="submit" class="btn btn-danger me-2"><i class="fa fa-times"></i> Reply</button>
-            <button type="submit" class="btn btn-primary me-2"><i class="fa fa-save"></i> Cancel</button>
+            <div class="float-end">
+              {% if not data.reply_message %}
+              <button type="submit" class="btn btn-primary me-2"><i class="fa fa-save"></i> Reply</button>
+              {% endif %}
+              <a href="{% url 'contact_us_list' %}" type="submit" class="btn btn-danger me-2"><i class="fa fa-times"></i> Cancel</a>
+            </div>
           </form>
         </div>
 

@@ -33,54 +33,28 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>QA Tester</td>
-                    <td>john@test.com</td>
-                    <td>Subject</td>
-                    <td>Subject</td>
-                    <td>123456789</td>
-                    <td>
-                      <a href="{% url 'contact_us_edit' %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></a>
-                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>QA Tester</td>
-                    <td>john@test.com</td>
-                    <td>Subject</td>
-                    <td>Subject</td>
-                    <td>123456789</td>
-                    <td>
-                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
-                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>QA Tester</td>
-                    <td>john@test.com</td>
-                    <td>Subject</td>
-                    <td>Subject</td>
-                    <td>123456789</td>
-                    <td>
-                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
-                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>QA Tester</td>
-                    <td>john@test.com</td>
-                    <td>Subject</td>
-                    <td>Subject</td>
-                    <td>123456789</td>
-                    <td>
-                      <button class="btn btn-primary btm-sm"><i class="fa fa-edit"> Reply</i></button>
-                      <button class="btn btn-danger btm-sm"><i class="fa fa-delete"> Delete</i></button>
-                    </td>
-                  </tr>
+                  {% if data %}
+                  {% for i in data %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ i.name }}</td>
+                      <td>{{ i.email }}</td>
+                      <td>{{ i.subject }}</td>
+                      <td>{{ i.created_at }}</td>
+                      <td>{% if i.replied_date %}{{ i.replied_date }}{% else %}-{% endif %}</td>
+                      <td>
+                        {% if not i.replied_date %}
+                        <a href="{% url 'contact_us_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Reply</i></a>
+                        {% else %}
+                        <button class="btn btn-primary btn-xs"><i class="fa fa-delete"> Details</i></button>
+                        {% endif %}
+                        <button onclick="softDelete('{{ i.uuid }}')" class="btn btn-danger btn-xs"><i class="fa fa-delete"> Delete</i></button>
+                        <button class="btn btn-danger btn-xs delete-btn" data-url="{% url 'soft_delete_contact' i.uuid %}">Delete</button>
+
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  {% endif %}
                 </tbody>
               </table>
               {% include 'includes/pagination.html' %}
@@ -91,4 +65,8 @@
     </div>
   </div>
 </div>
+<form action="">
+  {% csrf_token %}
+</form>
+{% include 'contactUs/js/soft_delete.html' %}
 {% endblock %}

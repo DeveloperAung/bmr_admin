@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.contact_us_list, name='contact_us_list'),
-    path('edit', views.contact_us_edit, name='contact_us_edit'),
+    path('edit/id=?<uuid:uuid>/', views.contact_us_edit, name='contact_us_edit'),
+    path("delete/id=?<uuid:uuid>/", views.soft_delete_contact, name="soft_delete_contact"),
 ]

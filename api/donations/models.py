@@ -14,7 +14,7 @@ class DonationCategory(BaseModel):
 
 
 class DonationSubCategory(BaseModel):
-    donation_category = models.ForeignKey(DonationCategory, on_delete=models.SET_NULL,
+    donation_category = models.ForeignKey(DonationCategory, on_delete=models.SET_NULL, blank=True, null=True,
                                           related_name='donation_sub_category')
     title = models.CharField(max_length=250)
 
@@ -25,7 +25,9 @@ class DonationSubCategory(BaseModel):
 class Donation(BaseModel):
     name = models.CharField(max_length=250)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
-    event = models.ForeignKey(EventDate, on_delete=models.SET_NULL, related_name='donation')
-    donation_sub_category = models.ForeignKey(DonationSubCategory, on_delete=models.SET_NULL)
+    event = models.ForeignKey(EventDate, on_delete=models.SET_NULL, related_name='donation', blank=True, null=True)
+    donation_sub_category = models.ForeignKey(DonationSubCategory, on_delete=models.SET_NULL, null=True)
     remarks = models.TextField(blank=True, null=True)
-    
+
+    def __unicode__(self):
+        return self.name

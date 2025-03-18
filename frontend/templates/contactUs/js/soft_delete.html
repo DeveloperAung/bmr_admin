@@ -1,0 +1,50 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let deleteUrl = this.getAttribute("data-url");  // ✅ Get URL from button
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This message will be deleted.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Confirm"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(deleteUrl, {  // ✅ Use the correct URL from data-url
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRFToken": getCSRFToken(), // ✅ CSRF protection
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            Swal.fire("Deleted!", data.message, "success");
+                            setTimeout(() => location.reload(), 1000); // ✅ Refresh after 1 sec
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Failed to delete message.", "error");
+                        });
+                    }
+                });
+            });
+        });
+    });
+
+    // ✅ Function to Get CSRF Token (Required for Django AJAX Requests)
+    function getCSRFToken() {
+        let csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfTokenElement) {
+            return csrfTokenElement.value;  // ✅ Return token if exists
+        } else {
+            console.error("CSRF token not found in the document.");  // ✅ Log an error for debugging
+            return "";  // ✅ Return an empty string to prevent `null` errors
+        }
+    }
+
+</script>

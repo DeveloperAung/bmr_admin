@@ -17,7 +17,7 @@ class EventCategory(BaseModel):
 
 class EventSubCategory(BaseModel):
     title = models.CharField(max_length=250)
-    event_category = models.ForeignKey(EventCategory, on_delete=models.SET_NULL, related_name='event_sub_category')
+    event_category = models.ForeignKey(EventCategory, on_delete=models.SET_NULL, related_name='event_sub_category', null=True)
 
     def __unicode__(self):
         return f'{self.event_category.title} - {self.title}'
@@ -27,8 +27,8 @@ class Event(BaseModel):
     title = models.CharField(max_length=1500)
     short_description = models.CharField(max_length=1500, blank=True)
     description = models.TextField(blank=True)
-    location = models.CharField(blank=True)
-    feature_image = models.CharField(blank=True)
+    location = models.CharField(blank=True, max_length=1500)
+    feature_image = models.CharField(blank=True, max_length=1500)
     cover_image = models.ImageField(upload_to=event_image_path, blank=True)
     is_registered = models.BooleanField(default=False)
     is_short_course = models.BooleanField(default=False)
@@ -57,7 +57,7 @@ class Event(BaseModel):
 
 
 class EventDate(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="event_dates")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="event_dates", null=True)
     event_date = models.DateField()
     from_time = models.TimeField(blank=True)
     to_time = models.TimeField(blank=True)

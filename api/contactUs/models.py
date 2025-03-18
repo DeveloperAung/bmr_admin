@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from django.utils.timezone import now
 from api.core.models import BaseModel
 
 
@@ -18,5 +18,17 @@ class ContactUs(BaseModel):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name_plural = 'Contact Us'
+
+    def soft_delete(self, user):
+        self.deleted_at = now()
+        self.deleted_by = user
+        self.is_active = False
+        self.save()
+
+    def __unicode__(self):
+        return self.subject
 
 
