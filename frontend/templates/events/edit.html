@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Edit Dhamma Class - {{ data.title }}</h4>
+              </div>
+            </div>
+          </div>
+          <form class="">
+            <div class="row">
+              <div class="form-floating col-md-6">
+                <input type="email" class="form-control" id="idTitle" placeholder="Title" value="{{ data.title }}">
+                <label for="idTitle">Title</label>
+              </div>
+              <div class="form-group col-md-6">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>Select Category</option>
+                  {% if categories %}
+                  {% for c in categories %}
+                  <option value="{{ c.id }}" {% if c.title == data.category_titile %}selected{% endif %}> {{ c.title }}</option>
+                  {% endfor %}
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group form-floating col-md-6">
+                <input type="email" class="form-control" id="" placeholder="Title" value="{{ data.title }}">
+              </div>
+              <div class="form-group col-md-6">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>Open this select menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+            </div>
+          </form>
+
+            <h2>{{ event.title }}</h2>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Description:</strong> {{ event.description }}</p>
+
+            <h3>Event Dates</h3>
+            <ul>
+                {% for date in event_dates %}
+                <li>{{ date.event_date }} ({{ date.from_time }} - {{ date.to_time }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

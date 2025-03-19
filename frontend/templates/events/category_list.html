@@ -2,7 +2,7 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
+    <li class="breadcrumb-item"><a href="#">Event Category</a></li>
     <li class="breadcrumb-item active" aria-current="page">All</li>
   </ol>
 </nav>
@@ -14,10 +14,10 @@
           <div class="card-title mt-4">
             <div class="d-flex justify-content-between row">
               <div class="col-md-6">
-                <h4>Dhamma Class List</h4>
+                <h4>Event Category List</h4>
               </div>
               <div class="col-md-6 float-end text-end">
-                <a class="btn btn-primary" href="{% url 'dhamma_class_create' %}"><i class="fa fa-plus"> Create New Dhamma Class</i></a>
+                <a class="btn btn-primary" href=""><i class="fa fa-plus"> Create New Event Category</i></a>
               </div>
             </div>
           </div>
@@ -28,11 +28,7 @@
                   <tr>
                     <th>#</th>
                     <th class="sortStyle">Title<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Category<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Published<i class="ti-angle-down"></i></th>
                     <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Donation<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Registration<i class="ti-angle-down"></i></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -41,19 +37,9 @@
                   <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ i.title }}</td>
-                    <td>{{ i.category_title }}</td>
-                    <td>{% if i.published %}Yes{% else %}No{% endif %}</td>
                     <td>
-                      <button class="btn btn-xs btn-primary"><i class="fa fa-user"> Unpublished</i></button>
-                      <a href="{% url 'dhamma_class_details' i.uuid %}" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a>
-                      <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></button>
-                    </td>
-                    <td>
-                      <a href="{% url 'donation_list' %}" class="btn btn-primary btn-xs"><i class="fa fa-user"> Donation</i></a>
-                    </td>
-                    <td>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-edit"> Register</i></button>
-                      <button class="btn btn-danger btn-xs"><i class="fa fa-delete"> Attendance</i></button>
+                      <button class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></button>
+                      <button class="btn btn-danger btn-xs"><i class="fa fa-delete"> Delete</i></button>
                     </td>
                   </tr>
                   {% endfor %}

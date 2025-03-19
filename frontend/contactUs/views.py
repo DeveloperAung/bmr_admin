@@ -33,7 +33,7 @@ def contact_us_edit(request, uuid):
                 "reply_message": reply_message
             }
             # Send PUT request to update the contact message
-            response = requests.put(APIEndpoints.URL_CONTACT_US_UPDATE(uuid), json=payload, headers=headers)
+            response = requests.put(APIEndpoints.URL_CONTACT_US_DETAIL(uuid), json=payload, headers=headers)
 
             response_body = response.json()
             if response.status_code == 401:

@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import EventCategory, EventSubCategory, EventDate, Event
 
-# Register your models here.
+
+admin.site.register(EventCategory)
+admin.site.register(EventSubCategory)
+admin.site.register(Event)
+admin.site.register(EventDate)

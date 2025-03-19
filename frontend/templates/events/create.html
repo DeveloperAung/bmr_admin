@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Create New Dhamma Class</h4>
+              </div>
+            </div>
+          </div>
+            <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Event Fields -->
+    <div class="mb-3">
+        {{ form.as_p }}
+    </div>
+
+    <!-- Event Date Section -->
+    <h3>Event Dates</h3>
+    <div id="event-dates-container">
+        <div class="event-date-item mb-3">
+            <label for="event_date">Date:</label>
+            <input type="date" name="event_date[]" class="form-control" required>
+
+            <label for="from_time">From Time:</label>
+            <input type="time" name="from_time[]" class="form-control" required>
+
+            <label for="to_time">To Time:</label>
+            <input type="time" name="to_time[]" class="form-control" required>
+
+            <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
+        </div>
+    </div>
+
+    <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
+
+    <br><br>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const dateContainer = document.getElementById("event-dates-container");
+    const addDateBtn = document.getElementById("add-date-btn");
+
+    // Function to add new date fields
+    addDateBtn.addEventListener("click", function() {
+        const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
+
+        // Clear the values in the new fields
+        newDateFields.querySelectorAll("input").forEach(input => input.value = "");
+
+        dateContainer.appendChild(newDateFields);
+
+        // Reattach remove button event
+        attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
+    });
+
+    // Function to remove date fields
+    function attachRemoveEvent(button) {
+        button.addEventListener("click", function() {
+            if (document.querySelectorAll(".event-date-item").length > 1) {
+                button.parentElement.remove();
+            }
+        });
+    }
+
+    // Attach remove event to initial remove button
+    attachRemoveEvent(document.querySelector(".remove-date-btn"));
+});
+</script>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
