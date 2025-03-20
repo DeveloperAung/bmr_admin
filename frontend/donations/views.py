@@ -30,8 +30,13 @@ def donation_category_create(request):
         if request.method == "POST":
 
             title = request.POST["title"]
+            is_date_required = request.POST.get("is_date_required", "off") == "on"
+            is_multi_select_required = request.POST.get("is_multi_select_required", "off") == "on"
+
             payload = {
                 "title": title,
+                "is_date_required": is_date_required,
+                "is_multi_select_required": is_multi_select_required,
             }
             response = check_auth_request("POST", APIEndpoints.URL_DONATION_CATEGORY, request, data=payload)
 
@@ -62,11 +67,16 @@ def donation_category_edit(request, uuid):
         if request.method == "POST":
 
             title = request.POST["title"]
+            is_date_required = request.POST.get("is_date_required","off") == "on"
+            is_multi_select_required = request.POST.get("is_multi_select_required", "off") == "on"
+
             payload = {
                 "title": title,
+                "is_date_required": is_date_required,
+                "is_multi_select_required": is_multi_select_required,
             }
             response = check_auth_request("PUT", APIEndpoints.URL_DONATION_CATEGORY_DETAILS(uuid), request, data=payload)
-
+            print('res', response)
             if response.status_code == 401:  # Unauthorized
                 return redirect("login")
 

@@ -29,6 +29,8 @@
                     <th>#</th>
                     <th class="sortStyle">Title<i class="ti-angle-down"></i></th>
                     <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
+                    <th>Require Date</th>
+                    <th>Require Multi Select</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -37,6 +39,8 @@
                   <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ i.title }}</td>
+                    <td>{% if i.is_date_required %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if i.is_multi_select_required %}Yes{% else %}No{% endif %}</td>
                     <td>
                       <a href="{% url 'donation_category_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></a>
                       <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'donation_category_soft_delete' i.uuid %}"><i class="ti ti-trash"> </i></button>
