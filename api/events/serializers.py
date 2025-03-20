@@ -27,7 +27,7 @@ class EventSubCategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventSubCategory
-        fields = ['id', 'uuid', 'title', 'category_title']
+        fields = ['id', 'uuid', 'title', 'category_title', 'event_category']
 
 
 class EventSubCategoryRetrieveSerializer(serializers.ModelSerializer):

@@ -37,7 +37,7 @@ def refresh_access_token(request):
         if response.status_code == 200:
             tokens = response.json()
             request.session["access_token"] = tokens["access"]  # ✅ Store new access token
-            return tokens["access"]  # ✅ Return new access token
+            return tokens["access"]
 
         request.session.flush()
 
@@ -61,10 +61,8 @@ def check_auth_request(method, url, request, data=None, params=None):
     try:
         headers = get_auth_headers(request)
         response = requests.request(method, url, headers=headers, json=data, params=params)
-        if response.status_code == 401:  # Unauthorized
-            return redirect("login")
-        print('default response', response)
-        return response  # Return the response object for further handling
+
+        return response
 
     except requests.exceptions.RequestException as e:
         print(f"Error making request: {e}")
@@ -91,9 +89,6 @@ def login(request):
 
 
 def logout(request):
-    print('logout')
-    """Handles user logout"""
     lg_response = requests.post(APIEndpoints.URL_LOGOUT, json={"refresh_token": request.session.get("refresh_token")}, allow_redirects=False)
-    print('logout response', lg_response)
     request.session.flush()
     return redirect("login")

@@ -1,4 +1,6 @@
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<form action="">
+  {% csrf_token %}
+</form>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("#idDeleteBtn").forEach(button => {
@@ -7,7 +9,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "This message will be deleted.",
+                    text: "This data will be deleted.",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",

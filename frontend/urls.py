@@ -8,5 +8,6 @@ urlpatterns = [
     path('contact-us/', include('frontend.contactUs.urls')),
     path('donations/', include('frontend.donations.urls')),
     path('events/', include('frontend.events.urls')),
+    path('posts/', include('frontend.posts.urls')),
     path('home-page/', include('frontend.homePage.urls')),
 ]

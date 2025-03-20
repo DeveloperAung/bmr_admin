@@ -2,8 +2,8 @@
 {% block content %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Event Sub Category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+        <li class="breadcrumb-item"><a href="#">Donation Sub Category</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
     </ol>
 </nav>
 <div class="content-wrapper">
@@ -14,15 +14,15 @@
                     <div class="card-title mt-4">
                         <div class="d-flex justify-content-between row">
                             <div class="col-md-6">
-                                <h4>Edit Event Sub Category</h4>
+                                <h4>Create Donation Sub Category</h4>
                             </div>
                         </div>
                     </div>
-                    <form method="post" action="{% url 'event_sub_category_edit' data.uuid %}">
+                    <form method="post" action="{% url 'donation_sub_category_create' %}">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="idTitle"></label>
-                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
+                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title">
                         </div>
                         <div class="mb-3">
                             <label for="idCategory"></label>
@@ -30,13 +30,13 @@
                                 <option value=""> Select Category </option>
                                 {% if categories %}
                                 {% for i in categories %}
-                                <option value="{{ i.id }}" {% if i.id == data.event_category %}selected{% endif %}>{{ i.title }}</option>
+                                <option value="{{ i.id }}">{{ i.title }}</option>
                                 {% endfor %}
                                 {% endif %}
                             </select>
                         </div>
                         <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'event_sub_category_list' %}" class="btn btn-secondary">Cancel</a>
+                        <a href="{% url 'donation_category_list' %}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>

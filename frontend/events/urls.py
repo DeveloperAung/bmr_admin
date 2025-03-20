@@ -11,9 +11,11 @@ urlpatterns = [
     path('category', views.event_category_list, name='event_category_list'),
     path('category/create', views.event_category_create, name='event_category_create'),
     path('category/edit/id=?<uuid:uuid>', views.event_category_edit, name='event_category_edit'),
+    path("category/delete/id=?<uuid:uuid>/", views.event_category_soft_delete, name="event_category_soft_delete"),
 
     path('sub-category', views.event_sub_category_list, name='event_sub_category_list'),
     path('sub-category/create', views.event_sub_category_create, name='event_sub_category_create'),
     path('sub-category/edit/id=?<uuid:uuid>', views.event_sub_category_edit, name='event_sub_category_edit'),
-
+    path("sub-category/delete/id=?<uuid:uuid>/", views.event_sub_category_soft_delete,
+         name="event_sub_category_soft_delete"),
 ]

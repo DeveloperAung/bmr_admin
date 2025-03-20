@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import requests
 from frontend.adminUsers.views import get_auth_headers, check_auth_request
@@ -7,11 +8,8 @@ from frontend.events.forms import EventForm
 
 def event_category_list(request):
     try:
-        headers = get_auth_headers(request)
-
-        event_response = requests.get(APIEndpoints.URL_EVENT_CATEGORY, headers=headers)
-
-        if event_response.status_code == 401:
+        event_response = check_auth_request("GET", APIEndpoints.URL_EVENT_CATEGORY, request)
+        if event_response.status_code == 401:  # Unauthorized
             return redirect("login")
         event_response_body = event_response.json()
         context = {
@@ -33,6 +31,8 @@ def event_category_create(request):
                 "title": title,
             }
             response = check_auth_request("POST", APIEndpoints.URL_EVENT_CATEGORY, request, data=payload)
+            if response.status_code == 401:  # Unauthorized
+                return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
                 return redirect('event_category_list')
@@ -61,6 +61,8 @@ def event_category_edit(request, uuid):
                 "title": title,
             }
             response = check_auth_request("PUT", APIEndpoints.URL_EVENT_CATEGORY_DETAILS(uuid), request, data=payload)
+            if response.status_code == 401:
+                return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
                 return redirect('event_category_list')
@@ -82,15 +84,28 @@ def event_category_edit(request, uuid):
         return render(request, "events/category_edit.html", {"error": str(e)})
 
 
+def event_category_soft_delete(request, uuid):
+    if request.method == "DELETE":
+        response = check_auth_request("DELETE", APIEndpoints.URL_EVENT_CATEGORY_DETAILS(uuid), request)
+        if response.status_code == 401:
+            return redirect("login")
+
+        if response.status_code == 200:
+            return JsonResponse({"success": True, "message": "Category deleted successfully."})
+        else:
+            return JsonResponse(
+                {"success": False, "message": f"Failed to delete Category {response.status_code}."}, status=400
+            )
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
+
+
 def event_sub_category_list(request):
     try:
-        headers = get_auth_headers(request)
-
-        event_response = requests.get(APIEndpoints.URL_EVENT_SUB_CATEGORY, headers=headers)
-
-        if event_response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_EVENT_SUB_CATEGORY, request)
+        if response.status_code == 401:
             return redirect("login")
-        event_response_body = event_response.json()
+
+        event_response_body = response.json()
         context = {
             'messages': event_response_body["message"],
             'data': event_response_body["data"]["results"],
@@ -113,6 +128,8 @@ def event_sub_category_create(request):
                 "event_category": category
             }
             response = check_auth_request("POST", APIEndpoints.URL_EVENT_SUB_CATEGORY, request, data=payload)
+            if response.status_code == 401:
+                return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
                 return redirect('event_sub_category_list')
@@ -148,6 +165,8 @@ def event_sub_category_edit(request, uuid):
                 "event_category": category
             }
             response = check_auth_request("PUT", APIEndpoints.URL_EVENT_SUB_CATEGORY_DETAILS(uuid), request, data=payload)
+            if response.status_code == 401:
+                return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
                 return redirect('event_sub_category_list')
@@ -172,19 +191,29 @@ def event_sub_category_edit(request, uuid):
         return render(request, "events/sub_category_edit.html", {"error": str(e)})
 
 
-def post_category(request):
-    return render(request, '')
+def event_sub_category_soft_delete(request, uuid):
+    if request.method == "DELETE":
+        response = check_auth_request("DELETE", APIEndpoints.URL_EVENT_SUB_CATEGORY_DETAILS(uuid), request)
+        if response.status_code == 401:
+            return redirect("login")
+        if response.status_code == 200:
+            return JsonResponse({"success": True, "message": "Sub Category deleted successfully."})
+        else:
+            return JsonResponse(
+                {"success": False, "message": f"Failed to delete Sub Category {response.status_code}."}, status=400
+            )
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 
 def dhamma_class_list(request):  # event
     try:
         headers = get_auth_headers(request)
 
-        event_response = requests.get(APIEndpoints.URL_EVENT_LIST, headers=headers)
-
-        if event_response.status_code == 401:
+        response = requests.get(APIEndpoints.URL_EVENT_LIST, headers=headers)
+        if response.status_code == 401:
             return redirect("login")
-        event_response_body = event_response.json()
+
+        event_response_body = response.json()
         context = {
             'messages': event_response_body["message"],
             'data': event_response_body["data"]["results"],
@@ -193,7 +222,7 @@ def dhamma_class_list(request):  # event
     except Exception as e:
         print('error', e)
         return render(request, "events/list.html", {"error": str(e)})
-    return render(request, 'events/list.html')
+    # return render(request, 'events/list.html')
 
 
 def dhamma_class_create(request):   # event create

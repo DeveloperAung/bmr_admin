@@ -2,8 +2,8 @@
 {% block content %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Event Category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Create</li>
+        <li class="breadcrumb-item"><a href="#">Donation Category</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
 <div class="content-wrapper">
@@ -14,18 +14,18 @@
                     <div class="card-title mt-4">
                         <div class="d-flex justify-content-between row">
                             <div class="col-md-6">
-                                <h4>Create Event Category</h4>
+                                <h4>Edit Donation Category</h4>
                             </div>
                         </div>
                     </div>
-                    <form method="post" action="{% url 'event_category_create' %}">
+                    <form action="{% url 'donation_category_edit' data.uuid %}" method="post">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="idTitle"></label>
-                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title">
+                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
                         </div>
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'event_category_list' %}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{% url 'donation_category_list' %}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>

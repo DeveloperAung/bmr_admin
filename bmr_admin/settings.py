@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'api.contactUs',
     'api.donations',
     'api.events',
+    'api.posts',
     'api.homePage',
 ]
 

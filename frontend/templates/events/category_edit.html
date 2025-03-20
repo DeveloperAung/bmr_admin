@@ -22,7 +22,7 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="idTitle"></label>
-                            <input type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
+                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
                         </div>
                         <button type="submit" class="btn btn-success">Update</button>
                         <a href="{% url 'event_category_list' %}" class="btn btn-secondary">Cancel</a>
