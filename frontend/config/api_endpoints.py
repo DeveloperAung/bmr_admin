@@ -21,11 +21,19 @@ class APIEndpoints:
 
     """ Event START """
     URL_EVENT_LIST = f"{API_BASE_URL}/api/e/event/"
-    URL_EVENT_CATEGORY_LIST = f"{API_BASE_URL}/api/e/category/"
-    URL_EVENT_SUB_CATEGORY_LIST = f"{API_BASE_URL}/api/e/sub-category/"
+    URL_EVENT_CATEGORY = f"{API_BASE_URL}/api/e/category/"
+    URL_EVENT_SUB_CATEGORY = f"{API_BASE_URL}/api/e/sub-category/"
 
     @staticmethod
     def URL_EVENT_DETAILS(uuid):
         return f"{API_BASE_URL}/api/e/event/{uuid}/"
+
+    @staticmethod
+    def URL_EVENT_CATEGORY_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/e/category/{uuid}/"
+
+    @staticmethod
+    def URL_EVENT_SUB_CATEGORY_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/e/sub-category/{uuid}/"
 
     """ Event END """

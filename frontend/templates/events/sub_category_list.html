@@ -17,7 +17,7 @@
                 <h4>Event Sub Category List</h4>
               </div>
               <div class="col-md-6 float-end text-end">
-                <a class="btn btn-primary" href=""><i class="fa fa-plus"> Create New Event Sub Category</i></a>
+                <a class="btn btn-primary" href="{% url 'event_sub_category_create' %}"><i class="fa fa-plus"> Create New Event Sub Category</i></a>
               </div>
             </div>
           </div>
@@ -40,7 +40,7 @@
                     <td>{{ i.title }}</td>
                     <td>{{ i.category_title }}</td>
                     <td>
-                      <button class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></button>
+                      <a href="{% url 'event_sub_category_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></a>
                       <button class="btn btn-danger btn-xs"><i class="fa fa-delete"> Delete</i></button>
                     </td>
                   </tr>

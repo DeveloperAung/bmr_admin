@@ -9,6 +9,11 @@ urlpatterns = [
     path('details/id=?<uuid:event_uuid>', views.dhamma_class_details, name='dhamma_class_details'),
 
     path('category', views.event_category_list, name='event_category_list'),
+    path('category/create', views.event_category_create, name='event_category_create'),
+    path('category/edit/id=?<uuid:uuid>', views.event_category_edit, name='event_category_edit'),
 
     path('sub-category', views.event_sub_category_list, name='event_sub_category_list'),
+    path('sub-category/create', views.event_sub_category_create, name='event_sub_category_create'),
+    path('sub-category/edit/id=?<uuid:uuid>', views.event_sub_category_edit, name='event_sub_category_edit'),
+
 ]

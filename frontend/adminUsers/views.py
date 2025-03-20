@@ -51,10 +51,24 @@ def get_auth_headers(request):
         return {"Authorization": f"Bearer {token}"}
 
     new_token = refresh_access_token(request)
-    print('new_token', new_token)
+
     if new_token:
         return {"Authorization": f"Bearer {new_token}"}
     return {}
+
+
+def check_auth_request(method, url, request, data=None, params=None):
+    try:
+        headers = get_auth_headers(request)
+        response = requests.request(method, url, headers=headers, json=data, params=params)
+        if response.status_code == 401:  # Unauthorized
+            return redirect("login")
+        print('default response', response)
+        return response  # Return the response object for further handling
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error making request: {e}")
+        return None
 
 
 def login(request):

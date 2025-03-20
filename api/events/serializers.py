@@ -36,15 +36,17 @@ class EventSubCategoryRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventSubCategory
         fields = [
-            'id', 'uuid', 'title', 'category', 'category_title',
+            'id', 'uuid', 'title', 'event_category', 'category_title',
                   'created_at', 'created_by', 'modified_at', 'modified_by'
         ]
 
 
 class EventSubCategoryCreateSerializer(serializers.ModelSerializer):
+    # category = serializers.PrimaryKeyRelatedField(queryset=EventCategory.objects.all())
+
     class Meta:
         model = EventSubCategory
-        fields = ['title', 'category']
+        fields = ['title', 'event_category']
 
 
 class EventDateSerializer(serializers.ModelSerializer):

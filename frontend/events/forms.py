@@ -29,3 +29,9 @@ class EventDateForm(forms.ModelForm):
             "to_time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
         }
 
+
+class EventCategoryForm(forms.ModelForm):
+    class Meta:
+        model = EventCategory
+        fields = ["title"]
+
