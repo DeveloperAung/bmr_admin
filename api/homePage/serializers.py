@@ -3,7 +3,7 @@ from .models import HomeBanner
 
 
 class HomeBannerListSerializer(serializers.ModelSerializer):
-    category_title = serializers.CharField(source="category.title", read_only=True)
+    category_title = serializers.CharField(source="category.name", read_only=True)
 
     class Meta:
         model = HomeBanner
@@ -11,7 +11,7 @@ class HomeBannerListSerializer(serializers.ModelSerializer):
 
 
 class HomeBannerRetrieveSerializer(serializers.ModelSerializer):
-    category_title = serializers.CharField(source="category.title", read_only=True)
+    category_title = serializers.CharField(source="category.name", read_only=True)
 
     class Meta:
         model = HomeBanner
@@ -26,3 +26,8 @@ class HomeBannerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeBanner
         fields = ['title', 'category', 'order_index']
+
+
+class HomeBannerReorderSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    order_index = serializers.IntegerField(required=True)

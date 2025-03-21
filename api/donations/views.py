@@ -13,6 +13,7 @@ from .serializers import (
     DonationSubCategoryCreateSerializer
 )
 from ..services import BaseSoftDeleteViewSet
+from ..utlis import url_routing_error
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +33,7 @@ class DonationCategoryViewSet(BaseSoftDeleteViewSet):
                 return DonationCategoryCreateSerializer
             return DonationCategoryListSerializer
         except Exception as e:
-            print('error', e)
-            logger.error(f"Error selecting serializer: {e}")
-            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            url_routing_error(error=e)
 
 
 class DonationSubCategoryViewSet(BaseSoftDeleteViewSet):
@@ -52,6 +51,4 @@ class DonationSubCategoryViewSet(BaseSoftDeleteViewSet):
                 return DonationSubCategoryCreateSerializer
             return DonationSubCategoryListSerializer
         except Exception as e:
-            print('error', e)
-            logger.error(f"Error selecting serializer: {e}")
-            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            url_routing_error(error=e)

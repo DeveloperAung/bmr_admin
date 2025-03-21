@@ -1,8 +1,5 @@
 import logging
-
-from rest_framework import status
-
-from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 
 from .models import EventCategory, EventSubCategory, Event, EventDate
 from .serializers import EventDateSerializer
@@ -23,6 +20,7 @@ from .serializers import (
     EventUpdateSerializer,
 )
 from ..services import BaseSoftDeleteViewSet
+from ..utlis import url_routing_error
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +40,9 @@ class EventCategoryViewSet(BaseSoftDeleteViewSet):
                 return EventCategoryCreateSerializer
             return EventCategoryListSerializer
         except Exception as e:
-            print('error', e)
-            logger.error(f"Error selecting serializer: {e}")
-            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # error_title = type(e).__name__
+            # raise APIException(detail=f"Serializer selection failed: {error_title}")
+            url_routing_error(error=e)
 
 
 class EventSubCategoryViewSet(BaseSoftDeleteViewSet):
@@ -62,9 +60,7 @@ class EventSubCategoryViewSet(BaseSoftDeleteViewSet):
                 return EventSubCategoryCreateSerializer
             return EventSubCategoryListSerializer
         except Exception as e:
-            print('error', e)
-            logger.error(f"Error selecting serializer: {e}")
-            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            url_routing_error(error=e)
 
 
 class EventViewSet(BaseSoftDeleteViewSet):
@@ -72,16 +68,19 @@ class EventViewSet(BaseSoftDeleteViewSet):
 
     def get_serializer_class(self):
         """Returns different serializer based on action"""
-        if self.action == "list":
-            return EventListSerializer
-        elif self.action == "retrieve":
-            print('event list')
+        try:
+            if self.action == "list":
+                return EventListSerializer
+            elif self.action == "retrieve":
+                print('event list')
+                return EventRetrieveSerializer
+            elif self.action == "create":
+                return EventCreateSerializer
+            elif self.action in ["update", "partial_update"]:
+                return EventUpdateSerializer
             return EventRetrieveSerializer
-        elif self.action == "create":
-            return EventCreateSerializer
-        elif self.action in ["update", "partial_update"]:
-            return EventUpdateSerializer
-        return EventRetrieveSerializer
+        except Exception as e:
+            url_routing_error(error=e)
 
     # def retrieve(self, request, *args, **kwargs):
     #     """

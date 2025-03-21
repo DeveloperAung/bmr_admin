@@ -71,3 +71,9 @@ class APIEndpoints:
     def URL_POST_CATEGORY_DETAILS(uuid):
         return f"{API_BASE_URL}/api/p/category/{uuid}/"
     """ Post END """
+
+    """ Home Page START """
+    URL_HOME_BANNER_LIST = f"{API_BASE_URL}/api/h/home-banner/"
+    URL_HOME_BANNER_REORDER = f"{API_BASE_URL}/api/h/home-banner/update-order/"
+
+    """ Post END """

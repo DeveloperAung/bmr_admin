@@ -9,7 +9,10 @@ class DonationCategory(BaseModel):
     is_date_required = models.BooleanField(default=True)
     is_multi_select_required = models.BooleanField(default=True)
 
-    def __unicode__(self):
+    class Meta:
+        verbose_name_plural = 'Donation Categories'
+
+    def __str__(self):
         return self.title
 
 
@@ -18,7 +21,10 @@ class DonationSubCategory(BaseModel):
                                           related_name='donation_sub_category')
     title = models.CharField(max_length=250)
 
-    def __unicode__(self):
+    class Meta:
+        verbose_name_plural = 'Donation Sub Categories'
+
+    def __str__(self):
         return self.title
 
 
@@ -29,5 +35,5 @@ class Donation(BaseModel):
     donation_sub_category = models.ForeignKey(DonationSubCategory, on_delete=models.SET_NULL, null=True)
     remarks = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'api.events',
     'api.posts',
     'api.homePage',
+    'api.notices',
 ]
 
 REST_FRAMEWORK = {

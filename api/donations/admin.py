@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import DonationCategory, DonationSubCategory, Donation
 
-# Register your models here.
+
+admin.site.register(Donation)
+admin.site.register(DonationCategory)
+admin.site.register(DonationSubCategory)
+
