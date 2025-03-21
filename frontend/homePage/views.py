@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
@@ -16,7 +15,7 @@ def home_setting_video_edit(request):
 
 def home_page_banner_order(request):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_HOME_BANNER_LIST, request)
+        response = check_auth_request("GET", APIEndpoints.URL_HOME_BANNERS, request)
         if response.status_code == 401:
             return redirect("login")
         response_body = response.json()

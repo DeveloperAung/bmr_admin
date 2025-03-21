@@ -1,0 +1,38 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#idPublishToggleBtn").forEach(button => {
+            button.addEventListener("click", function () {
+                let publishToggleUrl = this.getAttribute("data-url");
+                let value = this.getAttribute("data-value");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This data will be " + value + ".",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Confirm"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(publishToggleUrl, {
+                            method: "PATCH",
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}",
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            Swal.fire(value, data.message, "success");
+                            setTimeout(() => location.reload(), 3000);
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Failed to " + value + " notice.", "error");
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>

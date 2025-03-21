@@ -61,7 +61,6 @@ def check_auth_request(method, url, request, data=None, params=None):
     try:
         headers = get_auth_headers(request)
         response = requests.request(method, url, headers=headers, json=data, params=params)
-
         return response
 
     except requests.exceptions.RequestException as e:

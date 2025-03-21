@@ -39,3 +39,17 @@
 <!-- Custom js for Dragula-->
 <script src="{% static 'assets/js/dragula.js' %}"></script>
 <!-- End custom js for Dragula -->
+
+<!-- jQuery (required for Summernote) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#summernote').summernote({
+    height: 200,   // set editor height
+    placeholder: 'Write something awesome...'
+  });
+});
+</script>

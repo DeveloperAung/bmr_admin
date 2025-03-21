@@ -1,6 +1,3 @@
-<form action="">
-  {% csrf_token %}
-</form>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("#idDeleteBtn").forEach(button => {
@@ -17,17 +14,17 @@
                     confirmButtonText: "Confirm"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(deleteUrl, {  // ✅ Use the correct URL from data-url
+                        fetch(deleteUrl, {
                             method: "DELETE",
                             headers: {
-                                "X-CSRFToken": getCSRFToken(), // ✅ CSRF protection
+                                "X-CSRFToken": "{{ csrf_token }}",
                                 "Content-Type": "application/json"
                             }
                         })
                         .then(response => response.json())
                         .then(data => {
                             Swal.fire("Deleted!", data.message, "success");
-                            setTimeout(() => location.reload(), 1000); // ✅ Refresh after 1 sec
+                            setTimeout(() => location.reload(), 2000);
                         })
                         .catch(error => {
                             Swal.fire("Error", "Failed to delete message.", "error");

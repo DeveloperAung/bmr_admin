@@ -209,7 +209,7 @@ def dhamma_class_list(request):  # event
     try:
         headers = get_auth_headers(request)
 
-        response = requests.get(APIEndpoints.URL_EVENT_LIST, headers=headers)
+        response = requests.get(APIEndpoints.URL_EVENTS, headers=headers)
         if response.status_code == 401:
             return redirect("login")
 

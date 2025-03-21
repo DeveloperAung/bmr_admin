@@ -2,7 +2,7 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Donation Category</a></li>
+    <li class="breadcrumb-item"><a href="#">Announcements</a></li>
     <li class="breadcrumb-item active" aria-current="page">All</li>
   </ol>
 </nav>
@@ -14,10 +14,10 @@
           <div class="card-title mt-4">
             <div class="d-flex justify-content-between row">
               <div class="col-md-6">
-                <h4>Donation Category List</h4>
+                <h4>Announcement List</h4>
               </div>
               <div class="col-md-6 float-end text-end">
-                <a class="btn btn-primary" href="{% url 'donation_category_create' %}"><i class="fa fa-plus"> Create New Donation Category</i></a>
+                <a class="btn btn-primary" href="{% url 'notice_create' %}"><i class="fa fa-plus"> Create New Announcement</i></a>
               </div>
             </div>
           </div>
@@ -28,8 +28,8 @@
                   <tr>
                     <th>#</th>
                     <th class="sortStyle">Title<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Require Date</th>
-                    <th class="sortStyle">Require Multi Select</th>
+                    <th class="sortStyle">Is Published<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Period<i class="ti-angle-down"></i></th>
                     <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
                   </tr>
                 </thead>
@@ -39,11 +39,12 @@
                   <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ i.title }}</td>
-                    <td>{% if i.is_date_required %}Yes{% else %}No{% endif %}</td>
-                    <td>{% if i.is_multi_select_required %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if i.is_published %}Yes{% else %}No{% endif %}</td>
+                    <td>{{ i.from_date }} - {% if i.to_date %} {{ i.to_date }} {% else %} NA {% endif %}</td>
                     <td>
-                      <a href="{% url 'donation_category_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></a>
-                      <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'donation_category_soft_delete' i.uuid %}"><i class="ti ti-trash"> </i></button>
+                      <button class="btn btn-primary" id="idPublishToggleBtn" data-url="{% url 'notice_publish_toggle' i.uuid %}" data-value="{% if i.is_published %}Unpublish{% else %}Publish{% endif %}">{% if i.is_published %}Unpublish{% else %}Publish{% endif %}</button>
+                      <a href="{% url 'notice_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></a>
+                      <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'notice_delete' i.uuid %}"><i class="ti ti-trash"> </i></button>
                     </td>
                   </tr>
                   {% endfor %}
@@ -59,5 +60,6 @@
   </div>
 </div>
 
+{% include 'includes/publish_toggle.html' %}
 {% include 'includes/soft_delete.html' %}
 {% endblock %}

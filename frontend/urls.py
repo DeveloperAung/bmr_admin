@@ -9,5 +9,6 @@ urlpatterns = [
     path('donations/', include('frontend.donations.urls')),
     path('events/', include('frontend.events.urls')),
     path('posts/', include('frontend.posts.urls')),
+    path('notices/', include('frontend.notices.urls')),
     path('home-page/', include('frontend.homePage.urls')),
 ]

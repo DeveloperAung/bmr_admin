@@ -49,6 +49,7 @@ class BaseSoftDeleteViewSet(viewsets.ModelViewSet):
                     success=True, message="Created successfully", data=serializer.data,
                     status_code=status.HTTP_201_CREATED
                 )
+            print()
             return custom_api_response(
                 success=False, message="Validation error", errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
@@ -104,6 +105,7 @@ class BaseSoftDeleteViewSet(viewsets.ModelViewSet):
             )
 
     def destroy(self, request, *args, **kwargs):
+        print('go inside delete')
         auth_error = self.handle_authentication_error(request)
         if auth_error:
             return auth_error

@@ -11,6 +11,8 @@ def notice_image_path(instance, filename):
 class Notice(BaseModel):
     title = models.CharField(max_length=250)
     description = models.TextField(blank=True, null=True)
+    from_date = models.DateTimeField(blank=True, null=True)
+    to_date = models.DateTimeField(blank=True, null=True)
     is_published = models.BooleanField(default=True)
     published_at = models.DateTimeField(blank=True, null=True)
     published_by = models.ForeignKey(

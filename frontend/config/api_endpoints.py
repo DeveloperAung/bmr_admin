@@ -22,7 +22,7 @@ class APIEndpoints:
     """ Contact START """
 
     """ Event START """
-    URL_EVENT_LIST = f"{API_BASE_URL}/api/e/event/"
+    URL_EVENTS = f"{API_BASE_URL}/api/e/event/"
     URL_EVENT_CATEGORY = f"{API_BASE_URL}/api/e/category/"
     URL_EVENT_SUB_CATEGORY = f"{API_BASE_URL}/api/e/sub-category/"
 
@@ -41,7 +41,7 @@ class APIEndpoints:
     """ Event END """
 
     """ Donation START """
-    URL_DONATION_LIST = f"{API_BASE_URL}/api/d/donation/"
+    URL_DONATIONS = f"{API_BASE_URL}/api/d/donation/"
     URL_DONATION_CATEGORY = f"{API_BASE_URL}/api/d/category/"
     URL_DONATION_SUB_CATEGORY = f"{API_BASE_URL}/api/d/sub-category/"
 
@@ -60,8 +60,8 @@ class APIEndpoints:
     """ Donation END """
 
     """ Post START """
-    URL_POST_LIST = f"{API_BASE_URL}/api/p/donation/"
-    URL_POST_CATEGORY = f"{API_BASE_URL}/api/p/category/"
+    URL_POST = f"{API_BASE_URL}/api/p/post/"
+    URL_POST_CATEGORY = f"{API_BASE_URL}/api/p/post/"
 
     # @staticmethod
     # def URL_DONATION_DETAILS(uuid):
@@ -73,7 +73,20 @@ class APIEndpoints:
     """ Post END """
 
     """ Home Page START """
-    URL_HOME_BANNER_LIST = f"{API_BASE_URL}/api/h/home-banner/"
+    URL_HOME_BANNERS = f"{API_BASE_URL}/api/h/home-banner/"
     URL_HOME_BANNER_REORDER = f"{API_BASE_URL}/api/h/home-banner/update-order/"
 
-    """ Post END """
+    """ Home Page END """
+
+    """ Notice START """
+    URL_NOTICES = f"{API_BASE_URL}/api/n/notice/"
+
+    @staticmethod
+    def URL_NOICE_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/n/notice/{uuid}/"
+
+    @staticmethod
+    def URL_NOICE_PUBLISH_TOGGLE(uuid):
+        return f"{API_BASE_URL}/api/n/notice/{uuid}/publish-toggle/"
+
+    """ Notice END """

@@ -79,10 +79,10 @@
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        alert(data.message || "Order updated!");
-        location.reload();
+        Swal.fire("Success", "Reorder completed", "success");
+        setTimeout(() => location.reload(), 2000);
       } else {
-        alert(data.message || "Something went wrong.");
+        Swal.fire("Error", "Something went wrong! Please try again.", "error");
       }
     })
     .catch(err => {
