@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from api.services import BaseSoftDeleteViewSet
 from .models import PostCategory
 from .serializers import (
@@ -12,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Post Category"])
 class PostCategoryViewSet(BaseSoftDeleteViewSet):
     queryset = PostCategory.objects.all().order_by('id')
 

@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "rest_framework_simplejwt",
     "corsheaders",
-    'drf_yasg',
+    'drf_spectacular',
     'api.adminUsers',
     'api.contactUs',
     'api.donations',
@@ -62,12 +62,39 @@ INSTALLED_APPS = [
     'api.notices',
 ]
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'BMR Admin API',
+    'DESCRIPTION': 'API documentation for the BMR Admin Panel',
+    'VERSION': '1.0.0',
+    # 'TERM_OF_SERVICE' : "https://bmr.sg/policies/terms/",
+    'CONTACT': {'email': 'support@bmr.sg'},
+
+    'SECURITY': [{'Bearer': []}],
+    # 'AUTHENTICATION_WHITELIST': [],
+
+    'COMPONENTS': {
+        'securitySchemes': {
+            'Bearer': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        },
+    },
+
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+
+}
+
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",

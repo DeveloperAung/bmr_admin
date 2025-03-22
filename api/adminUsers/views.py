@@ -1,12 +1,22 @@
+from drf_spectacular import openapi
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
+from api.adminUsers.serializers import LogoutSerializer
 from api.utlis import custom_api_response
 
 
+@extend_schema(
+    tags=["Auth"],
+    request=TokenObtainPairSerializer,
+    responses={200: OpenApiResponse(description="Access and refresh tokens")},
+)
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -15,6 +25,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return custom_api_response(success=False, message="Invalid credentials", status_code=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    tags=["Auth"],
+    request=TokenRefreshSerializer,
+    responses={200: OpenApiResponse(description="New access token")},
+)
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -23,6 +38,11 @@ class CustomTokenRefreshView(TokenRefreshView):
         return custom_api_response(success=False, message="Invalid refresh token", status_code=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    tags=["Auth"],
+    request=LogoutSerializer,
+    responses={200: OpenApiResponse(description="Logout success")}
+)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def logout_view(request):

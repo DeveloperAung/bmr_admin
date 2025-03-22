@@ -1,6 +1,7 @@
 import logging
 from rest_framework import status
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import DonationCategory, DonationSubCategory
 from .serializers import (
     DonationCategoryListSerializer,
@@ -18,6 +19,7 @@ from ..utlis import url_routing_error
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Donation Category"])
 class DonationCategoryViewSet(BaseSoftDeleteViewSet):
     queryset = DonationCategory.objects.all().order_by('id')
 
@@ -36,6 +38,7 @@ class DonationCategoryViewSet(BaseSoftDeleteViewSet):
             url_routing_error(error=e)
 
 
+@extend_schema(tags=["Donation Sub Category"])
 class DonationSubCategoryViewSet(BaseSoftDeleteViewSet):
     queryset = DonationSubCategory.objects.all().order_by('id')
 

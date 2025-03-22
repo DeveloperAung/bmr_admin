@@ -4,6 +4,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from drf_spectacular.utils import extend_schema_view, extend_schema
 
 from api.services import BaseSoftDeleteViewSet
 from .models import Notice
@@ -19,6 +20,7 @@ from ..utlis import custom_api_response
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Notice"])
 class NoticeViewSet(BaseSoftDeleteViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

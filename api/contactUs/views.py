@@ -2,17 +2,20 @@ from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from drf_spectacular.utils import extend_schema
 
 from .models import ContactUs
 from .serializers import ContactUsUserSerializer, ContactUsAdminSerializer
 from ..custom_pagination import CustomPagination
 from ..utlis import custom_api_response
+
 import logging
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Contact Us"])
 class ContactUsViewSet(viewsets.ModelViewSet):
     queryset = ContactUs.objects.filter(is_active=True).order_by("-created_at")
     pagination_class = CustomPagination

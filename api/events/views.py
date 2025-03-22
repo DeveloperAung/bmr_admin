@@ -1,6 +1,6 @@
 import logging
 from rest_framework.exceptions import APIException
-
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import EventCategory, EventSubCategory, Event, EventDate
 from .serializers import EventDateSerializer
 from .serializers import (
@@ -25,6 +25,7 @@ from ..utlis import url_routing_error
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Event Category"])
 class EventCategoryViewSet(BaseSoftDeleteViewSet):
     queryset = EventCategory.objects.all().order_by('id')
 
@@ -45,6 +46,7 @@ class EventCategoryViewSet(BaseSoftDeleteViewSet):
             url_routing_error(error=e)
 
 
+@extend_schema(tags=["Event Sub Category"])
 class EventSubCategoryViewSet(BaseSoftDeleteViewSet):
     queryset = EventSubCategory.objects.all().order_by('id')
 
@@ -63,6 +65,7 @@ class EventSubCategoryViewSet(BaseSoftDeleteViewSet):
             url_routing_error(error=e)
 
 
+@extend_schema(tags=["Event"])
 class EventViewSet(BaseSoftDeleteViewSet):
     queryset = Event.objects.filter(is_active=True).order_by('-created_at')
 
@@ -150,6 +153,7 @@ class EventViewSet(BaseSoftDeleteViewSet):
     #         )
 
 
+@extend_schema(tags=["Event Date"])
 class EventDateViewSet(BaseSoftDeleteViewSet):
     queryset = EventDate.objects.all()
     serializer_class = EventDateSerializer

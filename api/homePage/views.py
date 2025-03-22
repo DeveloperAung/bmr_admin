@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema_view, extend_schema
 
 from api.services import BaseSoftDeleteViewSet
 from .models import HomeBanner
@@ -15,6 +16,7 @@ from ..utlis import url_routing_error, custom_api_response
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["Home Banner"])
 class HomeBannerViewSet(BaseSoftDeleteViewSet):
     queryset = HomeBanner.objects.all().order_by('order_index')
 
