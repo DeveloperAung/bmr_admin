@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-primary mt-4">
+        <li class="breadcrumb-item"><a href="#">Notice Category</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title mt-4">
+                        <div class="d-flex justify-content-between row">
+                            <div class="col-md-6">
+                                <h4>Edit Notice Category</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <form method="post" action="{% url 'single_page_edit' data.uuid %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="idTitle"></label>
+                            <input  class="form-control"  type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idTitleInMM"></label>
+                            <input  class="form-control"  type="text" id="idTitleInMM" name="title_mm" placeholder="Title in Myanmar" value="{{ data.title_mm }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idContentType"></label>
+                            <input  class="form-control"  type="text" id="idContentType" name="content_type" placeholder="Content Type" value="{{ data.content_type }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="summernote">Content</label>
+                            <textarea id="summernote" name="content">{{ data.content }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{% url 'single_page_list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

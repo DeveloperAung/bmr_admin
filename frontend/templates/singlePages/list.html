@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Single Page</a></li>
+    <li class="breadcrumb-item active" aria-current="page">All</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mt-4">
+            <div class="d-flex justify-content-between row">
+              <div class="col-md-6">
+                <h4>Single Page List</h4>
+              </div>
+              <div class="col-md-6 float-end text-end">
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="table-sorter-wrapper col-lg-12 table-responsive">
+              <table id="sortable-table-1" class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="sortStyle">Title<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Title in Myanmar<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Updated at<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if data %}
+                  {% for i in data %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.title_mm }}</td>
+                    <td>{{ i.modified_at }}</td>
+                    <td>
+                      <a href="{% url 'single_page_edit' i.uuid %}" class="btn btn-primary btn-xs"><i class="fa fa-edit"> Edit</i></a>
+                      <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'single_page_delete' i.uuid %}"><i class="ti ti-trash"> </i></button>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+              {% include 'includes/pagination.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'includes/soft_delete.html' %}
+{% endblock %}

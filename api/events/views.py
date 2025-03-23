@@ -75,7 +75,6 @@ class EventViewSet(BaseSoftDeleteViewSet):
             if self.action == "list":
                 return EventListSerializer
             elif self.action == "retrieve":
-                print('event list')
                 return EventRetrieveSerializer
             elif self.action == "create":
                 return EventCreateSerializer

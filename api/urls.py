@@ -47,4 +47,5 @@ urlpatterns = [
     path('p/', include('api.posts.urls')),
     path('h/', include('api.homePage.urls')),
     path('n/', include('api.notices.urls')),
+    path('s/', include('api.singlePage.urls')),
 ]

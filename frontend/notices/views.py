@@ -10,10 +10,10 @@ def notice_list(request):
         response = check_auth_request("GET", APIEndpoints.URL_NOTICES, request)
         if response.status_code == 401:  # Unauthorized
             return redirect("login")
-        event_response_body = response.json()
+        response_body = response.json()
         context = {
-            'messages': event_response_body["message"],
-            'data': event_response_body["data"]["results"],
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
         }
         return render(request, "notices/notice_list.html", context)
     except Exception as e:

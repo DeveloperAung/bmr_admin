@@ -90,3 +90,12 @@ class APIEndpoints:
         return f"{API_BASE_URL}/api/n/notice/{uuid}/publish-toggle/"
 
     """ Notice END """
+
+    """ Single Page Start """
+    URL_SINGLE_PAGES = f"{API_BASE_URL}/api/s/single-page/"
+
+    @staticmethod
+    def URL_SINGLE_PAGE_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/s/single-page/{uuid}/"
+
+    """ Single Page END """
