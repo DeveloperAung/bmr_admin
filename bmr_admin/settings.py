@@ -60,7 +60,9 @@ INSTALLED_APPS = [
     'api.posts',
     'api.homePage',
     'api.notices',
-    'api.singlePage'
+    'api.singlePage',
+    'api.memberships',
+    'api.media',
 ]
 
 SPECTACULAR_SETTINGS = {
