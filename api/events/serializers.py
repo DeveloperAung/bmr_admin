@@ -90,21 +90,24 @@ class EventDateSerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ModelSerializer):
     """ Event Minimal Serializer """
-    category_title = serializers.CharField(source="category.title", read_only=True)
+    sub_category_title = serializers.CharField(source="sub_category.title", read_only=True)
+    category_title = serializers.CharField(source="sub_category.event_category.title", read_only=True)
 
     class Meta:
         model = Event
-        fields = ["id", "uuid", "title", "category_title", "is_publish"]
+        fields = ["id", "uuid", "title", "sub_category_title", "category_title", "is_publish"]
 
 
 class EventRetrieveSerializer(serializers.ModelSerializer):
-    category_title = serializers.CharField(source="category.title", read_only=True)
+    sub_category_title = serializers.CharField(source="sub_category.title", read_only=True)
+    category_title = serializers.CharField(source="sub_category.event_category.title", read_only=True)
     event_dates = EventDateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
         fields = [
-            "id", "uuid", "title", "category_title", "event_dates", "short_description", "description", "location",
+            "id", "uuid", "title", "sub_category_title", "category_title", "event_dates", "short_description",
+            "description", "location",
             "feature_image", "cover_image", "is_registered", "is_short_course", "max_seat", "is_publish",
             "published_at", "published_by", "media_sent_at", "media_sent_by", "media_sent_count", "created_at",
             "created_by", "modified_at", "modified_by"
@@ -132,7 +135,7 @@ class EventCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ["title", "short_description", "description", "category", "location", "is_publish", "event_dates"]
+        fields = ["title", "short_description", "description", "sub_category", "location", "is_publish", "event_dates"]
 
     def create(self, validated_data):
         """
@@ -155,7 +158,7 @@ class EventUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ["title", "short_description", "description", "category", "location", "is_publish", "event_dates"]
+        fields = ["title", "short_description", "description", "sub_category", "location", "is_publish", "event_dates"]
         extra_kwargs = {"title": {"required": False}}  # Allows partial updates
 
     def update(self, instance, validated_data):
