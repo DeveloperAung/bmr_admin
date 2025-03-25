@@ -256,9 +256,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    'bmr_admin/static',
+    os.path.join(BASE_DIR, 'bmr_admin/static'),
 ]
-STATIC_URL = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
