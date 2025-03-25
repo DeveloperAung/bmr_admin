@@ -38,7 +38,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['82.29.162.217', 'srv733911.hstgr.cloud', '*']
 
-API_BASE_URL = "http://127.0.0.1:8001"
+API_BASE_URL = "http://127.0.0.1:8002"
 
 # Application definition
 
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'api.memberships',
     'api.medias',
     'api.siteInfo',
+    'api.core',
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -174,8 +175,8 @@ MIDDLEWARE = [
 
 # CORS: Allow Frontend to Access API
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8001",  # Frontend React/Vue/Angular app
-    "http://127.0.0.1:8001",  # Django frontend
+    "http://localhost:8002",  # Frontend React/Vue/Angular app
+    "http://127.0.0.1:8002",  # Django frontend
 ]
 
 ROOT_URLCONF = 'bmr_admin.urls'
