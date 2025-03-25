@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 from datetime import timedelta
+from decouple import config
 
 if sys.platform.startswith("win"):
     os.environ["PYTHONIOENCODING"] = "utf-8"
@@ -30,14 +31,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*t^34hpz@zxuvpae8a@5uql)i3i+tw4zs%ep-)rffapj)trj7u'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['82.29.162.217', 'srv733911.hstgr.cloud', '*']
 
-API_BASE_URL = "http://127.0.0.1:8000"
+API_BASE_URL = "http://127.0.0.1:8001"
 
 # Application definition
 
@@ -173,8 +174,8 @@ MIDDLEWARE = [
 
 # CORS: Allow Frontend to Access API
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Frontend React/Vue/Angular app
-    "http://127.0.0.1:8000",  # Django frontend
+    "http://localhost:8001",  # Frontend React/Vue/Angular app
+    "http://127.0.0.1:8001",  # Django frontend
 ]
 
 ROOT_URLCONF = 'bmr_admin.urls'
@@ -203,13 +204,22 @@ WSGI_APPLICATION = 'bmr_admin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
