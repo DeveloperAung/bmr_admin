@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'api.notices',
     'api.singlePage',
     'api.memberships',
-    'api.media',
+    'api.medias',
     'api.siteInfo',
 ]
 

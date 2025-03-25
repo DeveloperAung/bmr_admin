@@ -49,5 +49,5 @@ urlpatterns = [
     path('n/', include('api.notices.urls')),
     path('s/', include('api.singlePage.urls')),
     path('m/', include('api.memberships.urls')),
-    path('f/', include('api.media.urls')),
+    path('f/', include('api.medias.urls')),
 ]
