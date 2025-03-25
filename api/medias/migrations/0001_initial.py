@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('title', models.CharField(max_length=200)),
                 ('file_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('file_path', models.FileField(blank=True, null=True, upload_to=api.media.models.media_file_path)),
+                ('file_path', models.FileField(blank=True, null=True, upload_to=api.medias.models.media_file_path)),
                 ('file_type', models.CharField(blank=True, max_length=200, null=True)),
                 ('embed_code', models.CharField(blank=True, max_length=200, null=True)),
                 ('location', models.CharField(blank=True, max_length=200, null=True)),
