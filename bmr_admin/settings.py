@@ -177,6 +177,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8002",  # Frontend React/Vue/Angular app
     "http://127.0.0.1:8002",  # Django frontend
+    "http://srv733911.hstgr.cloud",
+    "http://82.29.162.217",
 ]
 
 ROOT_URLCONF = 'bmr_admin.urls'
@@ -259,8 +261,8 @@ USE_TZ = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'bmr_admin/static'),
 ]
-FORCE_SCRIPT_NAME = '/bmr_project'
-STATIC_URL = '/bmr_project/static/'
+# FORCE_SCRIPT_NAME = '/bmr_project'
+STATIC_URL = 'bmr_admin/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
