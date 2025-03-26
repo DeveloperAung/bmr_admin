@@ -1,5 +1,6 @@
 from drf_spectacular import openapi
 from rest_framework import status
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
@@ -19,9 +20,12 @@ from api.utlis import custom_api_response
 )
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        if response.status_code == 200:
-            return custom_api_response(success=True, message="Login successful", data=response.data)
+        try:
+            response = super().post(request, *args, **kwargs)
+            if response.status_code == 200:
+                return custom_api_response(success=True, message="Login successful", data=response.data)
+        except TokenError:
+            return custom_api_response(success=False, message="Invalid credentials", status_code=status.HTTP_400_BAD_REQUEST)
         return custom_api_response(success=False, message="Invalid credentials", status_code=status.HTTP_400_BAD_REQUEST)
 
 

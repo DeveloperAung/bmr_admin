@@ -104,6 +104,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    'EXCEPTION_HANDLER': 'api.utlis.custom_exception_handler',
     "PAGE_SIZE": 10,
     "DATETIME_FORMAT": "%d/%m/%Y %I:%M %p",
     "DATE_FORMAT": "%d/%m/%Y",
