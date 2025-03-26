@@ -34,11 +34,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['82.29.162.217', 'srv733911.hstgr.cloud', '*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
-API_BASE_URL = "http://127.0.0.1:8002"
+API_BASE_URL = config('API_BASE_URL')
 
 # Application definition
 
@@ -174,12 +174,7 @@ MIDDLEWARE = [
 ]
 
 # CORS: Allow Frontend to Access API
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8002",  # Frontend React/Vue/Angular app
-    "http://127.0.0.1:8002",  # Django frontend
-    "http://srv733911.hstgr.cloud",
-    "http://82.29.162.217",
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
 
 ROOT_URLCONF = 'bmr_admin.urls'
 
