@@ -1,12 +1,22 @@
 from django.conf import settings
 from django.db import models
-
-from api.adminUsers.models import AdminUser
+from django.utils import timezone
+from datetime import timedelta
 from api.core.models import BaseModel
 
 
 def profile_image_path(instance, filename):
     return "member/profile/{}/{}".format(instance.id, filename)
+
+
+class CheckEmail(models.Model):
+    email = models.EmailField(unique=True)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+
+    def is_expired(self):
+        return timezone.now() > self.created_at + timedelta(minutes=15)
 
 
 class RegisteredUser(BaseModel):

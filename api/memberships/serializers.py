@@ -1,5 +1,19 @@
 from rest_framework import serializers
-from .models import RegisteredUser, Membership
+from .models import RegisteredUser, Membership, CheckEmail
+
+
+class RegistrationRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckEmail
+        fields = ['email']
+
+
+class OTPVerificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckEmail
+        fields = ['email', 'opt']
+    # email = serializers.EmailField()
+    # otp = serializers.CharField(max_length=6)
 
 
 class RegisteredUserListSerializer(serializers.ModelSerializer):
