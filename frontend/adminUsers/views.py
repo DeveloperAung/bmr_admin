@@ -1,14 +1,125 @@
 import requests
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from frontend.config.api_endpoints import APIEndpoints
 
 
 def admin_user_list(request):
-    return render(request, 'adminUsers/list.html')
+    try:
+        headers = get_auth_headers(request)
+        response = requests.get(APIEndpoints.URL_ADMIN_USERS, headers=headers)
+        if response.status_code == 401:
+            return redirect("login")
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"]
+        }
+        return render(request, "adminUsers/list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "adminUsers/list.html", {"error": str(e)})
 
 
-def register_admin_user(request):
-    return render(request, 'adminUsers/register_admin_user.html')
+def admin_user_register(request):
+    try:
+        if request.method == "POST":
+
+            name = request.POST["name"]
+            username = request.POST["username"]
+            email = request.POST["email"]
+            contact = request.POST["contact"]
+            secondary_contact = request.POST["secondary_contact"]
+
+            print(name, username, email, contact)
+            payload = {
+                "name": name,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "secondary_contact": secondary_contact,
+            }
+            response = check_auth_request("POST", APIEndpoints.URL_ADMIN_USERS, request, data=payload)
+
+            if response.status_code == 401:  # Unauthorized
+                return redirect("login")
+
+            response_body = response.json()
+            if response.status_code == 201:
+                return redirect('admin_user_list')
+            else:
+                context = {
+                    'errors': response_body['errors'],
+                    'message': response_body['message']
+                }
+                return render(request, "adminUsers/create.html", context)
+        else:
+            context = {
+
+            }
+            return render(request, "adminUsers/create.html", context)
+    except Exception as e:
+        print('Admin User Create Error:', e)
+        return render(request, "adminUsers/create.html", {"error": str(e)})
+
+
+def admin_user_edit(request, uuid):
+    try:
+        if request.method == "POST":
+
+            name = request.POST["name"]
+            username = request.POST["username"]
+            email = request.POST["email"]
+            contact = request.POST["contact"]
+            secondary_contact = request.POST["secondary_contact"]
+
+            payload = {
+                "name": name,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "secondary_contact": secondary_contact,
+            }
+            response = check_auth_request("PUT", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request, data=payload)
+
+            if response.status_code == 401:  # Unauthorized
+                return redirect("login")
+
+            response_body = response.json()
+            if response.status_code == 200:
+                return redirect('admin_user_list')
+            else:
+                context = {
+                    'errors': response_body['errors'],
+                    'message': response_body['message']
+                }
+                return render(request, "adminUsers/edit.html", context)
+        else:
+            response = check_auth_request("GET", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request)
+            response_body = response.json()
+            print('response ', response_body)
+            context = {
+                'data': response_body['data']
+            }
+            return render(request, "adminUsers/edit.html", context)
+    except Exception as e:
+        print('Donation Category Edit Error:', e)
+        return render(request, "adminUsers/edit.html", {"error": str(e)})
+
+
+def admin_user_soft_delete(request, uuid):
+    if request.method == "DELETE":
+        response = check_auth_request("DELETE", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request)
+        if response.status_code == 401:  # Unauthorized
+            return redirect("login")
+
+        if response.status_code == 200:
+            return JsonResponse({"success": True, "message": "Admin User deleted successfully."})
+        else:
+            return JsonResponse(
+                {"success": False, "message": f"Failed to delete Admin User {response.status_code}."}, status=400
+            )
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 
 def reset_password(request):
@@ -61,6 +172,7 @@ def check_auth_request(method, url, request, data=None, params=None):
     try:
         headers = get_auth_headers(request)
         response = requests.request(method, url, headers=headers, json=data, params=params)
+        print('response', response)
         return response
 
     except requests.exceptions.RequestException as e:

@@ -50,4 +50,5 @@ urlpatterns = [
     path('s/', include('api.singlePage.urls')),
     path('m/', include('api.memberships.urls')),
     path('f/', include('api.medias.urls')),
+    path('sub/', include('api.subscribers.urls')),
 ]

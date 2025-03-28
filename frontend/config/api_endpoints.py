@@ -8,6 +8,23 @@ class APIEndpoints:
     URL_LOGOUT = f"{API_BASE_URL}/api/auth/logout/"
     URL_REFRESH = f"{API_BASE_URL}/api/auth/token/refresh/"
 
+    """ Admin Users START """
+    URL_ADMIN_USERS = f"{API_BASE_URL}/api/auth/admin-user/"
+
+    @staticmethod
+    def URL_ADMIN_USER_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/auth/admin-user/{uuid}/"
+    """ Admin Users END """
+
+    """ Subscribers START """
+    URL_SUBSCRIBERS = f"{API_BASE_URL}/api/sub/subscribers/"
+
+    @staticmethod
+    def URL_SUBSCRIBERS_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/sub/subscribers/{uuid}/"
+
+    """ Subscribers END """
+
     """ Contact START """
     URL_CONTACT_US_LIST = f"{API_BASE_URL}/api/contact-us/"
 

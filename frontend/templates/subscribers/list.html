@@ -2,7 +2,7 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Admin Users</a></li>
+    <li class="breadcrumb-item"><a href="#">Subscribers</a></li>
     <li class="breadcrumb-item active" aria-current="page">All</li>
   </ol>
 </nav>
@@ -17,7 +17,7 @@
                 <h4>Admin User Lists</h4>
               </div>
               <div class="col-md-6 float-end text-end">
-                <a class="btn btn-primary" href="{% url 'admin_user_register' %}"><i class="fa fa-plus"> Create New Admin User</i></a>
+                <a class="btn btn-primary" href="{% url 'admin_user_register' %}"><i class="fa fa-plus"> Create New Subscriber</i></a>
               </div>
             </div>
           </div>
@@ -27,10 +27,10 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th class="sortStyle">Name<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Username<i class="ti-angle-down"></i></th>
                     <th class="sortStyle">Email<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Mobile<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Subscription Code<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Active<i class="ti-angle-down"></i></th>
+                    <th class="sortStyle">Subscribed DateTime<i class="ti-angle-down"></i></th>
                     <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
                   </tr>
                 </thead>
@@ -39,14 +39,13 @@
                   {% for i in data %}
                   <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ i.name }}</td>
-                    <td>{{ i.username }}</td>
                     <td>{{ i.email }}</td>
-                    <td>{{ i.contact }}</td>
+                    <td>{{ i.uuid }}</td>
+                    <td>{{ i.subscrd_flag }}</td>
+                    <td>{{ i.created_date }}</td>
                     <td>
-                      <button class="btn btn-primary btm-sm"><i class="fa fa-user"> Permission</i></button>
-                      <a href="{% url 'admin_user_edit' i.uuid %}" class="btn btn-primary btm-sm"><i class="fa fa-edit"> Edit</i></a>
-                      <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'admin_user_soft_delete' i.uuid %}"><i class="ti ti-trash"> </i></button>
+                      <button class="btn btn-primary" id="idActiveToggleBtn" data-url="" data-value="">Yes / No</button>
+                      <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url=""><i class="ti ti-trash"> </i></button>
                     </td>
                   </tr>
                   {% endfor %}

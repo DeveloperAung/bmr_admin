@@ -49,7 +49,6 @@ class CheckEmailSendOTP(APIView):
             )
             pending.save()
 
-            # Send the OTP via email
             send_mail(
                 'Your OTP Code',
                 f'Use this code to verify your email: {otp}',

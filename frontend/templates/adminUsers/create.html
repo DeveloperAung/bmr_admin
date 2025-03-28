@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-primary mt-4">
+        <li class="breadcrumb-item"><a href="#">Admin User</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+</nav>
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title mt-4">
+                        <div class="d-flex justify-content-between row">
+                            <div class="col-md-6">
+                                <h4>Admin User</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <form method="post" action="{% url 'admin_user_register' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="idName"></label>
+                            <input  class="form-control"  type="text" id="idName" name="name" placeholder="Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idEmail"></label>
+                            <input  class="form-control"  type="text" id="idEmail" name="email" placeholder="Email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idUsername"></label>
+                            <input  class="form-control"  type="text" id="idUsername" name="username" placeholder="Username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idRole"></label>
+                            <select name="role" id="idRole">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idContact"></label>
+                            <input  class="form-control"  type="text" id="idContact" name="contact" placeholder="Mobile">
+                        </div>
+                        <div class="mb-3">
+                            <label for="idSecondaryContact"></label>
+                            <input  class="form-control"  type="text" id="idSecondaryContact" name="secondary_contact" placeholder="Secondary Mobile">
+                        </div>
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="{% url 'admin_user_list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
