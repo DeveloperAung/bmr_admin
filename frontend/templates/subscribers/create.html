@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-primary mt-4">
+    <li class="breadcrumb-item"><a href="#">Subscriber</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-header">
+            <h4>Create New Subscriber</h4>
+          </div>
+          <div class="row">
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h3 class="mb-3">Subscribers' Email</h3>
+                <button type="button" id="add-subscriber-btn" class="btn btn-secondary">
+                    <i class="bi bi-plus-circle me-1"></i> Add Another Subscriber
+                </button>
+
+                <br><br>
+                <div id="subscriber-list-container">
+                    <div class="subscriber-item mb-3 d-flex align-items-center gap-2 col-md-5">
+                        <input type="email" name="subscriber_email[]" class="form-control" placeholder="Email" required>
+                        <button type="button" class="btn btn-danger remove-subscriber-btn" title="Remove">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{% url 'subscriber_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const subscribersContainer = document.getElementById("subscriber-list-container");
+    const addSubscriberBtn = document.getElementById("add-subscriber-btn");
+
+    // Function to add new date fields
+    addSubscriberBtn.addEventListener("click", function() {
+        const newSubscriberFields = document.querySelector(".subscriber-item").cloneNode(true);
+
+        // Clear the values in the new fields
+        newSubscriberFields.querySelectorAll("input").forEach(input => input.value = "");
+
+        subscribersContainer.appendChild(newSubscriberFields);
+
+        // Reattach remove button event
+        attachRemoveSubscriber(newSubscriberFields.querySelector(".remove-subscriber-btn"));
+    });
+
+    // Function to remove date fields
+    function attachRemoveSubscriber(button) {
+        button.addEventListener("click", function() {
+            if (document.querySelectorAll(".subscriber-item").length > 1) {
+                button.parentElement.remove();
+            }
+        });
+    }
+
+    // Attach remove event to initial remove button
+    attachRemoveSubscriber(document.querySelector(".remove-subscriber-btn"));
+});
+</script>
+
+{% include 'includes/soft_delete.html' %}
+{% endblock %}

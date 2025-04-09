@@ -19,37 +19,40 @@
             </div>
           </div>
             <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+                {% csrf_token %}
 
-    <!-- Event Fields -->
-    <div class="mb-3">
-        {{ form.as_p }}
-    </div>
+                <!-- Event Fields -->
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
 
-    <!-- Event Date Section -->
-    <h3>Event Dates</h3>
-    <div id="event-dates-container">
-        <div class="event-date-item mb-3">
-            <label for="event_date">Date:</label>
-            <input type="date" name="event_date[]" class="form-control" required>
+                <!-- Event Date Section -->
+                <h3>Event Dates</h3>
+                <div id="event-dates-container">
+                    <div class="event-date-item mb-3">
+                        <label for="event_date">Date:</label>
+                        <input type="date" name="event_date[]" class="form-control" required>
 
-            <label for="from_time">From Time:</label>
-            <input type="time" name="from_time[]" class="form-control" required>
+                        <label for="from_time">From Time:</label>
+                        <input type="time" name="from_time[]" class="form-control" required>
 
-            <label for="to_time">To Time:</label>
-            <input type="time" name="to_time[]" class="form-control" required>
+                        <label for="to_time">To Time:</label>
+                        <input type="time" name="to_time[]" class="form-control" required>
 
-            <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
+                        <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
+                    </div>
+                </div>
+
+                <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
+
+                <br><br>
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
         </div>
+      </div>
     </div>
-
-    <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
-
-    <br><br>
-    <button type="submit" class="btn btn-success">Save</button>
-    <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
-</form>
-
+  </div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const dateContainer = document.getElementById("event-dates-container");
@@ -81,10 +84,5 @@ document.addEventListener("DOMContentLoaded", function() {
     attachRemoveEvent(document.querySelector(".remove-date-btn"));
 });
 </script>
-
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}

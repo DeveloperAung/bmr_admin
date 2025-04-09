@@ -12,18 +12,23 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
-from api.adminUsers.models import AdminUser
+from api.adminUsers.models import AdminUser, AdminUserRole
 from api.adminUsers.serializers import LogoutSerializer
 from api.utlis import custom_api_response, url_routing_error
 from .serializers import (
     AdminUserListSerializer,
     AdminUserRetrieveSerializer,
-    AdminUserCreateUpdateSerializer
+    AdminUserCreateUpdateSerializer,
+
+    AdminUserRoleListSerializer,
+    AdminUserRoleCreateSerializer,
+    AdminUserRoleRetrieveSerializer
 )
 import logging
 from django.utils.timezone import now
 
 from ..custom_pagination import CustomPagination
+from ..services import BaseSoftDeleteViewSet
 
 logger = logging.getLogger(__name__)
 
@@ -213,5 +218,28 @@ class AdminUserViewSet(viewsets.ModelViewSet):
             )
 
 
+@extend_schema(tags=["Admin User Roles"])
+class AdminUserRolesViewSet(BaseSoftDeleteViewSet):
 
+    def get_serializer_class(self):
+        try:
+            if self.action == "list":
+                return AdminUserRoleListSerializer
+            elif self.action == "retrieve":
+                return AdminUserRoleRetrieveSerializer
+            elif self.action == "create":
+                return AdminUserRoleCreateSerializer
+            elif self.action in ["update", "partial_update"]:
+                return AdminUserRoleCreateSerializer
+            return AdminUserRoleListSerializer
+        except Exception as e:
+            url_routing_error(error=e)
+
+    pagination_class = CustomPagination
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'uuid'
+
+    def get_queryset(self):
+        return AdminUserRole.objects.filter(is_active=True).order_by('title')
 

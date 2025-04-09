@@ -10,6 +10,7 @@ class APIEndpoints:
 
     """ Admin Users START """
     URL_ADMIN_USERS = f"{API_BASE_URL}/api/auth/admin-user/"
+    URL_ADMIN_USER_ROLES = f"{API_BASE_URL}/api/auth/admin-user-role/"
 
     @staticmethod
     def URL_ADMIN_USER_DETAILS(uuid):

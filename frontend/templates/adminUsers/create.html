@@ -33,10 +33,17 @@
                             <input  class="form-control"  type="text" id="idUsername" name="username" placeholder="Username">
                         </div>
                         <div class="mb-3">
-                            <label for="idRole"></label>
-                            <select name="role" id="idRole">
-                                <option value="">Select</option>
+                            <label>Admin User Role</label>
+                            {% if roles %}
+                            <select class="form-select" name="admin_user_role">
+                             {% for role in roles %}
+                                <option value="{{ role.id }}"
+                                  {% if data.admin_user_role.id == role.id %}selected{% endif %}>
+                                  {{ role.title }}
+                                </option>
+                             {% endfor %}
                             </select>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
                             <label for="idContact"></label>

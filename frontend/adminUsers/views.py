@@ -23,6 +23,10 @@ def admin_user_list(request):
 
 def admin_user_register(request):
     try:
+        role_response = check_auth_request("GET", APIEndpoints.URL_ADMIN_USER_ROLES, request)
+        roles_data = role_response.json().get("data", [])
+        roles = roles_data["results"]
+
         if request.method == "POST":
 
             name = request.POST["name"]
@@ -30,14 +34,15 @@ def admin_user_register(request):
             email = request.POST["email"]
             contact = request.POST["contact"]
             secondary_contact = request.POST["secondary_contact"]
+            admin_user_role = request.POST["admin_user_role"]
 
-            print(name, username, email, contact)
             payload = {
                 "name": name,
                 "username": username,
                 "email": email,
                 "contact": contact,
                 "secondary_contact": secondary_contact,
+                "admin_user_role": admin_user_role
             }
             response = check_auth_request("POST", APIEndpoints.URL_ADMIN_USERS, request, data=payload)
 
@@ -50,12 +55,13 @@ def admin_user_register(request):
             else:
                 context = {
                     'errors': response_body['errors'],
-                    'message': response_body['message']
+                    'message': response_body['message'],
+                    "roles": roles
                 }
                 return render(request, "adminUsers/create.html", context)
         else:
             context = {
-
+                "roles": roles
             }
             return render(request, "adminUsers/create.html", context)
     except Exception as e:
@@ -65,6 +71,10 @@ def admin_user_register(request):
 
 def admin_user_edit(request, uuid):
     try:
+        role_response = check_auth_request("GET", APIEndpoints.URL_ADMIN_USER_ROLES, request)
+        roles_data = role_response.json().get("data", [])
+        roles = roles_data["results"]
+
         if request.method == "POST":
 
             name = request.POST["name"]
@@ -72,6 +82,7 @@ def admin_user_edit(request, uuid):
             email = request.POST["email"]
             contact = request.POST["contact"]
             secondary_contact = request.POST["secondary_contact"]
+            admin_user_role = request.POST.get("admin_user_role")
 
             payload = {
                 "name": name,
@@ -79,6 +90,7 @@ def admin_user_edit(request, uuid):
                 "email": email,
                 "contact": contact,
                 "secondary_contact": secondary_contact,
+                "admin_user_role": admin_user_role
             }
             response = check_auth_request("PUT", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request, data=payload)
 
@@ -91,19 +103,20 @@ def admin_user_edit(request, uuid):
             else:
                 context = {
                     'errors': response_body['errors'],
-                    'message': response_body['message']
+                    'message': response_body['message'],
+                    'roles': roles
                 }
                 return render(request, "adminUsers/edit.html", context)
         else:
             response = check_auth_request("GET", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request)
             response_body = response.json()
-            print('response ', response_body)
             context = {
-                'data': response_body['data']
+                'data': response_body['data'],
+                'roles': roles
             }
             return render(request, "adminUsers/edit.html", context)
     except Exception as e:
-        print('Donation Category Edit Error:', e)
+        print('Admin User Edit Error:', e)
         return render(request, "adminUsers/edit.html", {"error": str(e)})
 
 

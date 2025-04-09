@@ -43,8 +43,10 @@ class UserManager(BaseUserManager):
 
 
 class AdminUserRole(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -55,7 +57,7 @@ class AdminUser(AbstractUser):
     name = models.CharField(max_length=150)
     contact = models.CharField(max_length=150)
     secondary_contact = models.CharField(max_length=150, blank=True, null=True)
-    # admin_user_role = models.ForeignKey(AdminUserRole, on_delete=models.SET_NULL, blank=True, null=True)
+    admin_user_role = models.ForeignKey(AdminUserRole, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.username

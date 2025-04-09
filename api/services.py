@@ -1,7 +1,7 @@
 from django.http import Http404
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied
+from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied, AuthenticationFailed
 from rest_framework import status, viewsets
 from django.utils.timezone import now
 from api.custom_pagination import CustomPagination
@@ -30,6 +30,13 @@ class BaseSoftDeleteViewSet(viewsets.ModelViewSet):
         try:
             self.check_permissions(request)
             return None
+        except AuthenticationFailed as e:
+            # Example: Wrong username or password
+            return custom_api_response(
+                success=False,
+                message="Invalid credentials. Please check your username and password.",
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
         except NotAuthenticated:
             return custom_api_response(success=False, message="Authentication required",
                                        status_code=status.HTTP_401_UNAUTHORIZED)

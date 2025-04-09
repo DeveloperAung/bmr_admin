@@ -1,13 +1,15 @@
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
+from api.subscribers.models import SubscriberUser
 from frontend.adminUsers.views import check_auth_request
 from frontend.config.api_endpoints import APIEndpoints
 
 
 def subscriber_list(request):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_SINGLE_PAGES, request)
+        response = check_auth_request("GET", APIEndpoints.URL_SUBSCRIBERS, request)
         if response.status_code == 401:  # Unauthorized
             return redirect("login")
         response_body = response.json()
@@ -24,35 +26,34 @@ def subscriber_list(request):
 def subscribers_bulk_create(request):
     try:
         if request.method == "POST":
+            email_list = request.POST.getlist('subscriber_email[]')
+            email_list = [email.strip() for email in email_list if email.strip()]  # clean whitespace, remove empty
 
-            title = request.POST["title"]
-            title_mm = request.POST["title_mm"]
-            content_type = request.POST["content_type"]
-            content = request.POST["content"]
+            # Get already existing emails
+            existing_emails = set(
+                SubscriberUser.objects.filter(email__in=email_list).values_list('email', flat=True)
+            )
 
-            payload = {
-                "title": title,
-                "title_mm": title_mm,
-                "content_type": content_type,
-                "content": content
-            }
-            response = check_auth_request("POST", APIEndpoints.URL_SINGLE_PAGES, request, data=payload)
-            if response.status_code == 401:
-                return redirect("login")
-            response_body = response.json()
-            if response.status_code == 201:
-                return redirect('single_page_list')
-            else:
-                context = {
-                    'errors': response_body['errors'],
-                    'message': response_body['message']
-                }
-                return render(request, "subscribers/create.html", context)
+            # Filter out emails that already exist
+            new_emails = [email for email in email_list if email not in existing_emails]
+
+            if not new_emails:
+                messages.warning(request, "All entered emails already exist.")
+                return redirect('subscriber_create')
+
+            # Prepare Subscriber instances
+            new_subscribers = [SubscriberUser(email=email) for email in new_emails]
+
+            # Bulk create
+            SubscriberUser.objects.bulk_create(new_subscribers)
+
+            messages.success(request, f"{len(new_subscribers)} new subscriber(s) added.")
+            return redirect('subscriber_list')
         else:
             context = {
 
             }
-            return render(request, "subscribers/create.html", context)
+        return render(request, "subscribers/create.html", context)
     except Exception as e:
         print('error', e)
         return render(request, "subscribers/create.html", {"error": str(e)})

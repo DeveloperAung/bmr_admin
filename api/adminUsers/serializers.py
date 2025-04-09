@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.adminUsers.models import AdminUser
+from api.adminUsers.models import AdminUser, AdminUserRole
 
 
 class LogoutSerializer(serializers.Serializer):
@@ -11,21 +11,21 @@ class AdminUserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AdminUser
-        fields = ['id', 'uuid', 'name', 'username', 'email', 'contact']
+        fields = ['id', 'uuid', 'name', 'username', 'email', 'contact', 'admin_user_role']
 
 
 class AdminUserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminUser
         fields = [
-            'id', 'uuid', 'name', 'username', 'email', 'contact', 'secondary_contact', 'date_joined'
+            'id', 'uuid', 'name', 'username', 'email', 'contact', 'secondary_contact', 'admin_user_role', 'date_joined'
         ]
 
 
 class AdminUserCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminUser
-        fields = ['name', 'username', 'email', 'contact', 'secondary_contact']
+        fields = ['name', 'username', 'email', 'contact', 'secondary_contact', 'admin_user_role']
 
     def validate(self, attrs):
         errors = {}
@@ -59,7 +59,26 @@ class AdminUserCreateUpdateSerializer(serializers.ModelSerializer):
                 errors['contact'] = 'This contact number is already in use.'
 
         if errors:
+            print('validation error', errors)
             raise serializers.ValidationError(errors)
 
         return attrs
 
+
+class AdminUserRoleListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AdminUserRole
+        fields = ['id', 'uuid', 'title']
+
+
+class AdminUserRoleRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminUserRole
+        fields = ['id', 'uuid', 'title']
+
+
+class AdminUserRoleCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminUserRole
+        fields = ['title']
