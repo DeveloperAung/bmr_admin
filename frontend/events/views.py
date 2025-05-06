@@ -210,10 +210,12 @@ def dhamma_class_list(request):  # event
         headers = get_auth_headers(request)
 
         response = requests.get(APIEndpoints.URL_EVENTS, headers=headers)
+
         if response.status_code == 401:
             return redirect("login")
 
         event_response_body = response.json()
+        print('response', event_response_body)
         context = {
             'messages': event_response_body["message"],
             'data': event_response_body["data"]["results"],
@@ -226,11 +228,44 @@ def dhamma_class_list(request):  # event
 
 
 def dhamma_class_create(request):   # event create
+    # try:
+    #     if request.method == "POST":
+    #
+    #         title = request.POST["title"]
+    #         title_mm = request.POST["title_mm"]
+    #         content_type = request.POST["content_type"]
+    #         content = request.POST["content"]
+    #
+    #         payload = {
+    #             "title": title,
+    #             "title_mm": title_mm,
+    #             "content_type": content_type,
+    #             "content": content
+    #         }
+    #         response = check_auth_request("POST", APIEndpoints.URL_SINGLE_PAGES, request, data=payload)
+    #         if response.status_code == 401:
+    #             return redirect("login")
+    #         response_body = response.json()
+    #         if response.status_code == 201:
+    #             return redirect('single_page_list')
+    #         else:
+    #             context = {
+    #                 'errors': response_body['errors'],
+    #                 'message': response_body['message']
+    #             }
+    #             return render(request, "events/create.html", context)
+    #     else:
+    #         context = {
+    #
+    #         }
+    #         return render(request, "events/create.html", context)
+    # except Exception as e:
+    #     print('error', e)
+    #     return render(request, "events/create.html", {"error": str(e)})
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
-            event.created_by = request.user
             event.save()
             return redirect("dhamma_class_list")
     else:

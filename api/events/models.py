@@ -32,7 +32,7 @@ class EventSubCategory(BaseModel):
 class Event(BaseModel):
     title = models.CharField(max_length=1500)
     short_description = models.CharField(max_length=1500, blank=True)
-    sub_category = models.ForeignKey(EventSubCategory, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(EventCategory, on_delete=models.SET_NULL, null=True)
     description = models.TextField(blank=True)
     location = models.CharField(blank=True, max_length=1500)
     feature_image = models.CharField(blank=True, max_length=1500)

@@ -1,4 +1,5 @@
 from django import forms
+from django_summernote.widgets import SummernoteWidget
 
 from api.events.models import Event, EventDate, EventCategory
 
@@ -11,11 +12,52 @@ class EventForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control"})  # Bootstrap styling
     )
 
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'id': 'summernote'})
+    )
+
+    need_registration = forms.BooleanField(
+        required=False,
+        label="Require Registration",
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+            'id': 'id_need_registration',
+            'style': 'margin-left: 10px;'
+        })
+    )
+
     class Meta:
         model = Event
         fields = ["title", "short_description", "description", "category",
                   "location", "feature_image", "cover_image",
-                  "is_short_course", "max_seat", "is_publish"]
+                  "is_short_course", 'need_registration', "max_seat", "is_publish"]
+        widgets = {
+            "description": SummernoteWidget(),
+            "event_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "from_time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
+            "to_time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        require_registration = cleaned_data.get('require_registration')
+        max_seat = cleaned_data.get('max_seat')
+
+        if require_registration and not max_seat:
+            self.add_error('max_seat', 'Max seat is required if registration is required.')
+
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            if field not in ['description']:
+                self.fields[field].widget.attrs['class'] = 'form-control'
+
+        self.fields['description'].widget.attrs['required'] = 'required'
+
+        # Set max_seat initially optional
+        self.fields['max_seat'].required = False
+        self.fields['need_registration'].widget.attrs.update({'class': 'form-check-input'})
 
 
 class EventDateForm(forms.ModelForm):

@@ -105,3 +105,110 @@ def post_category_soft_delete(request, uuid):
             )
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
+
+def weekly_activities_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+
+
+def article_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+
+
+def books_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+
+
+def travel_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+
+
+def friday_activities_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+
+
+def achievements_post_list(request, category_uuid):
+    try:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
+        if response.status_code == 401:
+            messages.warning(request, "Your session has expired! Please login again.")
+            return redirect("login")
+
+        response_body = response.json()
+        context = {
+            'messages': response_body["message"],
+            'data': response_body["data"]["results"],
+        }
+        return render(request, "posts/weekly_activities_post_list.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})

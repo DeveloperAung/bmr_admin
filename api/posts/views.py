@@ -50,7 +50,12 @@ class PostViewSet(BaseSoftDeleteViewSet):
     permission_classes = [IsAuthenticated]
     lookup_field = 'uuid'
 
-    queryset = Post.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = Post.objects.all().order_by('id')
+        category_uuid = self.request.query_params.get('category_uuid')
+        if category_uuid:
+            queryset = queryset.filter(category__uuid=category_uuid)
+        return queryset
 
     def get_serializer_class(self):
         try:

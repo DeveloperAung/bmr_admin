@@ -1,5 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  /* Make Summernote responsive */
+  .note-editor.note-frame {
+    width: 100% !important;
+  }
+
+  /* Optional: Make toolbar buttons wrap instead of overflow */
+  .note-toolbar .note-btn-group {
+    flex-wrap: wrap;
+  }
+
+  /* Ensure the iframe/content area adapts */
+  .note-editable {
+    min-height: 200px;
+    resize: vertical;
+  }
+</style>
+
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb bg-primary mt-4">
     <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
@@ -23,7 +41,95 @@
 
                 <!-- Event Fields -->
                 <div class="mb-3">
-                    {{ form.as_p }}
+                    {{ form.media }}
+                     <div class="row">
+                        <!-- Title -->
+                        <div class="col-md-6 mb-3">
+                          {{ form.title.label_tag }}
+                          {{ form.title }}
+                          {% if form.title.errors %}
+                            <div class="text-danger">{{ form.title.errors }}</div>
+                          {% endif %}
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-6 mb-3">
+                          {{ form.category.label_tag }}
+                          {{ form.category }}
+                          {% if form.category.errors %}
+                            <div class="text-danger">{{ form.category.errors }}</div>
+                          {% endif %}
+                        </div>
+
+                         <div class="row">
+                             <div class="col-md-6 mb-3">
+                              {{ form.cover_image.label_tag }}
+
+                              <!-- Preview image -->
+                              <div id="coverImagePreview" class="mb-2">
+                                {% if form.instance.cover_image %}
+                                  <img src="{{ form.instance.cover_image.url }}" alt="Cover Image" style="max-height: 150px;" class="img-thumbnail">
+                                {% endif %}
+                              </div>
+
+                              <!-- File input field -->
+                              {{ form.cover_image }}
+                              {% if form.cover_image.errors %}
+                                <div class="text-danger">{{ form.cover_image.errors }}</div>
+                                  {% endif %}
+                             </div>
+                         </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch">
+                              {{ form.need_registration.as_widget }}
+                              <label class="form-check-label" for="{{ form.need_registration.id_for_label }}"> Require Registration</label>
+                            </div>
+
+
+                          {{ form.max_seat }}
+                          {% if form.max_seat.errors %}
+                            <div class="text-danger">{{ form.max_seat.errors }}</div>
+                          {% endif %}
+                        </div>
+
+
+                         <!-- Location -->
+                        <div class="col-md-6 mb-3">
+                          {{ form.location.label_tag }}
+                          {{ form.location }}
+                        </div>
+
+                        <!-- Short Description -->
+                        <div class="col-md-12 mb-3">
+                          {{ form.short_description.label_tag }}
+                          {{ form.short_description }}
+                          {% if form.short_description.errors %}
+                            <div class="text-danger">{{ form.short_description.errors }}</div>
+                          {% endif %}
+                        </div>
+
+                        <!-- Description (manual Summernote textarea) -->
+                        <div class="col-12 mb-3">
+                          <label for="summernote">Description</label>
+                          <textarea id="summernote" name="description" class="form-control">
+                            {{ form.description.value|default_if_none:"" }}
+                          </textarea>
+                        </div>
+
+                        <!-- Is Publish -->
+                        <div class="col-md-6 mb-3">
+                          {{ form.is_publish.label_tag }}
+                          {{ form.is_publish }}
+                        </div>
+
+                        <!-- Event Date -->
+                        <div class="col-md-6 mb-3">
+                          {{ form.event_date.label_tag }}
+                          {{ form.event_date }}
+                        </div>
+
+                     </div>
                 </div>
 
                 <!-- Event Date Section -->
@@ -53,36 +159,85 @@
       </div>
     </div>
   </div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const dateContainer = document.getElementById("event-dates-container");
-    const addDateBtn = document.getElementById("add-date-btn");
-
-    // Function to add new date fields
-    addDateBtn.addEventListener("click", function() {
-        const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
-
-        // Clear the values in the new fields
-        newDateFields.querySelectorAll("input").forEach(input => input.value = "");
-
-        dateContainer.appendChild(newDateFields);
-
-        // Reattach remove button event
-        attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
-    });
-
-    // Function to remove date fields
-    function attachRemoveEvent(button) {
-        button.addEventListener("click", function() {
-            if (document.querySelectorAll(".event-date-item").length > 1) {
-                button.parentElement.remove();
-            }
+    <script>
+      window.addEventListener("load", function () {
+        $('.django-summernote textarea').summernote({
+          height: 250,
+          width: '100%',
         });
-    }
+      });
+    </script>
 
-    // Attach remove event to initial remove button
-    attachRemoveEvent(document.querySelector(".remove-date-btn"));
-});
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateContainer = document.getElementById("event-dates-container");
+            const addDateBtn = document.getElementById("add-date-btn");
+
+            // Function to add new date fields
+            addDateBtn.addEventListener("click", function() {
+                const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
+
+                // Clear the values in the new fields
+                newDateFields.querySelectorAll("input").forEach(input => input.value = "");
+
+                dateContainer.appendChild(newDateFields);
+
+                // Reattach remove button event
+                attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
+            });
+
+            // Function to remove date fields
+            function attachRemoveEvent(button) {
+                button.addEventListener("click", function() {
+                    if (document.querySelectorAll(".event-date-item").length > 1) {
+                        button.parentElement.remove();
+                    }
+                });
+            }
+
+            // Attach remove event to initial remove button
+            attachRemoveEvent(document.querySelector(".remove-date-btn"));
+        });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const needReg = document.getElementById("id_need_registration");
+        const maxSeat = document.getElementById("id_max_seat");
+
+        function toggleRequired() {
+          if (needReg.checked) {
+            maxSeat.setAttribute("required", "required");
+          } else {
+            maxSeat.removeAttribute("required");
+          }
+        }
+
+        needReg.addEventListener("change", toggleRequired);
+        toggleRequired();  // run on load
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const coverInput = document.getElementById("id_cover_image");
+        const previewContainer = document.getElementById("coverImagePreview");
+
+        coverInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 150px;" class="img-thumbnail">`;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            previewContainer.innerHTML = "<p class='text-danger'>Selected file is not an image.</p>";
+          }
+        });
+      });
+    </script>
+
+
 </div>
 {% endblock %}
