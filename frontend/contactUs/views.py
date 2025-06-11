@@ -10,7 +10,7 @@ def contact_us_list(request):
     try:
         headers = get_auth_headers(request)
         response = requests.get(APIEndpoints.URL_CONTACT_US_LIST, headers=headers)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         response_body = response.json()
         context = {
@@ -36,7 +36,7 @@ def contact_us_edit(request, uuid):
             response = requests.put(APIEndpoints.URL_CONTACT_US_DETAIL(uuid), json=payload, headers=headers)
 
             response_body = response.json()
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             if response.status_code == 200:
                 return redirect("contact_us_list")
@@ -64,7 +64,7 @@ def soft_delete_contact(request, uuid):
     if request.method == "DELETE":
         headers = get_auth_headers(request)
         response = requests.delete(APIEndpoints.URL_CONTACT_US_DETAIL(uuid), headers=headers)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         if response.status_code == 200:
             return JsonResponse({"success": True, "message": "Message deleted successfully."})

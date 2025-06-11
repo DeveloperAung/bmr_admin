@@ -1,15 +1,60 @@
+{% load pagination_extras %}
 <div class="row mt-3">
-  <div class="hint-text col-md-6 mt-2">
-      Showing <b>{{ page_objs.start_index }}-{{ page_objs.end_index }}</b> out of <b>{{page_objs.paginator.count }}</b> entries
+  {% if data_header %}
+  <div class="col-md-6 mt-4">
+    {% calculate_start data_header.current_page data_header.page_size as current_start %}
+    {% calculate_end data_header.current_page data_header.page_size data_header.total_records as current_end %}
+    <p>
+        Showing {{ current_start }} to {{ current_end }} of {{ data_header.total_records }} entries
+        - Page {{ data_header.current_page }} of {{ data_header.total_pages }}
+    </p>
   </div>
-  <nav class="col-md-6">
-    <ul class="pagination flex-wrap pagination-rounded float-end">
-      <li class="page-item"><a class="page-link" href="#"><i class="ti-angle-left"></i></a></li>
-      <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item"><a class="page-link" href="#">4</a></li>
-      <li class="page-item"><a class="page-link" href="#"><i class="ti-angle-right"></i></a></li>
-    </ul>
-  </nav>
+
+  <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-primary gap-2  justify-content-end">
+
+              <li class="page-item {% if not data_header.previous %}disabled{% endif %}">
+                <a class="page-link rounded-circle"
+                   href="{% querystring_replace 'page' data_header.current_page|add:"-1" %}"
+                   aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+
+              {% for i in 1|to:data_header.total_pages %}
+              {% if i == 1 or i == 2 or i == data_header.total_pages or i == data_header.total_pages|add:'-1' or i == data_header.current_page or i == data_header.current_page|add:'-1' or i == data_header.current_page|add:'1' %}
+                <li class="page-item {% if i == data_header.current_page %}active{% endif %}">
+                  <a class="page-link rounded-circle" href="{% querystring_replace 'page' i %}">{{ i }}</a>
+                </li>
+
+              {% elif i == 3 and data_header.current_page > 5 %}
+                <li class="page-item disabled">
+                  <span class="page-link rounded-circle">...</span>
+                </li>
+
+              {% elif i == data_header.current_page|add:'2' and i < data_header.total_pages|add:'-1' %}
+                <li class="page-item disabled">
+                  <span class="page-link rounded-circle">...</span>
+                </li>
+
+              {% endif %}
+            {% endfor %}
+
+              <li class="page-item {% if not data_header.next %}disabled{% endif %}">
+                <a class="page-link rounded-circle"
+                   href="{% querystring_replace 'page' data_header.current_page|add:"1" %}"
+                   aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 </div>

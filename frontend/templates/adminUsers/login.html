@@ -1,51 +1,57 @@
 {% load static %}
 <html lang="en">
-
-{% include 'includes/css_import.html' %}
-
-<body>
-  <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-      <div class="content-wrapper d-flex align-items-center auth px-0">
-        <div class="row w-100 mx-0">
-          <div class="col-lg-4 mx-auto">
-            <div class="auth-form-light text-start py-5 px-4 px-sm-5">
-              <div class="brand-logo">
-                <img src="../../../assets/images/logo.svg" alt="logo">
-              </div>
-              <h4>Hello! let's get started</h4>
-              <h6 class="fw-light">Sign in to continue.</h6>
-              <form class="pt-3" action="{% url 'login' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="idUsername" name="username" placeholder="Username">
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="idPassword" name="password"
-                    placeholder="Password">
-                </div>
-                <div class="mt-3 d-grid gap-2">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg fw-medium auth-form-btn">SIGN IN</button>
-                </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
-                  <div class="form-check">
-                    <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input">
-                      Keep me signed in
-                    </label>
+  <head>
+    {% include 'includes/css_import.html' %}
+  </head>
+  <body>
+    <!-- tap on top starts-->
+    <div class="tap-top"><i class="iconly-Arrow-Up icli"></i></div>
+    <!-- tap on tap ends-->
+    <!-- loader-->
+    <div class="loader-wrapper">
+      <div class="loader"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <!-- login page start-->
+    <div class="container-fluid p-0">
+      <div class="row m-0">
+        <div class="col-12 p-0">
+          <div class="login-card login-dark">
+            <div>
+              <div><a class="logo" href="index.html"><img class="img-fluid for-light m-auto" src="../assets/images/logo/logo1.png" alt="looginpage"><img class="img-fluid for-dark" src="../assets/images/logo/logo-dark.png" alt="logo"></a></div>
+              <div class="login-main">
+                <form class="theme-form" action="{% url 'login' %}" method="post">
+                  {% csrf_token %}
+                  <h2 class="text-center">Sign in to account</h2>
+                  <p class="text-center">Enter username &amp; password to login</p>
+                  <div class="form-group">
+                    <label class="col-form-label">Username</label>
+                    <input type="text" class="form-control" id="idUsername" name="username" placeholder="Username">
                   </div>
-                  <a href="{% url 'forgot_password' %}" class="auth-link text-black">Forgot password?</a>
-                </div>
-              </form>
+                  <div class="form-group">
+                    <label class="col-form-label">Password</label>
+                    <div class="form-input position-relative">
+                      <input class="form-control" type="password" name="password" id="idPassword"  required="" placeholder="*********">
+                      <div class="show-hide"><span class="show">                         </span></div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-0 checkbox-checked">
+                    <div class="form-check checkbox-solid-info">
+                      <input class="form-check-input" id="solid6" type="checkbox">
+                      <label class="form-check-label" for="solid6">Remember password</label>
+                    </div><a class="link" href="forget-password.html">Forgot password?</a>
+                    <div class="text-end mt-3">
+                      <button class="btn btn-primary btn-block w-100" type="submit">Sign in                 </button>
+                    </div>
+                  </div>
+                  <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2" href="sign-up.html">Create Account</a></p>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- content-wrapper ends -->
+      {% include 'includes/js_import.html' %}
     </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  {% include 'includes/js_import.html' %}
-</body>
-
+  </body>
 </html>
+

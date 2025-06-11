@@ -7,18 +7,29 @@ from frontend.config.api_endpoints import APIEndpoints
 
 def notice_list(request):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_NOTICES, request)
-        if response.status_code == 401:  # Unauthorized
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        response = check_auth_request("GET", APIEndpoints.URL_NOTICES, request, params=params)
+        print('response', response)
+        if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
         response_body = response.json()
         context = {
             'messages': response_body["message"],
-            'data': response_body["data"]["results"],
+            'data_header': response_body["data"],
+            'data_results': response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
         return render(request, "notices/notice_list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "notices/category_list.html", {"error": str(e)})
+        return render(request, "notices/notice_list.html", {"error": str(e)})
 
 
 def notice_create(request):
@@ -36,7 +47,7 @@ def notice_create(request):
                 "to_date": to_date
             }
             response = check_auth_request("POST", APIEndpoints.URL_NOTICES, request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
@@ -73,7 +84,7 @@ def notice_edit(request, uuid):
                 "to_date": to_date
             }
             response = check_auth_request("PUT", APIEndpoints.URL_NOICE_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             print('response_body', response_body)
@@ -100,7 +111,7 @@ def notice_edit(request, uuid):
 def notice_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_NOICE_DETAILS(uuid), request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         if response.status_code == 200:
@@ -117,7 +128,7 @@ def notice_publish_toggle(request, uuid):
 
         response = check_auth_request("PATCH", APIEndpoints.URL_NOICE_PUBLISH_TOGGLE(uuid), request)
         decoded_response = response.json()
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         if response.status_code == 200:

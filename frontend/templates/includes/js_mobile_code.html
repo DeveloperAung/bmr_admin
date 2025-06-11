@@ -1,0 +1,24 @@
+<script>
+  const input = document.querySelector("#idContact");
+
+    window.intlTelInput(input, {
+        initialCountry: "sg",
+        geoIpLookup: function(callback) {
+            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                const countryCode = (resp && resp.country) ? resp.country : "sg";
+                callback(countryCode);
+            });
+        }
+    });
+
+    const inputSecondary = document.querySelector("#idSecondaryContact");
+    window.intlTelInput(inputSecondary, {
+        initialCountry: "mm",
+        geoIpLookup: function(callback) {
+            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                const countryCode1 = (resp && resp.country) ? resp.country : "mm";
+                callback(countryCode1);
+            });
+        }
+    });
+</script>

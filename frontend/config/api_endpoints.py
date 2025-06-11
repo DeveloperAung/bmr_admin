@@ -90,8 +90,8 @@ class APIEndpoints:
         return f"{API_BASE_URL}/api/p/category/{uuid}/"
 
     @staticmethod
-    def URL_POST_BY_CATEGORY(category_uuid):
-        return f"{API_BASE_URL}/api/p/post/?category_uuid={category_uuid}/"
+    def URL_POST_BY_CATEGORY(category_title):
+        return f"{API_BASE_URL}/api/p/post/?category_title={category_title}/"
 
     """ Post END """
 

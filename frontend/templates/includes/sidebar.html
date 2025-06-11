@@ -1,100 +1,109 @@
 {% load static %}
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'dashboard' %}">
-                <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin_user_list' %}">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Admin Users</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'subscriber_list' %}">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Email Subscribers</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="./pages/widgets/widgets.html">
-                <i class="fa fa-film menu-icon"></i>
-                <span class="menu-title">Dhamma Media</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'dhamma_class_list' %}">
-                <i class="fa fa-calendar menu-icon"></i>
-                <span class="menu-title">Dhamma Classes</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-               aria-controls="ui-basic">
-                <i class="fa fa-folder-open-o menu-icon"></i>
-                <span class="menu-title">Manage Posts</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/accordions.html">Weekly Activities</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/buttons.html">Articles</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/badges.html">Books</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/breadcrumbs.html">Travel Posts</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/dropdowns.html">Friday Activities</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="./pages/ui-features/modals.html">Success Stories</a></li>
+{% load static %}
+<aside class="page-sidebar">
+    <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
+    <div class="main-sidebar" id="main-sidebar">
+        <ul class="sidebar-menu" id="simple-bar">
+            <li class="pin-title sidebar-main-title">
+                <div>
+                  <h5 class="sidebar-title f-w-700">Pinned</h5>
+                </div>
+            </li>
+            <li class="sidebar-main-title">
+                <div>
+                    <h5 class="f-w-700 sidebar-title pt-3">Management</h5>
+                </div>
+            </li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'dashboard' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Home-dashboard"></use>
+                  </svg>
+                <h6>Dashboards</h6><span class="badge">3</span><i class="iconly-Arrow-Right-2 icli"></i></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="index.html">Members</a></li>
+                    <li><a href="dashboard-02.html">Posts</a></li>
+                    <li><a href="dashboard-03.html">Events</a></li>
                 </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-advanced" aria-expanded="false"
-               aria-controls="ui-advanced">
-                <i class="fa fa-file-o menu-icon"></i>
-                <span class="menu-title">Single Pages</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-advanced">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home_setting_video_listing' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home_page_banner_order' %}">Home Banner</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'single_page_list' %}">Others</a></li>
+            </li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'admin_user_list' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Profile"></use>
+                  </svg>
+                <h6 class="f-w-600">Admin Users </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'subscriber_list' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#More-box"></use>
+                  </svg>
+                <h6 class="f-w-600">Email Subscribers </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'dhamma_class_list' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Calendar"></use>
+                </svg>
+                <h6 class="f-w-600">Dhamma Classes </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'notice_list' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#notification"></use>
+                </svg>
+                <h6 class="f-w-600">Announcements </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="javascript:void(0)">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Discovery"></use>
+                </svg>
+                <h6 class="f-w-600">Manage Posts</h6><i class="iconly-Arrow-Right-2 icli"></i></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="general-widget.html">Weekly Activities</a></li>
+                    <li><a href="chart-widget.html">Articles</a></li>
+                    <li><a href="chart-widget.html">Books</a></li>
+                    <li><a href="chart-widget.html">Travel Posts</a></li>
+                    <li><a href="chart-widget.html">Friday Activities</a></li>
+                    <li><a href="chart-widget.html">Achievements</a></li>
                 </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
-               aria-controls="form-elements">
-                <i class="icon-cog menu-icon"></i>
-                <span class="menu-title">Settings</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="form-elements">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'event_category_list' %}">Event Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'event_sub_category_list' %}">Event Sub Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'post_category_list' %}">Post Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'donation_category_list' %}">Donation Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'donation_sub_category_list' %}">Donation Sub Categories</a></li>
+            </li>
+
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="file-manager.html">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Category"></use>
+                </svg>
+                <h6 class="f-w-600">Memberships </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link"
+                                                                             href="file-manager.html">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Wallet"></use>
+                </svg>
+                <h6 class="f-w-600">Payments </h6></a></li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link"
+                                                                             href="javascript:void(0)">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Paper-plus"></use>
+                </svg>
+                <h6 class="f-w-600">Single Pages</h6><i class="iconly-Arrow-Right-2 icli"></i></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="{% url 'home_setting_video_listing' %}">Home </a></li>
+                    <li><a href="{% url 'home_page_banner_order' %}">Home Banner </a></li>
+                    <li><a href="{% url 'single_page_list' %}">Others </a></li>
                 </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'contact_us_list' %}">
-                <i class="fa fa-comments-o menu-icon"></i>
-                <span class="menu-title">Contact Us</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'notice_list' %}">
-                <i class="fa fa-bullhorn menu-icon"></i>
-                <span class="menu-title">Announcements</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+            </li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link"
+                                                                             href="javascript:void(0)">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Setting"></use>
+                </svg>
+                <h6 class="f-w-600">Settings</h6><i class="iconly-Arrow-Right-2 icli"></i></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="{% url 'event_category_list' %}">Event Categories </a></li>
+                    <li><a href="{% url 'event_sub_category_list' %}">Event Sub Categories </a></li>
+                    <li><a href="{% url 'post_category_list' %}">Post Categories </a></li>
+                    <li><a href="{% url 'donation_category_list' %}">Donation Categories </a></li>
+                    <li><a href="{% url 'donation_sub_category_list' %}">Donation Sub Categories </a></li>
+                </ul>
+            </li>
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link"
+                                                                             href="{% url 'contact_us_list' %}">
+                <svg class="stroke-icon">
+                    <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Contacts"></use>
+                </svg>
+                <h6 class="f-w-600">Contact Us </h6></a></li>
+        </ul>
+    </div>
+    <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
+</aside>

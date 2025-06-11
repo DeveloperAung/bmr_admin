@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -26,8 +27,6 @@ class NoticeViewSet(BaseSoftDeleteViewSet):
     permission_classes = [IsAuthenticated]
     lookup_field = 'uuid'
 
-    queryset = Notice.objects.all().order_by('-created_at')
-
     def get_serializer_class(self):
         if self.action == "list":
             return NoticeListSerializer
@@ -38,6 +37,17 @@ class NoticeViewSet(BaseSoftDeleteViewSet):
         elif self.action in ["update", "partial_update"]:
             return NoticeCreateSerializer
         return NoticeRetrieveSerializer
+
+    def get_queryset(self):
+        queryset = Notice.objects.filter(is_active=True).order_by('-created_at')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(email__icontains=search) |
+                Q(uuid__icontains=search)
+            )
+        return queryset
 
     @action(detail=True, methods=["patch"], url_path="publish-toggle")
     def publish_toggle(self, request, uuid=None):

@@ -31,7 +31,7 @@ def event_category_create(request):
                 "title": title,
             }
             response = check_auth_request("POST", APIEndpoints.URL_EVENT_CATEGORY, request, data=payload)
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
@@ -61,7 +61,7 @@ def event_category_edit(request, uuid):
                 "title": title,
             }
             response = check_auth_request("PUT", APIEndpoints.URL_EVENT_CATEGORY_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
@@ -87,7 +87,7 @@ def event_category_edit(request, uuid):
 def event_category_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_EVENT_CATEGORY_DETAILS(uuid), request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         if response.status_code == 200:
@@ -102,7 +102,7 @@ def event_category_soft_delete(request, uuid):
 def event_sub_category_list(request):
     try:
         response = check_auth_request("GET", APIEndpoints.URL_EVENT_SUB_CATEGORY, request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         event_response_body = response.json()
@@ -128,7 +128,7 @@ def event_sub_category_create(request):
                 "event_category": category
             }
             response = check_auth_request("POST", APIEndpoints.URL_EVENT_SUB_CATEGORY, request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
@@ -165,7 +165,7 @@ def event_sub_category_edit(request, uuid):
                 "event_category": category
             }
             response = check_auth_request("PUT", APIEndpoints.URL_EVENT_SUB_CATEGORY_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
@@ -194,7 +194,7 @@ def event_sub_category_edit(request, uuid):
 def event_sub_category_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_EVENT_SUB_CATEGORY_DETAILS(uuid), request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         if response.status_code == 200:
             return JsonResponse({"success": True, "message": "Sub Category deleted successfully."})
@@ -211,7 +211,7 @@ def dhamma_class_list(request):  # event
 
         response = requests.get(APIEndpoints.URL_EVENTS, headers=headers)
 
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         event_response_body = response.json()
@@ -243,7 +243,7 @@ def dhamma_class_create(request):   # event create
     #             "content": content
     #         }
     #         response = check_auth_request("POST", APIEndpoints.URL_SINGLE_PAGES, request, data=payload)
-    #         if response.status_code == 401:
+    #         if response.status_code == 401 or response.status_code == 400:
     #             return redirect("login")
     #         response_body = response.json()
     #         if response.status_code == 201:
@@ -280,7 +280,7 @@ def dhamma_class_details(request, event_uuid):
         response = requests.get(APIEndpoints.URL_EVENT_DETAILS(event_uuid), headers=headers)
         # response_category = request.get(APIEndpoints.URL_EVENT_CATEGORY_LIST, headers=headers)
         # print('response_category', response_category)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         response_body = response.json()

@@ -9,7 +9,7 @@ from frontend.config.api_endpoints import APIEndpoints
 def post_category_list(request):
     try:
         response = check_auth_request("GET", APIEndpoints.URL_POST_CATEGORY, request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -33,7 +33,7 @@ def post_category_create(request):
                 "title": title,
             }
             response = check_auth_request("POST", APIEndpoints.URL_POST_CATEGORY, request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 messages.warning(request, "Your session has expired! Please login again.")
                 return redirect("login")
             response_body = response.json()
@@ -64,7 +64,7 @@ def post_category_edit(request, uuid):
                 "title": title,
             }
             response = check_auth_request("PUT", APIEndpoints.URL_POST_CATEGORY_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 messages.warning(request, "Your session has expired! Please login again.")
                 return redirect("login")
             response_body = response.json()
@@ -78,7 +78,7 @@ def post_category_edit(request, uuid):
                 return render(request, "posts/category_edit.html", context)
         else:
             response = check_auth_request("GET", APIEndpoints.URL_POST_CATEGORY_DETAILS(uuid), request)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 messages.warning(request, "Your session has expired! Please login again.")
                 return redirect("login")
             response_body = response.json()
@@ -94,7 +94,7 @@ def post_category_edit(request, uuid):
 def post_category_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_POST_CATEGORY_DETAILS(uuid), request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
         if response.status_code == 200:
@@ -106,10 +106,10 @@ def post_category_soft_delete(request, uuid):
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 
-def weekly_activities_post_list(request, category_uuid):
+def weekly_activities_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -124,10 +124,10 @@ def weekly_activities_post_list(request, category_uuid):
         return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
 
 
-def article_post_list(request, category_uuid):
+def article_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -142,10 +142,10 @@ def article_post_list(request, category_uuid):
         return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
 
 
-def books_post_list(request, category_uuid):
+def books_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -160,10 +160,10 @@ def books_post_list(request, category_uuid):
         return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
 
 
-def travel_post_list(request, category_uuid):
+def travel_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -178,10 +178,10 @@ def travel_post_list(request, category_uuid):
         return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
 
 
-def friday_activities_post_list(request, category_uuid):
+def friday_activities_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 
@@ -196,10 +196,10 @@ def friday_activities_post_list(request, category_uuid):
         return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
 
 
-def achievements_post_list(request, category_uuid):
+def achievements_post_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_uuid), request)
-        if response.status_code == 401:
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
 

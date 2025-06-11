@@ -1,64 +1,99 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Admin User</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Create</li>
-    </ol>
-</nav>
-<div class="content-wrapper">
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title mt-4">
-                        <div class="d-flex justify-content-between row">
-                            <div class="col-md-6">
-                                <h4>Admin User</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <form method="post" action="{% url 'admin_user_register' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="idName"></label>
-                            <input  class="form-control"  type="text" id="idName" name="name" placeholder="Name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idEmail"></label>
-                            <input  class="form-control"  type="text" id="idEmail" name="email" placeholder="Email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idUsername"></label>
-                            <input  class="form-control"  type="text" id="idUsername" name="username" placeholder="Username">
-                        </div>
-                        <div class="mb-3">
-                            <label>Admin User Role</label>
-                            {% if roles %}
-                            <select class="form-select" name="admin_user_role">
-                             {% for role in roles %}
-                                <option value="{{ role.id }}"
-                                  {% if data.admin_user_role.id == role.id %}selected{% endif %}>
-                                  {{ role.title }}
-                                </option>
-                             {% endfor %}
-                            </select>
-                            {% endif %}
-                        </div>
-                        <div class="mb-3">
-                            <label for="idContact"></label>
-                            <input  class="form-control"  type="text" id="idContact" name="contact" placeholder="Mobile">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idSecondaryContact"></label>
-                            <input  class="form-control"  type="text" id="idSecondaryContact" name="secondary_contact" placeholder="Secondary Mobile">
-                        </div>
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'admin_user_list' %}" class="btn btn-secondary">Cancel</a>
-                    </form>
-                </div>
-            </div>
+
+<link rel="stylesheet" type="text/css" href="{% static '/assets/css/vendors/intltelinput.min.css' %}">
+<script src="{% static '/assets/js/vendors/@yaireo/tagify/dist/intlTelInput.min.js' %}"></script>
+<div class="container-fluid">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-sm-6 col-12">
+          <h2>Admin User Create</h2>
         </div>
+        <div class="col-sm-6 col-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'admin_user_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item">Admin User</li>
+            <li class="breadcrumb-item active">Create</li>
+          </ol>
+        </div>
+      </div>
     </div>
 </div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+          <form method="post" action="{% url 'admin_user_register' %}">
+            {% csrf_token %}
+            <div class="card">
+              <div class="card-body">
+                <div class="form theme-form basic-form">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Name</h5>
+                        <input class="form-control" type="text" id="idName" name="name" placeholder="Enter Name">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Email</h5>
+                        <input  class="form-control" type="email" id="idEmail" name="email" placeholder="Enter Email">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Username</h5>
+                        <input class="form-control" type="text" id="idUsername" name="username" placeholder="Enter Username">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Admin User Role</h5>
+                        {% if roles %}
+                        <select class="form-select" name="admin_user_role">
+                         {% for role in roles %}
+                            <option value="{{ role.id }}"
+                              {% if data.admin_user_role.id == role.id %}selected{% endif %}>
+                              {{ role.title }}
+                            </option>
+                         {% endfor %}
+                        </select>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Primary Contact</h5>
+                        <input id="idContact" name="contact" type="tel" class="form-control w-100">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Secondary Contact</h5>
+                        <input id="idSecondaryContact" name="secondary_contact" type="tel" class="form-control w-100">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="text-end">
+                          <a class="btn btn-primary btn-lg" href="#">Create</a>
+                          <a class="btn btn-danger btn-lg" href="{% url 'admin_user_list' %}">Cancel </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+</div>
+{% include 'includes/js_mobile_code.html' %}
 {% endblock %}

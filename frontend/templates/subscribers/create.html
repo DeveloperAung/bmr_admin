@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Subscriber</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Create</li>
-  </ol>
-</nav>
+<div class="container-fluid">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-sm-6 col-12">
+          <h2>Email Subscriber(s) Create</h2>
+        </div>
+        <div class="col-sm-6 col-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'subscriber_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item">Email Subscriber(s)</li>
+            <li class="breadcrumb-item active">Create</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+</div>
 <div class="content-wrapper">
   <div class="row">
     <div class="col-12 grid-margin">
       <div class="card">
         <div class="card-body">
-          <div class="card-header">
-            <h4>Create New Subscriber</h4>
-          </div>
           <div class="row">
               <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h3 class="mb-3">Subscribers' Email</h3>
-                <button type="button" id="add-subscriber-btn" class="btn btn-secondary">
+                <button type="button" id="add-subscriber-btn" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Add Another Subscriber
                 </button>
 
@@ -27,12 +34,12 @@
                     <div class="subscriber-item mb-3 d-flex align-items-center gap-2 col-md-5">
                         <input type="email" name="subscriber_email[]" class="form-control" placeholder="Email" required>
                         <button type="button" class="btn btn-danger remove-subscriber-btn" title="Remove">
-                            <i class="fa fa-trash"></i>
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success">Save</button>
+                <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{% url 'subscriber_list' %}" class="btn btn-secondary">Cancel</a>
             </form>
           </div>

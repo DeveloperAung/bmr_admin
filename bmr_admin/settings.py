@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mathfilters',
     'rest_framework',
     "rest_framework_simplejwt",
     "corsheaders",
@@ -69,6 +70,9 @@ INSTALLED_APPS = [
     'api.core',
     'api.subscribers',
 ]
+
+LOGIN_REDIRECT_URL = '/home/'
+LOGIN_URL = '/login/'
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'BMR Admin API',
@@ -100,6 +104,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',

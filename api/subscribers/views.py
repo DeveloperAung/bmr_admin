@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -36,6 +37,17 @@ class SubscriberViewSet(BaseSoftDeleteViewSet):
             print('error', e)
             logger.error(f"Error selecting serializer: {e}")
             return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get_queryset(self):
+        queryset = SubscriberUser.objects.filter(is_active=True).order_by('-created_at')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(email__icontains=search) |
+                Q(uuid__icontains=search)
+            )
+        return queryset
 
     @action(detail=False, methods=['post'], url_path='bulk-create')
     def bulk_create(self, request):

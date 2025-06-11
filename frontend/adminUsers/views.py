@@ -1,4 +1,7 @@
+from urllib.parse import urlencode
+
 import requests
+from django.contrib import auth, messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from frontend.config.api_endpoints import APIEndpoints
@@ -7,18 +10,40 @@ from frontend.config.api_endpoints import APIEndpoints
 def admin_user_list(request):
     try:
         headers = get_auth_headers(request)
-        response = requests.get(APIEndpoints.URL_ADMIN_USERS, headers=headers)
-        if response.status_code == 401:
+
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+        role = request.GET.get("role", "")
+
+        # Build query string
+        params = {"page": page}
+        if search:
+            params["search"] = search
+        if role:
+            params["role"] = role
+
+        response = requests.get(APIEndpoints.URL_ADMIN_USERS, headers=headers, params=params)
+
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
+
         response_body = response.json()
+        # print('response_body', response_body)
         context = {
             'messages': response_body["message"],
-            'data': response_body["data"]["results"]
+            'data_header': response_body["data"],
+            'data_results': response_body["data"]["results"],
+            "request": request,
+            "query": search,
+            "role": role,
         }
         return render(request, "adminUsers/list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "adminUsers/list.html", {"error": str(e)})
+        return render(request, "adminUsers/list.html", {
+            "error": str(e),
+            "request": request,
+        })
 
 
 def admin_user_register(request):
@@ -46,7 +71,7 @@ def admin_user_register(request):
             }
             response = check_auth_request("POST", APIEndpoints.URL_ADMIN_USERS, request, data=payload)
 
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
 
             response_body = response.json()
@@ -94,7 +119,7 @@ def admin_user_edit(request, uuid):
             }
             response = check_auth_request("PUT", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request, data=payload)
 
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
 
             response_body = response.json()
@@ -123,7 +148,7 @@ def admin_user_edit(request, uuid):
 def admin_user_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_ADMIN_USER_DETAILS(uuid), request)
-        if response.status_code == 401:  # Unauthorized
+        if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
 
         if response.status_code == 200:
@@ -147,7 +172,9 @@ def forgot_password(request):
     return render(request, 'adminUsers/forgot_password.html')
 
 
-def logout(request):
+def user_logout(request):
+    auth.logout(request)
+    messages.success(request, 'You are logout.')
     return render(request, 'adminUsers/login.html')
 
 
@@ -185,7 +212,7 @@ def check_auth_request(method, url, request, data=None, params=None):
     try:
         headers = get_auth_headers(request)
         response = requests.request(method, url, headers=headers, json=data, params=params)
-        print('response', response)
+
         return response
 
     except requests.exceptions.RequestException as e:

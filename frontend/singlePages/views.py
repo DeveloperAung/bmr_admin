@@ -8,7 +8,7 @@ from frontend.config.api_endpoints import APIEndpoints
 def single_page_list(request):
     try:
         response = check_auth_request("GET", APIEndpoints.URL_SINGLE_PAGES, request)
-        if response.status_code == 401:  # Unauthorized
+        if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
         response_body = response.json()
         context = {
@@ -37,7 +37,7 @@ def single_page_create(request):
                 "content": content
             }
             response = check_auth_request("POST", APIEndpoints.URL_SINGLE_PAGES, request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 201:
@@ -74,7 +74,7 @@ def single_page_edit(request, uuid):
                 "content": content
             }
             response = check_auth_request("PUT", APIEndpoints.URL_SINGLE_PAGE_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:
+            if response.status_code == 401 or response.status_code == 400:
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
@@ -101,7 +101,7 @@ def single_page_edit(request, uuid):
 def single_page_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_SINGLE_PAGE_DETAILS(uuid), request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         if response.status_code == 200:

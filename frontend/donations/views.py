@@ -11,7 +11,7 @@ def donation_category_list(request):
         headers = get_auth_headers(request)
         response = requests.get(APIEndpoints.URL_DONATION_CATEGORY, headers=headers)
 
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         donation_response_body = response.json()
@@ -40,7 +40,7 @@ def donation_category_create(request):
             }
             response = check_auth_request("POST", APIEndpoints.URL_DONATION_CATEGORY, request, data=payload)
 
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
 
             response_body = response.json()
@@ -77,7 +77,7 @@ def donation_category_edit(request, uuid):
             }
             response = check_auth_request("PUT", APIEndpoints.URL_DONATION_CATEGORY_DETAILS(uuid), request, data=payload)
             print('res', response)
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
 
             response_body = response.json()
@@ -104,7 +104,7 @@ def donation_category_edit(request, uuid):
 def donation_category_soft_delete(request, uuid):
     if request.method == "DELETE":
         response = check_auth_request("DELETE", APIEndpoints.URL_DONATION_CATEGORY_DETAILS(uuid), request)
-        if response.status_code == 401:  # Unauthorized
+        if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
 
         if response.status_code == 200:
@@ -119,7 +119,7 @@ def donation_category_soft_delete(request, uuid):
 def donation_sub_category_list(request):
     try:
         response = check_auth_request("GET", APIEndpoints.URL_DONATION_SUB_CATEGORY, request)
-        if response.status_code == 401:  # Unauthorized
+        if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
 
         donation_response_body = response.json()
@@ -145,7 +145,7 @@ def donation_sub_category_create(request):
                 "donation_category": category
             }
             response = check_auth_request("POST", APIEndpoints.URL_DONATION_SUB_CATEGORY, request, data=payload)
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
 
             response_body = response.json()
@@ -183,7 +183,7 @@ def donation_sub_category_edit(request, uuid):
                 "donation_category": category
             }
             response = check_auth_request("PUT", APIEndpoints.URL_DONATION_SUB_CATEGORY_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
             response_body = response.json()
             if response.status_code == 200:
@@ -196,7 +196,7 @@ def donation_sub_category_edit(request, uuid):
                 return render(request, "donations/sub_category_edit.html", context)
         else:
             response = check_auth_request("GET", APIEndpoints.URL_DONATION_SUB_CATEGORY_DETAILS(uuid), request)
-            if response.status_code == 401:  # Unauthorized
+            if response.status_code == 401 or response.status_code == 400:  # Unauthorized
                 return redirect("login")
             response_body = response.json()
             response_category = check_auth_request("GET", APIEndpoints.URL_DONATION_CATEGORY, request)

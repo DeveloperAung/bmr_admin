@@ -16,7 +16,7 @@ def home_setting_video_edit(request):
 def home_page_banner_order(request):
     try:
         response = check_auth_request("GET", APIEndpoints.URL_HOME_BANNERS, request)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         response_body = response.json()
         context = {
@@ -34,7 +34,7 @@ def home_page_banner_reorder(request):
         import json
         payload = json.loads(request.body)
         response = check_auth_request("POST", APIEndpoints.URL_HOME_BANNER_REORDER, request, data=payload)
-        if response.status_code == 401:
+        if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         if response.status_code == 200:
             return JsonResponse(response.json())

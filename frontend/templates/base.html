@@ -1,38 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
 {% load static %}
-
-{% include 'includes/css_import.html' %}
-<body>
-  <div class="container-scroller">
-
-    <!-- partial:partials/_navbar.html -->
-    {% include 'includes/navbar.html' %}
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_settings-panel.html -->
-      {% include 'includes/settings.html' %}
-
-      <!-- partial -->
-      <!-- partial:partials/_sidebar.html -->
-      {% include 'includes/sidebar.html' %}
-      <!-- partial -->
-      <div class="main-panel">
-        {% block content %}
-        {% endblock %}
-        <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        {% include 'includes/footer.html' %}
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
+<html lang="en">
+  <head>
+    {% include 'includes/css_import.html' %}
+  </head>
+  <body>
+    <!-- page-wrapper Start-->
+    <!-- tap on top starts-->
+    <div class="tap-top"><i class="iconly-Arrow-Up icli"></i></div>
+    <!-- tap on tap ends-->
+    <!-- loader-->
+    <div class="loader-wrapper">
+      <div class="loader"><span></span><span></span><span></span><span></span><span></span></div>
     </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  <!-- container-scroller -->
-
-  {% include 'includes/js_import.html' %}
-  <!-- End custom js for this page-->
-</body>
-
+    <div class="page-wrapper compact-wrapper" id="pageWrapper">
+      {% include 'includes/navbar.html' %}
+      <!-- Page Body Start-->
+      <div class="page-body-wrapper">
+        <!-- Page sidebar start-->
+        {% include 'includes/sidebar.html' %}
+        <!-- Page sidebar end-->
+        <div class="page-body">
+           {% block content %}
+           {% endblock %}
+        </div>
+        {% include 'includes/footer.html' %}
+      </div>
+    </div>
+    <!-- jquery-->
+    {% include 'includes/js_import.html' %}
+  </body>
 </html>

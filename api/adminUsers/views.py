@@ -1,5 +1,5 @@
+from django.db.models import Q
 from django.http import Http404
-from drf_spectacular import openapi
 from rest_framework import status, viewsets
 from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -92,7 +92,22 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     lookup_field = 'uuid'
 
     def get_queryset(self):
-        return AdminUser.objects.filter(is_active=True).order_by('-date_joined')
+        queryset = AdminUser.objects.filter(is_active=True).order_by('-date_joined')
+        search = self.request.query_params.get("search")
+        role = self.request.query_params.get("role")
+
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(username__icontains=search) |
+                Q(email__icontains=search) |
+                Q(contact__icontains=search)
+            )
+
+        if role:
+            queryset = queryset.filter(admin_user_role__id=role)
+
+        return queryset
 
     def handle_authentication_error(self, request):
         """
