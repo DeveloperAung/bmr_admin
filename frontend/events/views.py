@@ -227,23 +227,29 @@ def event_sub_category_soft_delete(request, uuid):
 
 def dhamma_class_list(request):  # event
     try:
-        headers = get_auth_headers(request)
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
 
-        response = requests.get(APIEndpoints.URL_EVENTS, headers=headers)
+        params = {"page": page}
+        if search:
+            params["search"] = search
 
+        response = check_auth_request("GET", APIEndpoints.URL_EVENTS, request, params=params)
         if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 
         event_response_body = response.json()
-        print('response', event_response_body)
         context = {
             'messages': event_response_body["message"],
-            'data': event_response_body["data"]["results"],
+            'data_header': event_response_body["data"],
+            'data_results': event_response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
         return render(request, "events/list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "events/list.html", {"error": str(e)})
+        return render(request, "events/list.html", {"error": str(e), "request": request})
     # return render(request, 'events/list.html')
 
 
@@ -292,6 +298,38 @@ def dhamma_class_create(request):   # event create
         form = EventForm()
 
     return render(request, 'events/create.html', {"form": form})
+
+
+def dhamma_class_soft_delete(request, uuid):
+    if request.method == "DELETE":
+        response = check_auth_request("DELETE", APIEndpoints.URL_EVENT_DETAILS(uuid), request)
+        if response.status_code == 401 or response.status_code == 400:
+            return redirect("login")
+
+        if response.status_code == 200:
+            return JsonResponse({"success": True, "message": "Dhamma Class deleted successfully."})
+        else:
+            return JsonResponse(
+                {"success": False, "message": f"Failed to delete Dhamma Class {response.status_code}."}, status=400
+            )
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
+
+
+def dhamma_class_publish_toggle(request, uuid):
+    if request.method == "PATCH":
+
+        response = check_auth_request("PATCH", APIEndpoints.URL_EVENT_PUBLISH_TOGGLE(uuid), request)
+        decoded_response = response.json()
+        if response.status_code == 401 or response.status_code == 400:
+            return redirect("login")
+
+        if response.status_code == 200:
+            return JsonResponse({"success": True, "message": decoded_response["message"]})
+        else:
+            return JsonResponse(
+                {"success": False, "message": f"Failed to publish Dhamma Class {response.status_code}."}, status=400
+            )
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 
 def dhamma_class_details(request, event_uuid):

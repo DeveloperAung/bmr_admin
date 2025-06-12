@@ -4,13 +4,13 @@
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Dhamma Class list</h2>
+        <h2>Post Category list</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Dhamma Class</li>
-          <li class="breadcrumb-item active">All</li>
+          <li class="breadcrumb-item">Post Category</li>
+          <li class="breadcrumb-item active">list</li>
         </ol>
       </div>
     </div>
@@ -28,8 +28,8 @@
                   <i class="filter-icon show" data-feather="filter"></i>
                 </a>
               </div>
-              <a class="btn btn-primary justify-content-end" href="{% url 'dhamma_class_create' %}">
-                <i class="fa-solid fa-plus"></i> Create New Dhamma Class
+              <a class="btn btn-primary justify-content-end" href="{% url 'post_category_create' %}">
+                <i class="fa-solid fa-plus"></i> Create New Post Category
               </a>
             </div>
           </div>
@@ -39,7 +39,7 @@
               <form method="get">
                 <div class="row g-3">
                   <div class="col-sm-4">
-                    <input name="q" class="form-control" placeholder="Search event category" value="{{ query }}">
+                    <input name="q" class="form-control" placeholder="Search post category" value="{{ query }}">
                   </div>
                   <div class="col-sm-2">
                     <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
@@ -55,11 +55,7 @@
                 <tr>
                   <th class="text-center">#</th>
                   <th>Title</th>
-                  <th>Category</th>
-                  <th class="text-center">Published?</th>
-                  <th class="text-center">Action</th>
-                  <th class="text-center">Donation</th>
-                  <th class="text-center">Registration</th>
+                  <th class="text-end">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,37 +63,22 @@
                 {% for i in data_results %}
                   <tr>
                     <td class="text-center">{{ forloop.counter }}</td>
-                    <td>{{ i.title }}</td>
-                    <td>{{ i.category_title }}</td>
-                    <td class="text-center"><button class="btn btn-{% if i.is_publish %}outline-danger{% else %}primary{% endif %}" id="idPublishToggleBtn" data-url="{% url 'dhamma_class_publish_toggle' i.uuid %}" data-value="{% if i.is_publish %}Unpublish{% else %}Publish{% endif %}">{% if i.is_publish %}Unpublish{% else %}Publish{% endif %}</button></td>
+                    <td>{{ i.title }} </td>
                     <td class="text-end">
                       <div class="product-action justify-content-center">
 
-                        <a href="{% url 'dhamma_class_details' i.uuid %}" title="Edit">
+                        <a href="{% url 'post_category_edit' i.uuid %}" title="Edit">
                           <i class="iconly-Edit-Square icli"></i>
                         </a>
-                        <button class="btn" id="idDeleteBtn" data-url="{% url 'dhamma_class_soft_delete' i.uuid %}" title="Delete">
+                        <button class="btn" id="idDeleteBtn" data-url="{% url 'post_category_soft_delete' i.uuid %}" title="Delete">
                           <i class="iconly-Delete icli danger"></i>
                         </button>
                       </div>
                     </td>
-                    <td class="text-center">
-                      <a href="" title="donation">
-                        <i class="fa-solid fa-heart icli"></i>
-                      </a>
-                    </td>
-                    <td class="text-center">
-                      <a href="" title="Registration">
-                        <i class="fa-regular fa-calendar icli"></i>
-                      </a>
-                      <a href="" title="Attendance">
-                        <i class="fa-regular fa-clipboard icli"></i>
-                      </a>
-                    </td>
                   </tr>
                 {% empty %}
                   <tr>
-                    <td colspan="6" class="text-center">No dhamma classes are found.</td>
+                    <td colspan="6" class="text-center">No post category found.</td>
                   </tr>
                 {% endfor %}
               {% endif %}
@@ -111,6 +92,5 @@
   </div>
 </div>
 
-{% include 'includes/publish_toggle.html' %}
 {% include 'includes/soft_delete.html' %}
 {% endblock %}

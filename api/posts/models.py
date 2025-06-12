@@ -24,4 +24,4 @@ class Post(BaseModel):
     post_category = models.ForeignKey(PostCategory, on_delete=models.SET_NULL, null=True)
     # feature image id
     # parent
-    cover_image = models.ImageField()
+    cover_image = models.ImageField(upload_to=post_image_path, blank=True)

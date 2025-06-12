@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <h2>Post Category Create</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'post_category_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Post Category</li>
+          <li class="breadcrumb-item active">Create</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form theme-form basic-form">
+                        <div class="row">
+                            <form method="post" action="{% url 'post_category_create' %}">
+                                {% csrf_token %}
+                                <div class="mb-3 col-md-6">
+                                    <label for="idTitle">Title</label>
+                                    <input class="form-control" type="text" id="idTitle" name="title" placeholder=""  value="{{ data.title }}">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="text-end">
+                                          <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                          <a class="btn btn-danger btn-lg" href="{% url 'post_category_list' %}">Cancel </a>
+                                      </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

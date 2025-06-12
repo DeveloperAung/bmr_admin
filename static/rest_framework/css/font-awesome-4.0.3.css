@@ -836,6 +836,11 @@
 .fa-clipboard:before {
   content: "\f0ea";
 }
+.fa-clipboard-check:before {
+  content: "\f46c"; }
+
+.fa-clipboard-list:before {
+  content: "\f46d"; }
 .fa-lightbulb-o:before {
   content: "\f0eb";
 }

@@ -7,6 +7,8 @@ urlpatterns = [
     path('', views.dhamma_class_list, name='dhamma_class_list'),
     path('create', views.dhamma_class_create, name='dhamma_class_create'),
     path('details/id=?<uuid:event_uuid>', views.dhamma_class_details, name='dhamma_class_details'),
+    path('delete/id=?<uuid:uuid>', views.dhamma_class_soft_delete, name='dhamma_class_soft_delete'),
+    path('publish-toggle/id=?<uuid:uuid>', views.dhamma_class_publish_toggle, name='dhamma_class_publish_toggle'),
 
     path('category', views.event_category_list, name='event_category_list'),
     path('category/create', views.event_category_create, name='event_category_create'),

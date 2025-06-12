@@ -49,6 +49,10 @@ class APIEndpoints:
         return f"{API_BASE_URL}/api/e/event/{uuid}/"
 
     @staticmethod
+    def URL_EVENT_PUBLISH_TOGGLE(uuid):
+        return f"{API_BASE_URL}/api/e/event/{uuid}/publish-toggle/"
+
+    @staticmethod
     def URL_EVENT_CATEGORY_DETAILS(uuid):
         return f"{API_BASE_URL}/api/e/category/{uuid}/"
 

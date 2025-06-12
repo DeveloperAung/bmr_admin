@@ -57,7 +57,7 @@ class EventForm(forms.ModelForm):
 
         # Set max_seat initially optional
         self.fields['max_seat'].required = False
-        self.fields['need_registration'].widget.attrs.update({'class': 'form-check-input'})
+        self.fields['need_registration'].widget.attrs.update({'class': 'form-check-input icsm'})
 
 
 class EventDateForm(forms.ModelForm):

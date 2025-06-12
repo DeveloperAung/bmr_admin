@@ -60,7 +60,7 @@ class PostViewSet(BaseSoftDeleteViewSet):
     lookup_field = 'uuid'
 
     def get_queryset(self):
-        queryset = Post.objects.all().order_by('id')
+        queryset = Post.objects.filter(is_active=True).order_by('id')
         category_title = self.request.query_params.get('category_title')
         if category_title:
             queryset = queryset.filter(category__title=category_title)

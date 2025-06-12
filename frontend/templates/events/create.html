@@ -18,226 +18,247 @@
   }
 </style>
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Create</li>
-  </ol>
-</nav>
-<div class="content-wrapper">
-  <div class="row">
-    <div class="col-12 grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title mt-4">
-            <div class="d-flex justify-content-between row">
-              <div class="col-md-6">
-                <h4>Create New Dhamma Class</h4>
-              </div>
-            </div>
-          </div>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <!-- Event Fields -->
-                <div class="mb-3">
-                    {{ form.media }}
-                     <div class="row">
-                        <!-- Title -->
-                        <div class="col-md-6 mb-3">
-                          {{ form.title.label_tag }}
-                          {{ form.title }}
-                          {% if form.title.errors %}
-                            <div class="text-danger">{{ form.title.errors }}</div>
-                          {% endif %}
-                        </div>
-
-                        <!-- Category -->
-                        <div class="col-md-6 mb-3">
-                          {{ form.category.label_tag }}
-                          {{ form.category }}
-                          {% if form.category.errors %}
-                            <div class="text-danger">{{ form.category.errors }}</div>
-                          {% endif %}
-                        </div>
-
-                         <div class="row">
-                             <div class="col-md-6 mb-3">
-                              {{ form.cover_image.label_tag }}
-
-                              <!-- Preview image -->
-                              <div id="coverImagePreview" class="mb-2">
-                                {% if form.instance.cover_image %}
-                                  <img src="{{ form.instance.cover_image.url }}" alt="Cover Image" style="max-height: 150px;" class="img-thumbnail">
-                                {% endif %}
-                              </div>
-
-                              <!-- File input field -->
-                              {{ form.cover_image }}
-                              {% if form.cover_image.errors %}
-                                <div class="text-danger">{{ form.cover_image.errors }}</div>
-                                  {% endif %}
-                             </div>
-                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <div class="form-check form-switch">
-                              {{ form.need_registration.as_widget }}
-                              <label class="form-check-label" for="{{ form.need_registration.id_for_label }}"> Require Registration</label>
-                            </div>
-
-
-                          {{ form.max_seat }}
-                          {% if form.max_seat.errors %}
-                            <div class="text-danger">{{ form.max_seat.errors }}</div>
-                          {% endif %}
-                        </div>
-
-
-                         <!-- Location -->
-                        <div class="col-md-6 mb-3">
-                          {{ form.location.label_tag }}
-                          {{ form.location }}
-                        </div>
-
-                        <!-- Short Description -->
-                        <div class="col-md-12 mb-3">
-                          {{ form.short_description.label_tag }}
-                          {{ form.short_description }}
-                          {% if form.short_description.errors %}
-                            <div class="text-danger">{{ form.short_description.errors }}</div>
-                          {% endif %}
-                        </div>
-
-                        <!-- Description (manual Summernote textarea) -->
-                        <div class="col-12 mb-3">
-                          <label for="summernote">Description</label>
-                          <textarea id="summernote" name="description" class="form-control">
-                            {{ form.description.value|default_if_none:"" }}
-                          </textarea>
-                        </div>
-
-                        <!-- Is Publish -->
-                        <div class="col-md-6 mb-3">
-                          {{ form.is_publish.label_tag }}
-                          {{ form.is_publish }}
-                        </div>
-
-                        <!-- Event Date -->
-                        <div class="col-md-6 mb-3">
-                          {{ form.event_date.label_tag }}
-                          {{ form.event_date }}
-                        </div>
-
-                     </div>
-                </div>
-
-                <!-- Event Date Section -->
-                <h3>Event Dates</h3>
-                <div id="event-dates-container">
-                    <div class="event-date-item mb-3">
-                        <label for="event_date">Date:</label>
-                        <input type="date" name="event_date[]" class="form-control" required>
-
-                        <label for="from_time">From Time:</label>
-                        <input type="time" name="from_time[]" class="form-control" required>
-
-                        <label for="to_time">To Time:</label>
-                        <input type="time" name="to_time[]" class="form-control" required>
-
-                        <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
-                    </div>
-                </div>
-
-                <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
-
-                <br><br>
-                <button type="submit" class="btn btn-success">Save</button>
-                <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
-            </form>
-        </div>
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <h2>Create New Dhamma Class</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dhamma_class_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Dhamma Class</li>
+          <li class="breadcrumb-item active">Create</li>
+        </ol>
       </div>
     </div>
   </div>
-    <script>
-      window.addEventListener("load", function () {
-        $('.django-summernote textarea').summernote({
-          height: 250,
-          width: '100%',
-        });
-      });
-    </script>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" action="{% url 'notice_create' %}">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Event Fields -->
+                            <div class="mb-3">
+                                {{ form.media }}
+                                <div class="row">
+                                    <!-- Title -->
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.title.label_tag }}
+                                        {{ form.title }}
+                                        {% if form.title.errors %}
+                                        <div class="text-danger">{{ form.title.errors }}</div>
+                                        {% endif %}
+                                    </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const dateContainer = document.getElementById("event-dates-container");
-            const addDateBtn = document.getElementById("add-date-btn");
+                                    <!-- Category -->
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.category.label_tag }}
+                                        {{ form.category }}
+                                        {% if form.category.errors %}
+                                        <div class="text-danger">{{ form.category.errors }}</div>
+                                        {% endif %}
+                                    </div>
 
-            // Function to add new date fields
-            addDateBtn.addEventListener("click", function() {
-                const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            {{ form.cover_image.label_tag }}
 
-                // Clear the values in the new fields
-                newDateFields.querySelectorAll("input").forEach(input => input.value = "");
+                                            <!-- Preview image -->
+                                            <div id="coverImagePreview" class="mb-2">
+                                                {% if form.instance.cover_image %}
+                                                <img src="{{ form.instance.cover_image.url }}" alt="Cover Image"
+                                                     style="max-height: 150px;" class="img-thumbnail">
+                                                {% endif %}
+                                            </div>
 
-                dateContainer.appendChild(newDateFields);
+                                            <!-- File input field -->
+                                            {{ form.cover_image }}
+                                            {% if form.cover_image.errors %}
+                                            <div class="text-danger">{{ form.cover_image.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
 
-                // Reattach remove button event
-                attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
-            });
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check form-switch">
+                                                {{ form.need_registration.as_widget }}
+                                                <label class="form-check-label mt-2" for="{{ form.need_registration.id_for_label }}">&nbsp; Require Registration</label>
+                                            </div>
+                                        </div>
 
-            // Function to remove date fields
-            function attachRemoveEvent(button) {
-                button.addEventListener("click", function() {
-                    if (document.querySelectorAll(".event-date-item").length > 1) {
-                        button.parentElement.remove();
-                    }
-                });
+                                        <div class="col-md-6">
+                                            <div class="form-group"> <label for="{{ form.max_seat.id_for_label }}">Maximum Seats:</label>
+                                                {{ form.max_seat }}
+                                                {% if form.max_seat.errors %}
+                                                <div class="text-danger">{{ form.max_seat.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.location.label_tag }}
+                                        {{ form.location }}
+                                    </div>
+
+                                    <!-- Short Description -->
+                                    <div class="col-md-12 mb-3">
+                                        {{ form.short_description.label_tag }}
+                                        {{ form.short_description }}
+                                        {% if form.short_description.errors %}
+                                        <div class="text-danger">{{ form.short_description.errors }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Description (manual Summernote textarea) -->
+                                    <textarea name="description" id="descriptionInput" style="display: none;"></textarea>
+                                    {% include 'includes/quill_editor.html' %}
+
+                                    <!-- Is Publish -->
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.is_publish.label_tag }}
+                                        {{ form.is_publish }}
+                                    </div>
+
+                                    <!-- Event Date -->
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.event_date.label_tag }}
+                                        {{ form.event_date }}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Event Date Section -->
+                            <h3>Event Dates</h3>
+                            <div id="event-dates-container">
+                                <div class="event-date-item mb-3">
+                                    <label for="event_date">Date:</label>
+                                    <input type="date" name="event_date[]" class="form-control" required>
+
+                                    <label for="from_time">From Time:</label>
+                                    <input type="time" name="from_time[]" class="form-control" required>
+
+                                    <label for="to_time">To Time:</label>
+                                    <input type="time" name="to_time[]" class="form-control" required>
+
+                                    <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
+                                </div>
+                            </div>
+
+                            <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
+
+                            <br><br>
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // Ensure the script runs after the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the checkbox and number input elements using their Django-generated IDs
+        const needRegistrationSwitch = document.getElementById('{{ form.need_registration.id_for_label }}');
+        const maxSeatInput = document.getElementById('{{ form.max_seat.id_for_label }}');
+
+        // Function to update the 'required' attribute of the max_seat input
+        function updateMaxSeatRequired() {
+            if (needRegistrationSwitch.checked) {
+                // If the switch is checked, make max_seat required
+                maxSeatInput.setAttribute('required', 'required');
+            } else {
+                // If the switch is unchecked, remove the required attribute
+                maxSeatInput.removeAttribute('required');
             }
-
-            // Attach remove event to initial remove button
-            attachRemoveEvent(document.querySelector(".remove-date-btn"));
-        });
-    </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const needReg = document.getElementById("id_need_registration");
-        const maxSeat = document.getElementById("id_max_seat");
-
-        function toggleRequired() {
-          if (needReg.checked) {
-            maxSeat.setAttribute("required", "required");
-          } else {
-            maxSeat.removeAttribute("required");
-          }
         }
 
-        needReg.addEventListener("change", toggleRequired);
-        toggleRequired();  // run on load
-      });
-    </script>
+        // Call the function once when the page loads to set the initial state
+        updateMaxSeatRequired();
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const coverInput = document.getElementById("id_cover_image");
-        const previewContainer = document.getElementById("coverImagePreview");
+        // Add an event listener to the switch so that the 'required' status updates whenever it's toggled
+        needRegistrationSwitch.addEventListener('change', updateMaxSeatRequired);
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateContainer = document.getElementById("event-dates-container");
+        const addDateBtn = document.getElementById("add-date-btn");
 
-        coverInput.addEventListener("change", function (e) {
-          const file = e.target.files[0];
-          if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 150px;" class="img-thumbnail">`;
-            };
-            reader.readAsDataURL(file);
-          } else {
-            previewContainer.innerHTML = "<p class='text-danger'>Selected file is not an image.</p>";
-          }
+        // Function to add new date fields
+        addDateBtn.addEventListener("click", function() {
+            const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
+
+            // Clear the values in the new fields
+            newDateFields.querySelectorAll("input").forEach(input => input.value = "");
+
+            dateContainer.appendChild(newDateFields);
+
+            // Reattach remove button event
+            attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
         });
-      });
-    </script>
 
+        // Function to remove date fields
+        function attachRemoveEvent(button) {
+            button.addEventListener("click", function() {
+                if (document.querySelectorAll(".event-date-item").length > 1) {
+                    button.parentElement.remove();
+                }
+            });
+        }
 
-</div>
+        // Attach remove event to initial remove button
+        attachRemoveEvent(document.querySelector(".remove-date-btn"));
+    });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const needReg = document.getElementById("id_need_registration");
+    const maxSeat = document.getElementById("id_max_seat");
+
+    function toggleRequired() {
+      if (needReg.checked) {
+        maxSeat.setAttribute("required", "required");
+      } else {
+        maxSeat.removeAttribute("required");
+      }
+    }
+
+    needReg.addEventListener("change", toggleRequired);
+    toggleRequired();  // run on load
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const coverInput = document.getElementById("id_cover_image");
+    const previewContainer = document.getElementById("coverImagePreview");
+
+    coverInput.addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 150px;" class="img-thumbnail">`;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewContainer.innerHTML = "<p class='text-danger'>Selected file is not an image.</p>";
+      }
+    });
+  });
+</script>
+
 {% endblock %}

@@ -116,9 +116,16 @@ def post_category_soft_delete(request, uuid):
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 
-def weekly_activities_post_list(request, category_title):
+def weekly_activities_list(request, category_title):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request)
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        response = check_auth_request("GET", APIEndpoints.URL_POST_BY_CATEGORY(category_title), request, params=params)
         if response.status_code == 401 or response.status_code == 400:
             messages.warning(request, "Your session has expired! Please login again.")
             return redirect("login")
@@ -126,12 +133,15 @@ def weekly_activities_post_list(request, category_title):
         response_body = response.json()
         context = {
             'messages': response_body["message"],
-            'data': response_body["data"]["results"],
+            'data_header': response_body["data"],
+            'data_results': response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
-        return render(request, "posts/weekly_activities_post_list.html", context)
+        return render(request, "posts/weekly_activities/list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+        return render(request, "posts/weekly_activities/list.html", {"error": str(e)})
 
 
 def article_post_list(request, category_title):
@@ -164,10 +174,10 @@ def books_post_list(request, category_title):
             'messages': response_body["message"],
             'data': response_body["data"]["results"],
         }
-        return render(request, "posts/weekly_activities_post_list.html", context)
+        return render(request, "posts/book/list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "posts/weekly_activities_post_list.html", {"error": str(e)})
+        return render(request, "posts/book/list.html", {"error": str(e)})
 
 
 def travel_post_list(request, category_title):

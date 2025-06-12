@@ -1937,6 +1937,9 @@
   .fa-clipboard:before {
     content: "\f328";
   }
+  .fa-clipboard-check:before {
+  content: "\f46c"; }
+
   .fa-house-circle-exclamation:before {
     content: "\e50a";
   }

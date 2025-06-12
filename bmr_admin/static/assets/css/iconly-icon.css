@@ -70,6 +70,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icsm{
+  font-weight: 150;
+  font-size: 25px;
+}
 .icli{
   font-weight: 200;
   font-size: 30px;
