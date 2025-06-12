@@ -1,4 +1,6 @@
 import logging
+
+from django.db.models import Q
 from rest_framework.exceptions import APIException
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import EventCategory, EventSubCategory, Event, EventDate
@@ -27,7 +29,15 @@ logger = logging.getLogger(__name__)
 
 @extend_schema(tags=["Event Category"])
 class EventCategoryViewSet(BaseSoftDeleteViewSet):
-    queryset = EventCategory.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = EventCategory.objects.filter(is_active=True).order_by('title')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search)
+            )
+        return queryset
 
     def get_serializer_class(self):
         try:
@@ -48,7 +58,16 @@ class EventCategoryViewSet(BaseSoftDeleteViewSet):
 
 @extend_schema(tags=["Event Sub Category"])
 class EventSubCategoryViewSet(BaseSoftDeleteViewSet):
-    queryset = EventSubCategory.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = EventSubCategory.objects.filter(is_active=True).order_by('title')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(event_category__title__icontains=search)
+            )
+        return queryset
 
     def get_serializer_class(self):
         try:

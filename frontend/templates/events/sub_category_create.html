@@ -1,46 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Event Sub Category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Create</li>
-    </ol>
-</nav>
-<div class="content-wrapper">
+<div class="container-fluid">
+  <div class="page-title">
     <div class="row">
-        <div class="col-12 grid-margin">
+      <div class="col-sm-6 col-12">
+        <h2>Event Sub Category Create</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'event_sub_category_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Event Sub Category</li>
+          <li class="breadcrumb-item active">Create</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title mt-4">
-                        <div class="d-flex justify-content-between row">
-                            <div class="col-md-6">
-                                <h4>Create Event Sub Category</h4>
-                            </div>
+                    <div class="form theme-form basic-form">
+                        <div class="row">
+                            <form method="post" action="{% url 'event_sub_category_create' %}">
+                                {% csrf_token %}
+                                <div class="mb-3 col-md-6">
+                                    <label for="idTitle">Title</label>
+                                    <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title">
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="idCategory"></label>
+                                    <select class="form-select" name="category" id="idCategory">
+                                        <option value=""> Select Category </option>
+                                        {% if categories %}
+                                        {% for i in categories %}
+                                        <option value="{{ i.id }}">{{ i.title }}</option>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="text-end">
+                                          <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                          <a class="btn btn-danger btn-lg" href="{% url 'event_sub_category_list' %}">Cancel </a>
+                                      </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <form method="post" action="{% url 'event_sub_category_create' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="idTitle"></label>
-                            <input class="form-control" type="text" id="idTitle" name="title" placeholder="Title">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idCategory"></label>
-                            <select class="form-select" name="category" id="idCategory">
-                                <option value=""> Select Category </option>
-                                {% if categories %}
-                                {% for i in categories %}
-                                <option value="{{ i.id }}">{{ i.title }}</option>
-                                {% endfor %}
-                                {% endif %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'event_category_list' %}" class="btn btn-secondary">Cancel</a>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

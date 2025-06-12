@@ -30,7 +30,7 @@ def notice_list(request):
         return render(request, "notices/notice_list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "notices/notice_list.html", {"error": str(e)})
+        return render(request, "notices/notice_list.html", {"error": str(e), "request": request,})
 
 
 def notice_create(request):
