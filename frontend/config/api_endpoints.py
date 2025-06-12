@@ -79,7 +79,7 @@ class APIEndpoints:
 
     """ Post START """
     URL_POST = f"{API_BASE_URL}/api/p/post/"
-    URL_POST_CATEGORY = f"{API_BASE_URL}/api/p/post/"
+    URL_POST_CATEGORY = f"{API_BASE_URL}/api/p/category/"
 
     # @staticmethod
     # def URL_DONATION_DETAILS(uuid):

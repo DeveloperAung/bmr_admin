@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -25,7 +26,15 @@ logger = logging.getLogger(__name__)
 
 @extend_schema(tags=["Post Category"])
 class PostCategoryViewSet(BaseSoftDeleteViewSet):
-    queryset = PostCategory.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = PostCategory.objects.filter(is_active=True).order_by('title')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search)
+            )
+        return queryset
 
     def get_serializer_class(self):
         try:

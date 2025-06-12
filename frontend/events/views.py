@@ -29,7 +29,7 @@ def event_category_list(request):
         return render(request, "events/category_list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "events/category_list.html", {"error": str(e), "request": request,})
+        return render(request, "events/category_list.html", {"error": str(e), "request": request, })
 
 
 def event_category_create(request):
@@ -133,7 +133,7 @@ def event_sub_category_list(request):
         return render(request, "events/sub_category_list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "events/sub_category_list.html", {"error": str(e)})
+        return render(request, "events/sub_category_list.html", {"error": str(e), "request": request, })
 
 
 def event_sub_category_create(request):
