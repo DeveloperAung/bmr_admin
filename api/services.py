@@ -112,7 +112,7 @@ class BaseSoftDeleteViewSet(viewsets.ModelViewSet):
             )
 
     def destroy(self, request, *args, **kwargs):
-        print('go inside delete')
+        
         auth_error = self.handle_authentication_error(request)
         if auth_error:
             return auth_error

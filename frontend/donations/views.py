@@ -8,8 +8,14 @@ from frontend.config.api_endpoints import APIEndpoints
 
 def donation_category_list(request):
     try:
-        headers = get_auth_headers(request)
-        response = requests.get(APIEndpoints.URL_DONATION_CATEGORY, headers=headers)
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        response = check_auth_request("GET", APIEndpoints.URL_DONATION_CATEGORY, request, params=params)
 
         if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
@@ -17,12 +23,15 @@ def donation_category_list(request):
         donation_response_body = response.json()
         context = {
             'messages': donation_response_body["message"],
-            'data': donation_response_body["data"]["results"],
+            'data_header': donation_response_body["data"],
+            'data_results': donation_response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
         return render(request, "donations/category_list.html", context)
     except Exception as e:
         print('Donation Category List Error:', e)
-        return render(request, "donations/category_list.html", {"error": str(e)})
+        return render(request, "donations/category_list.html", {"error": str(e), "request": request, })
 
 
 def donation_category_create(request):
@@ -118,19 +127,29 @@ def donation_category_soft_delete(request, uuid):
 
 def donation_sub_category_list(request):
     try:
-        response = check_auth_request("GET", APIEndpoints.URL_DONATION_SUB_CATEGORY, request)
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        response = check_auth_request("GET", APIEndpoints.URL_DONATION_SUB_CATEGORY, request, params=params)
         if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
 
         donation_response_body = response.json()
         context = {
             'messages': donation_response_body["message"],
-            'data': donation_response_body["data"]["results"],
+            'data_header': donation_response_body["data"],
+            'data_results': donation_response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
         return render(request, "donations/sub_category_list.html", context)
     except Exception as e:
         print('Donation Sub Category List Error:', e)
-        return render(request, "donations/sub_category_list.html", {"error": str(e)})
+        return render(request, "donations/sub_category_list.html", {"error": str(e), "request": request, })
 
 
 def donation_sub_category_create(request):

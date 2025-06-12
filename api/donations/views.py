@@ -1,4 +1,6 @@
 import logging
+
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view, extend_schema
@@ -21,7 +23,15 @@ logger = logging.getLogger(__name__)
 
 @extend_schema(tags=["Donation Category"])
 class DonationCategoryViewSet(BaseSoftDeleteViewSet):
-    queryset = DonationCategory.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = DonationCategory.objects.filter(is_active=True).order_by('id')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search)
+            )
+        return queryset
 
     def get_serializer_class(self):
         try:
@@ -40,7 +50,16 @@ class DonationCategoryViewSet(BaseSoftDeleteViewSet):
 
 @extend_schema(tags=["Donation Sub Category"])
 class DonationSubCategoryViewSet(BaseSoftDeleteViewSet):
-    queryset = DonationSubCategory.objects.all().order_by('id')
+    def get_queryset(self):
+        queryset = DonationSubCategory.objects.filter(is_active=True).order_by('id')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(donation_category__title__icontains=search)
+            )
+        return queryset
 
     def get_serializer_class(self):
         try:
