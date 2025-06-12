@@ -1,54 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Notice Category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
-    </ol>
-</nav>
-<div class="content-wrapper">
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title mt-4">
-                        <div class="d-flex justify-content-between row">
-                            <div class="col-md-6">
-                                <h4>Edit Notice Category</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <form method="post" action="{% url 'notice_edit' data.uuid %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="idTitle"></label>
-                            <input  class="form-control"  type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
-                        </div>
-                        <div class="row mb-3">
-                            <div id="idFromDate" class="col-md-6">
-                                <label for="idFromDate">From Date</label>
-                                <input type="datetime-local" name="from_date" class="form-control" value="{{ data.from_time }}">
-                            </div>
-                            <div id="idToDate" name="from_date" class="col-md-6">
-                                <label for="idToDate">To Date</label>
-                                <input type="datetime-local" name="to_date" class="form-control" value="{{ data.to_time }}">
-                            </div>
-                        </div>
-
-                        <div class="mb-3 form-switch">
-                          <input class="form-check-input" type="checkbox" name="is_published" id="idIsPublished" {% if data.is_published %}checked{% endif %}>
-                          <label class="form-check-label" for="idIsPublished"> Is Published</label>
-                        </div>
-                        <div class="mb-3">
-                            <label for="summernote">Description</label>
-                            <textarea id="summernote" name="description">{{ data.description }}</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Update</button>
-                        <a href="{% url 'notice_list' %}" class="btn btn-secondary">Cancel</a>
-                    </form>
-                </div>
-            </div>
+{% load date_filters %}
+<div class="container-fluid">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-sm-6 col-12">
+          <h2>Announcement Edit</h2>
         </div>
+        <div class="col-sm-6 col-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'notice_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item">Announcement</li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ol>
+        </div>
+      </div>
     </div>
 </div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="alert alert-light-primary" role="alert">
+              <p class="text-primary">This is a  <a class="alert-link text-primary" href="#">primary alert</a> {{ error }}</p>
+            </div>
+          <form method="post" action="{% url 'notice_edit' data.uuid %}">
+            {% csrf_token %}
+            <div class="card">
+              <div class="card-body">
+                <div class="form theme-form basic-form">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Title</h5>
+                        <input  class="form-control"  type="text" id="idTitle" name="title" value="{{ data.title }}" placeholder="Title">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Date Range</h5>
+                        <div class="input-group flatpicker-calender">
+                          <input class="form-control" id="range-date" name="date_range" value="{{ data.from_date|to_ymd }} to {{ data.to_date|to_ymd }}" type="text" placeholder="Select date range">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <textarea id="descriptionInput" name="description" style="display: none;">{{ data.description|safe }}</textarea>
+
+                  {% include 'includes/quill_editor.html' %}
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="text-end">
+                          <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                          <a class="btn btn-danger btn-lg" href="{% url 'notice_list' %}">Cancel </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+</div>
+<script>
+    flatpickr("#range-date", {
+        mode: "range",
+        dateFormat: "Y-m-d", // Match Django's default date format
+        altInput: true,
+        altFormat: "F j, Y",
+      });
+</script>
 {% endblock %}

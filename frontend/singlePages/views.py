@@ -13,7 +13,8 @@ def single_page_list(request):
         response_body = response.json()
         context = {
             'messages': response_body["message"],
-            'data': response_body["data"]["results"],
+            'data_header': response_body["data"],
+            'data_results': response_body["data"]["results"],
         }
         return render(request, "singlePages/list.html", context)
     except Exception as e:
@@ -28,7 +29,7 @@ def single_page_create(request):
             title = request.POST["title"]
             title_mm = request.POST["title_mm"]
             content_type = request.POST["content_type"]
-            content = request.POST["content"]
+            content = request.POST["description"]
 
             payload = {
                 "title": title,
@@ -61,11 +62,10 @@ def single_page_create(request):
 def single_page_edit(request, uuid):
     try:
         if request.method == "POST":
-            print('call post method')
             title = request.POST["title"]
             title_mm = request.POST["title_mm"]
             content_type = request.POST["content_type"]
-            content = request.POST["content"]
+            content = request.POST["description"]
 
             payload = {
                 "title": title,
@@ -88,7 +88,6 @@ def single_page_edit(request, uuid):
         else:
             response = check_auth_request("GET", APIEndpoints.URL_SINGLE_PAGE_DETAILS(uuid), request)
             response_body = response.json()
-            print('response body', response_body)
             context = {
                 'data': response_body['data']
             }

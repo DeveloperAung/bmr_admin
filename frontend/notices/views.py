@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
@@ -15,7 +17,6 @@ def notice_list(request):
             params["search"] = search
 
         response = check_auth_request("GET", APIEndpoints.URL_NOTICES, request, params=params)
-        print('response', response)
         if response.status_code == 401 or response.status_code == 400:  # Unauthorized
             return redirect("login")
         response_body = response.json()
@@ -35,11 +36,16 @@ def notice_list(request):
 def notice_create(request):
     try:
         if request.method == "POST":
-
             title = request.POST["title"]
             description = request.POST["description"]
-            from_date = request.POST["from_date"]
-            to_date = request.POST["to_date"]
+
+            date_range = request.POST.get("date_range") or request.GET.get("date_range")
+            from_date, to_date = None, None
+            if date_range:
+                parts = date_range.split(" to ")
+                from_date = parts[0]
+                to_date = parts[1] if len(parts) > 1 else from_date
+
             payload = {
                 "title": title,
                 "description": description,
@@ -75,8 +81,13 @@ def notice_edit(request, uuid):
 
             title = request.POST["title"]
             description = request.POST["description"]
-            from_date = request.POST["from_date"]
-            to_date = request.POST["to_date"]
+            date_range = request.POST.get("date_range") or request.GET.get("date_range")
+            from_date, to_date = None, None
+            if date_range:
+                parts = date_range.split(" to ")
+                from_date = parts[0]
+                to_date = parts[1] if len(parts) > 1 else from_date
+
             payload = {
                 "title": title,
                 "description": description,
@@ -100,7 +111,7 @@ def notice_edit(request, uuid):
             response = check_auth_request("GET", APIEndpoints.URL_NOICE_DETAILS(uuid), request)
             response_body = response.json()
             context = {
-                'data': response_body['data']
+                'data': response_body['data'],
             }
             return render(request, "notices/notice_edit.html", context)
     except Exception as e:

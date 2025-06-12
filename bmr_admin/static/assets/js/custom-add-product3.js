@@ -19,4 +19,19 @@
     theme: "snow",
     placeholder: "Enter your messages...",
   });
+
+  // Set initial content from textarea
+  const initialContent = document.getElementById("descriptionInput").value;
+  editor7.root.innerHTML = initialContent;
+
+  // Sync the Quill content to the textarea on change
+    editor7.on('text-change', function () {
+      document.getElementById("descriptionInput").value = editor7.root.innerHTML;
+    });
+
+    // OR — If using in a <form>, sync just before submit
+    document.querySelector("form").addEventListener("submit", function () {
+      document.getElementById("descriptionInput").value = editor7.root.innerHTML;
+    });
+
 })();

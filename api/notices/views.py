@@ -44,8 +44,8 @@ class NoticeViewSet(BaseSoftDeleteViewSet):
 
         if search:
             queryset = queryset.filter(
-                Q(email__icontains=search) |
-                Q(uuid__icontains=search)
+                Q(title__icontains=search) |
+                Q(description__icontains=search)
             )
         return queryset
 

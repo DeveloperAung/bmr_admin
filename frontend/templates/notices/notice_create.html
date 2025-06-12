@@ -19,6 +19,10 @@
 <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12">
+
+          <div class="alert alert-light-primary" role="alert">
+              <p class="text-primary">This is a  <a class="alert-link text-primary" href="#">primary alert</a> {{ error }}</p>
+            </div>
           <form method="post" action="{% url 'notice_create' %}">
             {% csrf_token %}
             <div class="card">
@@ -35,50 +39,14 @@
                       <div class="mb-3">
                         <h5 class="f-w-600 mb-2">Date Range</h5>
                         <div class="input-group flatpicker-calender">
-                          <input class="form-control" id="range-date" type="date">
+                          <input class="form-control" id="range-date" name="date_range" type="text" placeholder="Select date range">
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="toolbar-box mb-3">
-                      <div id="toolbar7"><span class="ql-formats">
-                          <select class="ql-size">
-                            <option value="small">Small</option>
-                            <option selected="">Normal</option>
-                            <option value="large">Large</option>
-                            <option value="huge">Huge</option>
-                          </select></span><span class="ql-formats">
-                          <button class="ql-bold">Bold</button>
-                          <button class="ql-italic">Italic</button>
-                          <button class="ql-underline">Underline</button>
-                          <button class="ql-strike">Strike</button>
-                          <button class="ql-script" value="sub"></button>
-                          <button class="ql-script" value="super"></button></span><span class="ql-formats">
-                          <button class="ql-header" value="1"></button>
-                          <button class="ql-header" value="2"></button></span><span class="ql-formats">
-                          <button class="ql-list" value="ordered">List</button>
-                          <button class="ql-list" value="bullet">Bullet</button>
-                          <button class="ql-indent" value="-1"></button>
-                          <button class="ql-indent" value="+1"></button></span><span class="ql-formats">
-                          <button class="ql-link">Link</button>
-                          <button class="ql-image">Image</button>
-                          <button class="ql-video">Video</button>
-                          <select class="ql-color"></select>
-                          <select class="ql-background"></select></span>
-                        <!-- Add more options here--><span class="ql-formats">
-                          <button class="ql-blockquote">Blockquote</button>
-                          <button class="ql-code-block"></button></span><span class="ql-formats">
-                          <button class="ql-align" value=""></button>
-                          <button class="ql-align" value="center"></button>
-                          <button class="ql-align" value="right"></button>
-                          <button class="ql-align" value="justify"></button></span><span class="ql-formats">
-                          <button class="ql-clean"></button></span>
-                      </div>
-                      <div class="quill-paragraph" id="editor7">
-                        <p>There was a road along with that open place. When the tiger saw any man passing by he said to him, “Brother, here is a good bangle. I wish to give it to you. Don’t fear. lam old and infirm now. I now pray to God five times a day and doing it will be useful to you. Don’t fear, come to me and take other religious acts. This bangle is useless to me. It will be useful to you. Don’t fear, come to me and take this.”</p>
-                      </div>
-                    </div>
+                  <textarea name="description" id="descriptionInput" style="display: none;"></textarea>
+                  {% include 'includes/quill_editor.html' %}
 
                   <div class="row">
                     <div class="col">
@@ -95,47 +63,13 @@
       </div>
     </div>
 </div>
-<div class="content-wrapper">
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title mt-4">
-                        <div class="d-flex justify-content-between row">
-                            <div class="col-md-6">
-                                <h4>Notice</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <form method="post" action="{% url 'notice_create' %}">
-                        {% csrf_token %}
-
-                        <div class="row mb-3">
-                            <div id="idFromDate" class="col-md-6">
-                                <label for="idFromDate">From Date</label>
-                                <input type="datetime-local" name="from_date" class="form-control">
-                            </div>
-                            <div id="idToDate" name="from_date" class="col-md-6">
-                                <label for="idToDate">To Date</label>
-                                <input type="datetime-local" name="to_date" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="mb-3 form-switch">
-                          <input class="form-check-input" type="checkbox" name="is_published" id="idIsPublished">
-                          <label class="form-check-label" for="idIsPublished"> Is Published</label>
-                        </div>
-                        <div class="mb-3">
-                            <label for="summernote">Description</label>
-                            <textarea id="summernote" name="description"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'notice_list' %}" class="btn btn-secondary">Cancel</a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    flatpickr("#range-date", {
+        mode: "range",
+        dateFormat: "Y-m-d", // Match Django's default date format
+        altInput: true,
+        altFormat: "F j, Y",
+      });
+</script>
 
 {% endblock %}

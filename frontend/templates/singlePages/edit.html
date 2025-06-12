@@ -1,47 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-primary mt-4">
-        <li class="breadcrumb-item"><a href="#">Notice Category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
-    </ol>
-</nav>
-<div class="content-wrapper">
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title mt-4">
-                        <div class="d-flex justify-content-between row">
-                            <div class="col-md-6">
-                                <h4>Edit Notice Category</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <form method="post" action="{% url 'single_page_edit' data.uuid %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="idTitle"></label>
-                            <input  class="form-control"  type="text" id="idTitle" name="title" placeholder="Title" value="{{ data.title }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idTitleInMM"></label>
-                            <input  class="form-control"  type="text" id="idTitleInMM" name="title_mm" placeholder="Title in Myanmar" value="{{ data.title_mm }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="idContentType"></label>
-                            <input  class="form-control"  type="text" id="idContentType" name="content_type" placeholder="Content Type" value="{{ data.content_type }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="summernote">Content</label>
-                            <textarea id="summernote" name="content">{{ data.content }}</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Update</button>
-                        <a href="{% url 'single_page_list' %}" class="btn btn-secondary">Cancel</a>
-                    </form>
-                </div>
-            </div>
+<div class="container-fluid">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-sm-6 col-12">
+          <h2>Single Page Edit</h2>
         </div>
+        <div class="col-sm-6 col-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'single_page_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item">Single Page</li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="alert alert-light-primary" role="alert">
+              <p class="text-primary">This is a  <a class="alert-link text-primary" href="#">primary alert</a> {{ error }}</p>
+            </div>
+          <form action="{% url 'single_page_edit' data.uuid %}" method="post">
+            {% csrf_token %}
+            <div class="card">
+              <div class="card-body">
+                <div class="form theme-form basic-form">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Title</h5>
+                        <input  class="form-control"  type="text" id="idTitle" name="title" value="{{ data.title }}" placeholder="Title">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Title</h5>
+                        <input  class="form-control"  type="text" id="idTitleInMM" name="title_mm" placeholder="Title in Myanmar" value="{{ data.title_mm }}">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <h5 class="f-w-600 mb-2">Content Type</h5>
+                        <input  class="form-control"  type="text" id="idContentType" name="content_type" placeholder="Content Type" value="{{ data.content_type }}">
+                      </div>
+                    </div>
+                  </div>
+                  <textarea id="descriptionInput" name="description" style="display: none;">{{ data.content|safe }}</textarea>
+
+                  {% include 'includes/quill_editor.html' %}
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="text-end">
+                          <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                          <a class="btn btn-danger btn-lg" href="{% url 'single_page_list' %}">Cancel </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
     </div>
 </div>
 {% endblock %}
