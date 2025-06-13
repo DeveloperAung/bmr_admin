@@ -1,68 +1,195 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Dhamma Class</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Create</li>
-  </ol>
-</nav>
-<div class="content-wrapper">
-  <div class="row">
-    <div class="col-12 grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title mt-4">
-            <div class="d-flex justify-content-between row">
-              <div class="col-md-6">
-                <h4>Edit Dhamma Class - {{ data.title }}</h4>
-              </div>
-            </div>
-          </div>
-          <form class="">
-            <div class="row">
-              <div class="form-floating col-md-6">
-                <input type="email" class="form-control" id="idTitle" placeholder="Title" value="{{ data.title }}">
-                <label for="idTitle">Title</label>
-              </div>
-              <div class="form-group col-md-6">
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Category</option>
-                  {% if categories %}
-                  {% for c in categories %}
-                  <option value="{{ c.id }}" {% if c.title == data.category_titile %}selected{% endif %}> {{ c.title }}</option>
-                  {% endfor %}
-                  {% endif %}
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group form-floating col-md-6">
-                <input type="email" class="form-control" id="" placeholder="Title" value="{{ data.title }}">
-              </div>
-              <div class="form-group col-md-6">
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
-          </form>
-
-            <h2>{{ event.title }}</h2>
-            <p><strong>Location:</strong> {{ event.location }}</p>
-            <p><strong>Description:</strong> {{ event.description }}</p>
-
-            <h3>Event Dates</h3>
-            <ul>
-                {% for date in event_dates %}
-                <li>{{ date.event_date }} ({{ date.from_time }} - {{ date.to_time }})</li>
-                {% endfor %}
-            </ul>
-        </div>
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <h2>Update Dhamma Class</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dhamma_class_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Dhamma Class</li>
+          <li class="breadcrumb-item active">Update</li>
+        </ol>
       </div>
     </div>
   </div>
+
+  <form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-body">
+        {{ form.media }}
+
+        <div class="row">
+          <!-- Title -->
+          <div class="col-md-6 mb-3">
+            {{ form.title.label_tag }} {{ form.title }}
+            {% if form.title.errors %}<div class="text-danger">{{ form.title.errors }}</div>{% endif %}
+          </div>
+
+          <!-- Category -->
+          <div class="col-md-6 mb-3">
+            {{ form.category.label_tag }} {{ form.category }}
+            {% if form.category.errors %}<div class="text-danger">{{ form.category.errors }}</div>{% endif %}
+          </div>
+
+          <!-- Cover Image -->
+          <div class="col-md-6 mb-3">
+            {{ form.cover_image.label_tag }}
+
+            <div id="coverImagePreview" class="mb-2">
+              {% if form.instance.cover_image %}
+                <img src="{{ form.instance.cover_image.url }}" alt="Cover Image" style="max-height: 150px;" class="img-thumbnail">
+              {% endif %}
+            </div>
+
+            {{ form.cover_image }}
+            {% if form.cover_image.errors %}<div class="text-danger">{{ form.cover_image.errors }}</div>{% endif %}
+          </div>
+
+          <!-- need_registration + max_seat (same row) -->
+          <div class="form-group row align-items-center col-md-6 mt-4">
+            <div class="col-md-5 d-flex align-items-center">
+              <div class="icon-state switch-outline">
+                <label class="switch mb-0">
+                  {{ form.is_registered }}
+                  <span class="switch-state bg-primary"></span>
+                </label>
+              </div>
+              <label for="{{ form.id_is_registered.id_for_label }}" class="col-form-label ms-3">
+                {{ form.id_is_registered.label }}
+              </label>
+            </div>
+
+            <div class="col-md-7">
+              {{ form.max_seat.label_tag }} {{ form.max_seat }}
+              {% if form.max_seat.errors %}<div class="text-danger">{{ form.max_seat.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="col-md-6 mb-3">
+            {{ form.location.label_tag }} {{ form.location }}
+          </div>
+
+          <!-- Short Description -->
+          <div class="col-md-12 mb-3">
+            {{ form.short_description.label_tag }} {{ form.short_description }}
+            {% if form.short_description.errors %}<div class="text-danger">{{ form.short_description.errors }}</div>{% endif %}
+          </div>
+
+          <!-- Description -->
+          <textarea name="description" id="descriptionInput" style="display: none;">{{ form.description.value }}</textarea>
+          {% include 'includes/quill_editor.html' %}
+
+          <!-- Is Publish -->
+          <div class="col-md-6 mb-3">
+            <label for="id_is_publish">Is publish?</label>
+            <div class="icon-state switch-outline">
+              <label class="switch mb-0">
+                {{ form.is_publish }}
+                <span class="switch-state bg-primary"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Event Date -->
+          <div class="col-md-6 mb-3">
+            {{ form.event_date.label_tag }} {{ form.event_date }}
+          </div>
+        </div>
+
+        <!-- Event Date Repeat Section -->
+        <h3 class="mb-3">Event Dates</h3>
+        <div id="event-dates-container">
+          {% if event_dates %}
+            {% for ed in event_dates %}
+              <div class="event-date-item row mb-3">
+                <div class="col-md-4">
+                  <label>Date:</label>
+                  <input type="date" name="event_date[]" value="{{ ed.event_date|date:'Y-m-d' }}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                  <label>From Time:</label>
+                  <input type="time" name="from_time[]" value="{{ ed.from_time|time:'H:i' }}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                  <label>To Time:</label>
+                  <input type="time" name="to_time[]" value="{{ ed.to_time|time:'H:i' }}" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-danger remove-date-btn mt-4">Remove</button>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <!-- Show one blank row if no dates -->
+            <div class="event-date-item row mb-3">
+              <div class="col-md-4"><input type="date" name="event_date[]" class="form-control" required></div>
+              <div class="col-md-3"><input type="time" name="from_time[]" class="form-control" required></div>
+              <div class="col-md-3"><input type="time" name="to_time[]" class="form-control" required></div>
+              <div class="col-md-2"><button type="button" class="btn btn-danger remove-date-btn mt-4">Remove</button></div>
+            </div>
+          {% endif %}
+        </div>
+
+        <button type="button" id="add-date-btn" class="btn btn-secondary">Add More Date</button>
+        <br><br>
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </div>
+  </form>
 </div>
+{% include 'events/includes/js_populate_image.html' %}
+<!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const switchInput = document.getElementById('id_is_registered');
+  const maxSeatInput = document.getElementById('id_max_seat');
+
+  function toggleMaxSeat() {
+    if (switchInput.checked) {
+      maxSeatInput.removeAttribute('disabled');
+      maxSeatInput.required = true;
+    } else {
+      maxSeatInput.setAttribute('disabled', 'disabled');
+      maxSeatInput.required = false;
+    }
+  }
+
+  toggleMaxSeat();  // On load
+  switchInput.addEventListener('change', toggleMaxSeat);  // On change
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const dateContainer = document.getElementById("event-dates-container");
+  const addDateBtn = document.getElementById("add-date-btn");
+
+  addDateBtn.addEventListener("click", function () {
+    const newDateFields = document.querySelector(".event-date-item").cloneNode(true);
+    newDateFields.querySelectorAll("input").forEach(input => input.value = "");
+    dateContainer.appendChild(newDateFields);
+    attachRemoveEvent(newDateFields.querySelector(".remove-date-btn"));
+  });
+
+  function attachRemoveEvent(button) {
+    button.addEventListener("click", function () {
+      if (document.querySelectorAll(".event-date-item").length > 1) {
+        button.closest(".event-date-item").remove();
+      }
+    });
+  }
+
+  attachRemoveEvent(document.querySelector(".remove-date-btn"));
+});
+</script>
+
+
+
 {% endblock %}

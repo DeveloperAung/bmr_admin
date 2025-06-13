@@ -73,7 +73,7 @@
                     <td class="text-end">
                       <div class="product-action justify-content-center">
 
-                        <a href="{% url 'dhamma_class_details' i.uuid %}" title="Edit">
+                        <a href="{% url 'dhamma_class_update' i.uuid %}" title="Edit">
                           <i class="iconly-Edit-Square icli"></i>
                         </a>
                         <button class="btn" id="idDeleteBtn" data-url="{% url 'dhamma_class_soft_delete' i.uuid %}" title="Delete">

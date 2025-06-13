@@ -70,6 +70,6 @@ class EventDate(models.Model):
     to_time = models.TimeField(blank=True)
 
     def __str__(self):
-        return f"{self.event.name} on {self.event_date}"
+        return f"{self.event.title} on {self.event_date}"
 
 

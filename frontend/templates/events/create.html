@@ -37,7 +37,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <form method="post" action="{% url 'notice_create' %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'dhamma_class_create' %}">
                 {% csrf_token %}
                 <div class="card">
                     <div class="card-body">
@@ -83,24 +83,30 @@
                                             <div class="text-danger">{{ form.cover_image.errors }}</div>
                                             {% endif %}
                                         </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-check form-switch">
-                                                {{ form.need_registration.as_widget }}
-                                                <label class="form-check-label mt-2" for="{{ form.need_registration.id_for_label }}">&nbsp; Require Registration</label>
+                                    <div class="form-group row align-items-center col-md-6 mt-4">
+                                        <!-- SWITCH FIELD -->
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            <div class="icon-state switch-outline">
+                                              <label class="switch mb-0">
+                                                {{ form.is_registered }}
+                                                <span class="switch-state bg-primary"></span>
+                                              </label>
                                             </div>
+                                            <label for="{{ form.is_registered.id_for_label }}" class="col-form-label ms-3">
+                                              {{ form.is_registered.label }}
+                                            </label>
+                                          </div>
+
+                                          <!-- MAX SEAT FIELD -->
+                                          <div class="col-md-8">
+
+                                            {{ form.max_seat }}
+                                            {% if form.max_seat.errors %}
+                                              <div class="text-danger">{{ form.max_seat.errors }}</div>
+                                            {% endif %}
+                                          </div>
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <div class="form-group"> <label for="{{ form.max_seat.id_for_label }}">Maximum Seats:</label>
-                                                {{ form.max_seat }}
-                                                {% if form.max_seat.errors %}
-                                                <div class="text-danger">{{ form.max_seat.errors }}</div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <!-- Location -->
@@ -124,8 +130,13 @@
 
                                     <!-- Is Publish -->
                                     <div class="col-md-6 mb-3">
-                                        {{ form.is_publish.label_tag }}
-                                        {{ form.is_publish }}
+                                        <label for="id_is_publish">Is publish?</label>
+                                        <div class="icon-state switch-outline">
+                                          <label class="switch mb-0">
+                                            {{ form.is_publish }}
+                                            <span class="switch-state bg-primary"></span>
+                                          </label>
+                                        </div>
                                     </div>
 
                                     <!-- Event Date -->
@@ -138,24 +149,28 @@
                             </div>
 
                             <!-- Event Date Section -->
-                            <h3>Event Dates</h3>
+                            <h3 class="mb-3">Event Dates</h3>
                             <div id="event-dates-container">
-                                <div class="event-date-item mb-3">
-                                    <label for="event_date">Date:</label>
-                                    <input type="date" name="event_date[]" class="form-control" required>
+                                <div class="event-date-item row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="event_date">Date:</label>
+                                        <input type="date" name="event_date[]" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="from_time">From Time:</label>
+                                        <input type="time" name="from_time[]" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="to_time">To Time:</label>
+                                        <input type="time" name="to_time[]" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-danger remove-date-btn mt-4">Remove</button>
+                                    </div>
 
-                                    <label for="from_time">From Time:</label>
-                                    <input type="time" name="from_time[]" class="form-control" required>
-
-                                    <label for="to_time">To Time:</label>
-                                    <input type="time" name="to_time[]" class="form-control" required>
-
-                                    <button type="button" class="btn btn-danger remove-date-btn mt-2">Remove</button>
                                 </div>
                             </div>
-
-                            <button type="button" id="add-date-btn" class="btn btn-secondary">Add Another Date</button>
-
+                            <button type="button" id="add-date-btn" class="btn btn-secondary">Add More Date</button>
                             <br><br>
                             <button type="submit" class="btn btn-success">Save</button>
                             <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
@@ -166,31 +181,29 @@
         </div>
     </div>
 </div>
+
 <script>
-    // Ensure the script runs after the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get the checkbox and number input elements using their Django-generated IDs
-        const needRegistrationSwitch = document.getElementById('{{ form.need_registration.id_for_label }}');
-        const maxSeatInput = document.getElementById('{{ form.max_seat.id_for_label }}');
+document.addEventListener('DOMContentLoaded', function () {
+  const switchInput = document.getElementById('id_is_registered');
+  const maxSeatInput = document.getElementById('id_max_seat');
 
-        // Function to update the 'required' attribute of the max_seat input
-        function updateMaxSeatRequired() {
-            if (needRegistrationSwitch.checked) {
-                // If the switch is checked, make max_seat required
-                maxSeatInput.setAttribute('required', 'required');
-            } else {
-                // If the switch is unchecked, remove the required attribute
-                maxSeatInput.removeAttribute('required');
-            }
-        }
+  function toggleMaxSeat() {
+    if (switchInput.checked) {
+      maxSeatInput.removeAttribute('disabled');
+      maxSeatInput.required = true;
+    } else {
+      maxSeatInput.setAttribute('disabled', 'disabled');
+      maxSeatInput.required = false;
+      maxSeatInput.value = '';  // Optional: clear field when disabled
+    }
+  }
 
-        // Call the function once when the page loads to set the initial state
-        updateMaxSeatRequired();
-
-        // Add an event listener to the switch so that the 'required' status updates whenever it's toggled
-        needRegistrationSwitch.addEventListener('change', updateMaxSeatRequired);
-    });
+  // On load and when changed
+  toggleMaxSeat();
+  switchInput.addEventListener('change', toggleMaxSeat);
+});
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const dateContainer = document.getElementById("event-dates-container");
@@ -225,7 +238,7 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const needReg = document.getElementById("id_need_registration");
+    const needReg = document.getElementById("id_is_registered");
     const maxSeat = document.getElementById("id_max_seat");
 
     function toggleRequired() {
@@ -241,24 +254,7 @@
   });
 </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const coverInput = document.getElementById("id_cover_image");
-    const previewContainer = document.getElementById("coverImagePreview");
+{% include 'events/includes/js_populate_image.html' %}
 
-    coverInput.addEventListener("change", function (e) {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 150px;" class="img-thumbnail">`;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        previewContainer.innerHTML = "<p class='text-danger'>Selected file is not an image.</p>";
-      }
-    });
-  });
-</script>
 
 {% endblock %}

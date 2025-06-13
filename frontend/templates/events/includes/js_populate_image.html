@@ -1,0 +1,28 @@
+<script>
+    <div id="coverImagePreview" class="mb-2">
+      {% if form.instance.cover_image %}
+        <img src="{{ form.instance.cover_image.url }}" alt="Cover Image" style="max-height: 150px;" class="img-thumbnail">
+      {% endif %}
+    </div>
+
+    {{ form.cover_image }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const coverInput = document.getElementById("id_cover_image");
+  const previewContainer = document.getElementById("coverImagePreview");
+
+  coverInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 150px;" class="img-thumbnail">`;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewContainer.innerHTML = "<p class='text-danger'>Selected file is not an image.</p>";
+    }
+  });
+});
+</script>

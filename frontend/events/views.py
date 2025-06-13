@@ -1,6 +1,8 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
+
+from api.events.models import Event, EventDate
 from frontend.adminUsers.views import get_auth_headers, check_auth_request
 from frontend.config.api_endpoints import APIEndpoints
 from frontend.events.forms import EventForm
@@ -288,16 +290,73 @@ def dhamma_class_create(request):   # event create
     # except Exception as e:
     #     print('error', e)
     #     return render(request, "events/create.html", {"error": str(e)})
+
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
-            event = form.save(commit=False)
-            event.save()
+            event = form.save()
+
+            for date, from_time, to_time in zip(
+                    request.POST.getlist("event_date[]"),
+                    request.POST.getlist("from_time[]"),
+                    request.POST.getlist("to_time[]"),
+            ):
+                if date and from_time and to_time:
+                    EventDate.objects.create(
+                        event=event,
+                        event_date=date,
+                        from_time=from_time,
+                        to_time=to_time
+                    )
             return redirect("dhamma_class_list")
+
+        else:
+            print(form.errors)  # Debug output
+            return render(request, 'events/create.html', {'form': form})
     else:
         form = EventForm()
 
     return render(request, 'events/create.html', {"form": form})
+
+
+def dhamma_class_update(request, uuid):
+    event = get_object_or_404(Event, uuid=uuid)
+
+    if request.method == "POST":
+        form = EventForm(request.POST, request.FILES, instance=event)
+
+        if form.is_valid():
+            event = form.save()
+
+            # Clear old event date entries
+            event.event_dates.all().delete()
+
+            for date, from_time, to_time in zip(
+                    request.POST.getlist("event_date[]"),
+                    request.POST.getlist("from_time[]"),
+                    request.POST.getlist("to_time[]"),
+            ):
+                if date and from_time and to_time:
+                    EventDate.objects.create(
+                        event=event,
+                        event_date=date,
+                        from_time=from_time,
+                        to_time=to_time
+                    )
+
+            return redirect("dhamma_class_list")
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = EventForm(instance=event)
+
+    event_dates = event.event_dates.all()  # ✅ related_name="event_dates" in EventDate model
+
+    return render(request, 'events/edit.html', {
+        "form": form,
+        "event": event,
+        "event_dates": event_dates,
+    })
 
 
 def dhamma_class_soft_delete(request, uuid):
