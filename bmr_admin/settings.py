@@ -273,7 +273,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'bmr_admin/static'),
 ]
 # FORCE_SCRIPT_NAME = '/bmr_project'
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
