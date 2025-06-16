@@ -2,52 +2,60 @@
 {% load static %}
 {% block content %}
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Contact Us</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Edit</li>
-  </ol>
-</nav>
-<div class="content-wrapper">
-  <div class="row">
-    <div class="col-12 grid-margin">
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title mt-4">
-            <div class="d-flex justify-content-between row">
-              <div class="col-md-6">
-                <h4>Reply to {{ data.name }}</h4>
-              </div>
-            </div>
-          </div>
-          {% if data %}
-          <form class="form-sample" action="{% url 'contact_us_edit' data.uuid %}" method="post">
-            {% csrf_token %}
-            <h5>on {{ data.created_at }}, {{ data.name }} at {{ data.email }} wrote.. </h5>
-          {% else %}
-              <p style="color:red;">Error: Data is missing, cannot edit.</p>
-          {% endif %}
-            <div class="row">
-              <div class="form-group">
-                <input type="text" class="form-control" id="idPageTitle" value="{{ data.message }}" readonly>
-              </div>
-              <div class="form-group">
-                <label for="idReplyMessage">Reply Message</label>
-                <textarea rows="10" type="text" class="form-control" id="idReplyMessage" placeholder="Reply Message">{{ data.reply_message }}</textarea>
-              </div>
-            </div>
-            <div class="float-end">
-              {% if not data.reply_message %}
-              <button type="submit" class="btn btn-primary me-2"><i class="fa fa-save"></i> Reply</button>
-              {% endif %}
-              <a href="{% url 'contact_us_list' %}" type="submit" class="btn btn-danger me-2"><i class="fa fa-times"></i> Cancel</a>
-            </div>
-          </form>
-        </div>
-
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <h2>Contact Us list</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Contact Us</li>
+          <li class="breadcrumb-item active">Reply</li>
+        </ol>
       </div>
     </div>
   </div>
 </div>
-
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title mt-4">
+                <div class="d-flex justify-content-between row">
+                  <div class="col-md-6 mb-2">
+                    <h4>Reply to <b class="text-primary">{{ data.name }}</b></h4>
+                  </div>
+                </div>
+              </div>
+              {% if data %}
+              <form class="form-sample" action="{% url 'contact_us_edit' data.uuid %}" method="post">
+                {% csrf_token %}
+                <h5 class="mb-2">on <i class="text-primary">{{ data.created_at }}, {{ data.name }}</i> at <i class="text-primary">{{ data.email }}</i> wrote.. </h5>
+              {% else %}
+                  <p style="color:red;">Error: Data is missing, cannot edit.</p>
+              {% endif %}
+                <div class="row">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="idPageTitle" value="{{ data.message }}" readonly>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="idReplyMessage">Reply Message</label>
+                    <textarea rows="10" type="text" class="form-control" id="idReplyMessage" placeholder="Reply Message">{{ data.reply_message }}</textarea>
+                  </div>
+                </div>
+                <div class="float-end mt-4">
+                  {% if not data.reply_message %}
+                  <button type="submit" class="btn btn-primary me-2"><i class="fa fa-save"></i> Reply</button>
+                  {% endif %}
+                  <a href="{% url 'contact_us_list' %}" type="submit" class="btn btn-danger me-2"><i class="fa fa-times"></i> Cancel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
@@ -17,18 +18,30 @@ logger = logging.getLogger(__name__)
 
 @extend_schema(tags=["Contact Us"])
 class ContactUsViewSet(viewsets.ModelViewSet):
-    queryset = ContactUs.objects.filter(is_active=True).order_by("-created_at")
     pagination_class = CustomPagination
-    authentication_classes = [JWTAuthentication]  # ✅ Use JWT for authentication
-    permission_classes = [IsAuthenticated]  # ✅ Only authenticated users can access
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     lookup_field = "uuid"
+
+    def get_queryset(self):
+        queryset = ContactUs.objects.filter(is_active=True).order_by('-created_at')
+        search = self.request.query_params.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(email__icontains=search) |
+                Q(message__icontains=search) |
+                Q(message__icontains=search)
+            )
+        return queryset
 
     def get_permissions(self):
         """Assign permissions based on the action."""
         if self.action in ["list", "retrieve"]:
-            return [IsAuthenticated()]  # ✅ Require authentication for GET requests
+            return [IsAuthenticated()]
         elif self.action in ["update", "partial_update", "destroy"]:
-            return [IsAdminUser()]  # ✅ Admins can update or delete
+            return [IsAdminUser()]  # Admins can update or delete
         return [IsAuthenticated()]
 
     def get_serializer_class(self):

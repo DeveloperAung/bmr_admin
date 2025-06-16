@@ -1,64 +1,102 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-primary mt-4">
-    <li class="breadcrumb-item"><a href="#">Contact Us</a></li>
-    <li class="breadcrumb-item active" aria-current="page">All</li>
-  </ol>
-</nav>
-<div class="content-wrapper">
+<div class="container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <h2>Contact Us list</h2>
+      </div>
+      <div class="col-sm-6 col-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Contact Us</li>
+          <li class="breadcrumb-item active">All</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
   <div class="row">
-    <div class="col-12 grid-margin">
+    <div class="col-sm-12">
       <div class="card">
         <div class="card-body">
-          <div class="card-title mt-4">
-            <div class="d-flex justify-content-between row">
-              <div class="col-md-6">
-                <h4>Contact Us</h4>
+          <div class="list-product-header">
+            <div class="">
+              <div class="light-box me-2">
+                <a data-bs-toggle="collapse" href="#collapseProduct" role="button" aria-expanded="false" aria-controls="collapseProduct">
+                  <i class="filter-icon show" data-feather="filter"></i>
+                </a>
               </div>
+              <a class="btn btn-primary justify-content-end" href="{% url 'dhamma_class_create' %}">
+                <i class="fa-solid fa-plus"></i> Create New Dhamma Class
+              </a>
             </div>
           </div>
-          <div class="row">
-            <div class="table-sorter-wrapper col-lg-12 table-responsive">
-              <table id="sortable-table-1" class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th class="sortStyle">Name<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Email<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Subject<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Received at<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Replied at<i class="ti-angle-down"></i></th>
-                    <th class="sortStyle">Action<i class="ti-angle-down"></i></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if data %}
-                  {% for i in data %}
-                    <tr>
-                      <td>{{ forloop.counter }}</td>
-                      <td>{{ i.name }}</td>
-                      <td>{{ i.email }}</td>
-                      <td>{{ i.subject }}</td>
-                      <td>{{ i.created_at }}</td>
-                      <td>{% if i.replied_date %}{{ i.replied_date }}{% else %}-{% endif %}</td>
-                      <td>
-                        {% if not i.replied_date %}
-                        <a href="{% url 'contact_us_edit' i.uuid %}" class="btn btn-primary btn-xs"> <i class="fa fa-reply"></i></a>
-                        {% else %}
-                        <button class="btn btn-primary btn-xs"><i class="fa fa-info-circle"></i></button>
-                        {% endif %}
-                        <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'soft_delete_contact' i.uuid %}"><i class="ti ti-trash"> </i></button>
 
-                      </td>
-                    </tr>
-                  {% endfor %}
-                  {% endif %}
-                </tbody>
-              </table>
-              {% include 'includes/pagination.html' %}
+          <div class="collapse" id="collapseProduct">
+            <div class="card card-body list-product-body">
+              <form method="get">
+                <div class="row g-3">
+                  <div class="col-sm-4">
+                    <input name="q" class="form-control" placeholder="Search event category" value="{{ query }}">
+                  </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
+
+          <div class="list-product mt-2 overflow-auto">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th class="text-center">#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Received at</th>
+                  <th>Replied at</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% if data_results %}
+                {% for i in data_results %}
+                  <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.email }}</td>
+                    <td>{{ i.subject }}</td>
+                    <td>{{ i.created_at }}</td>
+                    <td>{% if i.replied_date %}{{ i.replied_date }}{% else %}-{% endif %}</td>
+                    <td class="text-end">
+                      <div class="product-action justify-content-center">
+                        {% if not i.replied_date %}
+                        <a href="{% url 'contact_us_edit' i.uuid %}" title="Reply">
+                          <i class="fa-solid fa-share-from-square icli"></i>
+                        </a>
+                        {% else %}
+                        <a href="" title="Info"><i class="fa-solid fa-circle-info icli"></i></a>
+                        {% endif %}
+                        <button class="btn" id="idDeleteBtn" data-url="{% url 'soft_delete_contact' i.uuid %}" title="Delete">
+                          <i class="iconly-Delete icli danger"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="6" class="text-center">No contacts are found.</td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+          {% include 'includes/pagination.html' %}
         </div>
       </div>
     </div>

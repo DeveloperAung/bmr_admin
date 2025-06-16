@@ -2,25 +2,35 @@ import requests
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from frontend.adminUsers.views import get_auth_headers
+from frontend.adminUsers.views import get_auth_headers, check_auth_request
 from frontend.config.api_endpoints import APIEndpoints
 
 
 def contact_us_list(request):
     try:
-        headers = get_auth_headers(request)
-        response = requests.get(APIEndpoints.URL_CONTACT_US_LIST, headers=headers)
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        # Build query string
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        response = check_auth_request("GET", APIEndpoints.URL_CONTACT_US_LIST, request, params=params)
         if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
         response_body = response.json()
         context = {
             'messages': response_body["message"],
-            'data': response_body["data"]["results"]
+            'data_header': response_body["data"],
+            'data_results': response_body["data"]["results"],
+            "request": request,
+            "query": search,
         }
         return render(request, "contactUs/list.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "contactUs/list.html", {"error": str(e)})
+        return render(request, "contactUs/list.html", {"error": str(e), "request": request, })
 
 
 def contact_us_edit(request, uuid):
