@@ -5,12 +5,12 @@
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Weekly Activities Create</h2>
+        <h2>Article</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'weekly_activities_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Weekly Activities</li>
+          <li class="breadcrumb-item"><a href="{% url 'article_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Article</li>
           <li class="breadcrumb-item active">Create</li>
         </ol>
       </div>
@@ -24,8 +24,21 @@
                 <div class="card-body">
                     <div class="form theme-form basic-form">
                         <div class="row">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'weekly_activity_create' %}">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'article_create' %}">
                                 {% csrf_token %}
+                              <div class="mb-3">
+                                {% if parent_posts %}
+                                 <h5 class="f-w-600 mb-2">Parent Article (Optional)</h5>
+                                <select class="form-select" name="parent_article">
+                                    <option value="" selected>-- Select Parent Article --</option>
+                                 {% for post in parent_posts %}
+                                    <option value="{{ post.id }}">
+                                      {{ post.title }}
+                                    </option>
+                                 {% endfor %}
+                                </select>
+                                {% endif %}
+                              </div>
                                 <div class="mb-3">
                                     <label for="idTitle">Title</label>
                                     <input class="form-control" type="text" id="idTitle" name="title" placeholder=""  value="{{ data.title }}">
@@ -41,19 +54,15 @@
                                         {% endif %}
                                     </div>
 
-                                    <!-- File input field -->
                                     <input type="file" name="cover_image" accept="image/*" class="form-control" id="id_cover_image">
 
                                 </div>
 
                                 <div class="row m-1">
-                                    <!-- Description (manual Summernote textarea) -->
                                     <textarea name="description" id="descriptionInput" style="display: none;"></textarea>
                                     {% include 'includes/quill_editor.html' %}
                                 </div>
 
-
-                                <!-- Is Publish -->
                                 <div class="col-md-6 mb-3">
                                     <label for="id_is_publish">Is publish?</label>
                                     <div class="icon-state switch-outline">
@@ -66,7 +75,7 @@
                                 <div class="row">
                                   <div class="text-end">
                                       <button type="submit" class="btn btn-primary btn-lg">Create</button>
-                                      <a class="btn btn-danger btn-lg" href="{% url 'weekly_activities_list' %}">Cancel </a>
+                                      <a class="btn btn-danger btn-lg" href="{% url 'article_list' %}">Cancel </a>
                                  </div>
                                 </div>
                             </form>

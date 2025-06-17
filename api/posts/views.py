@@ -60,10 +60,10 @@ class PostViewSet(BaseSoftDeleteViewSet):
     lookup_field = 'uuid'
 
     def get_queryset(self):
-        queryset = Post.objects.filter(is_active=True).order_by('id')
-        category_title = self.request.query_params.get('category_title')
-        if category_title:
-            queryset = queryset.filter(category__title=category_title)
+        queryset = Post.objects.filter(is_active=True).order_by('-created_at')
+        category_id = self.request.query_params.get('category_id')
+        if category_id:
+            queryset = queryset.filter(post_category=category_id)
         return queryset
 
     def get_serializer_class(self):
@@ -82,6 +82,12 @@ class PostViewSet(BaseSoftDeleteViewSet):
             logger.error(f"Error selecting serializer: {e}")
             return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    # def perform_create(self, serializer):
+    #     instance = serializer.save(
+    #         published_by=self.request.user if serializer.validated_data.get('is_published') else None,
+    #         published_at=timezone.now() if serializer.validated_data.get('is_published') else None
+    #     )
+
     @action(detail=True, methods=["patch"], url_path="publish-toggle")
     def publish_toggle(self, request, uuid=None):
         try:
@@ -96,7 +102,7 @@ class PostViewSet(BaseSoftDeleteViewSet):
                 post.save()
                 return custom_api_response(
                     success=True,
-                    message=f"Notice {'published' if is_published else 'unpublished'} successfully",
+                    message=f"Post {'published' if is_published else 'unpublished'} successfully",
                     data={
                         "id": post.id,
                         "is_published": post.is_published,

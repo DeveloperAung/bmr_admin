@@ -4,12 +4,12 @@
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Weekly Activities list</h2>
+        <h2>Articles list</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Weekly Activities</li>
+          <li class="breadcrumb-item">Articles</li>
           <li class="breadcrumb-item active">All</li>
         </ol>
       </div>
@@ -28,8 +28,8 @@
                   <i class="filter-icon show" data-feather="filter"></i>
                 </a>
               </div>
-              <a class="btn btn-primary justify-content-end" href="{% url 'weekly_activity_create' %}">
-                <i class="fa-solid fa-plus"></i> Create New Weekly Activity
+              <a class="btn btn-primary justify-content-end" href="{% url 'article_create' %}">
+                <i class="fa-solid fa-plus"></i> Create New Article
               </a>
             </div>
           </div>
@@ -71,7 +71,7 @@
                     <td class="text-center">
                       <div class="product-action justify-content-center">
                         <button class="btn btn-{% if i.is_published %}outline-danger{% else %}primary{% endif %}" id="idPublishToggleBtn" data-url="{% url 'post_publish_toggle' i.uuid %}" data-value="{% if i.is_published %}Unpublish{% else %}Publish{% endif %}">{% if i.is_published %}Unpublish{% else %}Publish{% endif %}</button>
-                        <a href="{% url 'weekly_activity_edit' i.uuid %}" title="Edit">
+                        <a href="{% url 'article_edit' i.uuid %}" title="Edit">
                           <i class="iconly-Edit-Square icli"></i>
                         </a>
                         <button class="btn" id="idDeleteBtn" data-url="{% url 'post_soft_delete' i.uuid %}" title="Delete">

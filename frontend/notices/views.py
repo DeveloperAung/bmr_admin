@@ -146,6 +146,7 @@ def notice_publish_toggle(request, uuid):
             return JsonResponse({"success": True, "message": decoded_response["message"]})
         else:
             return JsonResponse(
-                {"success": False, "message": f"Failed to delete Notice {response.status_code}."}, status=400
+                {"success": False, "message": f"Failed to publish / un-publish Notice {response.status_code}."},
+                status=400
             )
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)

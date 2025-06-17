@@ -1,0 +1,172 @@
+{% load alert_tags %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mb-3" role="alert">
+            {% if message.tags == 'error' or message.tags == 'danger' %}
+                <i class="fa-solid fa-circle-exclamation"></i>
+            {% elif message.tags == 'warning' %}
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            {% elif message.tags == 'success' %}
+                <i class="fa-solid fa-circle-check"></i>
+            {% elif message.tags == 'info' %}
+                <i class="fa-solid fa-circle-info"></i>
+            {% else %}
+                <i class="fa-regular fa-heart"></i>
+            {% endif %}
+            <span class="ms-2">{{ message }}</span>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Form Non-Field Errors (general form errors) -->
+{% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div class="ms-2">
+            {% for error in form.non_field_errors %}
+                <p class="mb-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Multiple Forms Non-Field Errors (if you have multiple forms) -->
+{% if forms %}
+    {% for form in forms %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <div class="ms-2">
+                    <p class="mb-1"><strong>{{ form.prefix|title|default:'Form' }} Errors:</strong></p>
+                    {% for error in form.non_field_errors %}
+                        <p class="mb-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<!-- Custom Error Messages (passed from view context) -->
+{% if error_message %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span class="ms-2">{{ error_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Custom Success Messages -->
+{% if success_message %}
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="ms-2">{{ success_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Custom Warning Messages -->
+{% if warning_message %}
+    <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span class="ms-2">{{ warning_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Custom Info Messages -->
+{% if info_message %}
+    <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-info"></i>
+        <span class="ms-2">{{ info_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Form Field Errors Summary (optional - shows all field errors in one place) -->
+{% if form.errors and show_field_errors_summary %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div class="ms-2">
+            <p class="mb-2"><strong>Please correct the following errors:</strong></p>
+            {% for field, errors in form.errors.items %}
+                {% if field != '__all__' %}
+                    <div class="mb-1">
+                        <strong>{{ form|get_field_label:field }}:</strong>
+                        {% for error in errors %}
+                            <span class="d-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Formset Errors (for handling multiple forms/formsets) -->
+{% if formset.non_form_errors %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div class="ms-2">
+            <p class="mb-2"><strong>Formset Errors:</strong></p>
+            {% for error in formset.non_form_errors %}
+                <p class="mb-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- Custom Alert Types -->
+{% if custom_alerts %}
+    {% for alert in custom_alerts %}
+        <div class="alert alert-{{ alert.type|default:'secondary' }} alert-dismissible fade show mb-3" role="alert">
+            {% if alert.icon %}
+                <i class="{{ alert.icon }}"></i>
+            {% else %}
+                {% if alert.type == 'danger' or alert.type == 'error' %}
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                {% elif alert.type == 'warning' %}
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                {% elif alert.type == 'success' %}
+                    <i class="fa-solid fa-circle-check"></i>
+                {% elif alert.type == 'info' %}
+                    <i class="fa-solid fa-circle-info"></i>
+                {% else %}
+                    <i class="fa-regular fa-heart"></i>
+                {% endif %}
+            {% endif %}
+            <span class="ms-2">{{ alert.message }}</span>
+            {% if alert.dismissible|default:True %}
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- JavaScript for auto-dismiss (optional) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-dismiss success messages after 5 seconds
+    const successAlerts = document.querySelectorAll('.alert-success');
+    successAlerts.forEach(function(alert) {
+        setTimeout(function() {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+
+    // Auto-dismiss info messages after 7 seconds
+    const infoAlerts = document.querySelectorAll('.alert-info');
+    infoAlerts.forEach(function(alert) {
+        setTimeout(function() {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 7000);
+    });
+});
+</script>

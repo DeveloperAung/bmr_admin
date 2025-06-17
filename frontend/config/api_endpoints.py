@@ -85,17 +85,21 @@ class APIEndpoints:
     URL_POST = f"{API_BASE_URL}/api/p/post/"
     URL_POST_CATEGORY = f"{API_BASE_URL}/api/p/category/"
 
-    # @staticmethod
-    # def URL_DONATION_DETAILS(uuid):
-    #     return f"{API_BASE_URL}/api/d/donation/{uuid}/"
+    @staticmethod
+    def URL_POST_DETAILS(uuid):
+        return f"{API_BASE_URL}/api/p/post/{uuid}/"
 
     @staticmethod
     def URL_POST_CATEGORY_DETAILS(uuid):
         return f"{API_BASE_URL}/api/p/category/{uuid}/"
 
     @staticmethod
-    def URL_POST_BY_CATEGORY(category_title):
-        return f"{API_BASE_URL}/api/p/post/?category_title={category_title}/"
+    def URL_POST_PUBLISH_TOGGLE(uuid):
+        return f"{API_BASE_URL}/api/p/post/{uuid}/publish-toggle/"
+
+    # @staticmethod
+    # def URL_POST():
+    #     return f"{API_BASE_URL}/api/p/post/"
 
     """ Post END """
 

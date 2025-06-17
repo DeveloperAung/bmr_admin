@@ -14,14 +14,12 @@ def admin_user_list(request):
         page = request.GET.get("page", 1)
         search = request.GET.get("q", "")
         role = request.GET.get("role", "")
-
         # Build query string
         params = {"page": page}
         if search:
             params["search"] = search
         if role:
             params["role"] = role
-
         response = requests.get(APIEndpoints.URL_ADMIN_USERS, headers=headers, params=params)
 
         if response.status_code == 401 or response.status_code == 400:
@@ -234,6 +232,7 @@ def login(request):
             request.session["refresh_token"] = tokens["data"]["refresh"]
             return redirect("dashboard")
         else:
+            print('response', response)
             return render(request, "adminUsers/login.html", {"error": "Invalid credentials"})
 
     return render(request, "adminUsers/login.html")
