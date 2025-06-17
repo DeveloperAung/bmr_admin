@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="container-fluid">
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Weekly Activity Edit</h2>
+        <h2>Friday Activities Create</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'weekly_activities_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Weekly Activity</li>
-          <li class="breadcrumb-item active">Edit</li>
+          <li class="breadcrumb-item"><a href="{% url 'friday_activities_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Friday Activities</li>
+          <li class="breadcrumb-item active">Create</li>
         </ol>
       </div>
     </div>
@@ -23,7 +24,7 @@
                 <div class="card-body">
                     <div class="form theme-form basic-form">
                         <div class="row">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'weekly_activity_edit' data.uuid %}">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'friday_activity_create' %}">
                                 {% csrf_token %}
                                 <div class="mb-3">
                                     <label for="idTitle">Title</label>
@@ -34,8 +35,8 @@
 
                                     <!-- Preview image -->
                                     <div id="coverImagePreview" class="mb-2">
-                                        {% if data.cover_image %}
-                                        <img src="{{ data.cover_image }}" alt="Cover Image"
+                                        {% if form.instance.cover_image %}
+                                        <img src="{{ form.instance.cover_image.url }}" alt="Cover Image"
                                              style="max-height: 150px;" class="img-thumbnail">
                                         {% endif %}
                                     </div>
@@ -47,7 +48,7 @@
 
                                 <div class="row m-1">
                                     <!-- Description (manual Summernote textarea) -->
-                                    <textarea name="description" id="descriptionInput" style="display: none;">{{ data.description }}</textarea>
+                                    <textarea name="description" id="descriptionInput" style="display: none;"></textarea>
                                     {% include 'includes/quill_editor.html' %}
                                 </div>
 
@@ -57,15 +58,15 @@
                                     <label for="id_is_publish">Is publish?</label>
                                     <div class="icon-state switch-outline">
                                       <label class="switch mb-0">
-                                        <input type="checkbox" name="is_publish" class="form-check-input" id="id_is_publish" {% if data.is_published %}checked{% endif %}>
+                                        <input type="checkbox" name="is_publish" class="form-check-input" id="id_is_publish">
                                         <span class="switch-state bg-primary"></span>
                                       </label>
                                     </div>
                                 </div>
                                 <div class="row">
                                   <div class="text-end">
-                                      <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                                      <a class="btn btn-danger btn-lg" href="{% url 'weekly_activities_list' %}">Cancel </a>
+                                      <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                      <a class="btn btn-danger btn-lg" href="{% url 'friday_activities_list' %}">Cancel </a>
                                  </div>
                                 </div>
                             </form>

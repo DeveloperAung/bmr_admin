@@ -16,6 +16,14 @@ urlpatterns = [
     path('article/create', views.article_create, name='article_create'),
     path('article/edit/id=?<uuid:uuid>', views.article_edit, name='article_edit'),
 
+    path('travel_post', views.travel_post_list, name='travel_post_list'),
+    path('travel_post/create', views.travel_post_create, name='travel_post_create'),
+    path('travel_post/edit/id=?<uuid:uuid>', views.travel_post_edit, name='travel_post_edit'),
+
+    path('friday-activities', views.friday_activities_list, name='friday_activities_list'),
+    path('friday-activities/create', views.friday_activity_create, name='friday_activity_create'),
+    path('friday-activities/edit/id=?<uuid:uuid>', views.friday_activity_edit, name='friday_activity_edit'),
+
     path("post/delete/id=?<uuid:uuid>/", views.post_soft_delete, name="post_soft_delete"),
     path('publish-toggle/id=?<uuid:uuid>', views.post_publish_toggle, name='post_publish_toggle'),
 ]

@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="container-fluid">
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Weekly Activity Edit</h2>
+        <h2>Travel Post Create</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'weekly_activities_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Weekly Activity</li>
-          <li class="breadcrumb-item active">Edit</li>
+          <li class="breadcrumb-item"><a href="{% url 'travel_post_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Travel Post</li>
+          <li class="breadcrumb-item active">Create</li>
         </ol>
       </div>
     </div>
@@ -23,49 +24,59 @@
                 <div class="card-body">
                     <div class="form theme-form basic-form">
                         <div class="row">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'weekly_activity_edit' data.uuid %}">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'travel_post_create' %}">
                                 {% csrf_token %}
+                              <div class="mb-3">
+                                {% if parent_posts %}
+                                 <h5 class="f-w-600 mb-2">Parent Travel Post (Optional)</h5>
+                                <select class="form-select" name="parent_article">
+                                    <option value="" selected>-- Select Parent Travel Post --</option>
+                                 {% for post in parent_posts %}
+                                    <option value="{{ post.id }}">
+                                      {{ post.title }}
+                                    </option>
+                                 {% endfor %}
+                                </select>
+                                {% endif %}
+                              </div>
                                 <div class="mb-3">
                                     <label for="idTitle">Title</label>
-                                    <input class="form-control" type="text" id="idTitle" name="title" placeholder=""  value="{{ data.title }}">
+                                    <input class="form-control" type="text" id="idTitle" name="title" placeholder="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="idTitle">Short Description</label>
+                                    <textarea class="form-control" id="idShortDescription" name="short_description"></textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="id_cover_image">Cover image:</label>
-
                                     <!-- Preview image -->
                                     <div id="coverImagePreview" class="mb-2">
-                                        {% if data.cover_image %}
-                                        <img src="{{ data.cover_image }}" alt="Cover Image"
+                                        {% if form.instance.cover_image %}
+                                        <img src="{{ form.instance.cover_image.url }}" alt="Cover Image"
                                              style="max-height: 150px;" class="img-thumbnail">
                                         {% endif %}
                                     </div>
-
-                                    <!-- File input field -->
                                     <input type="file" name="cover_image" accept="image/*" class="form-control" id="id_cover_image">
-
                                 </div>
 
                                 <div class="row m-1">
-                                    <!-- Description (manual Summernote textarea) -->
-                                    <textarea name="description" id="descriptionInput" style="display: none;">{{ data.description }}</textarea>
+                                    <textarea name="description" id="descriptionInput" style="display: none;"></textarea>
                                     {% include 'includes/quill_editor.html' %}
                                 </div>
 
-
-                                <!-- Is Publish -->
                                 <div class="col-md-6 mb-3">
                                     <label for="id_is_publish">Is publish?</label>
                                     <div class="icon-state switch-outline">
                                       <label class="switch mb-0">
-                                        <input type="checkbox" name="is_publish" class="form-check-input" id="id_is_publish" {% if data.is_published %}checked{% endif %}>
+                                        <input type="checkbox" name="is_publish" class="form-check-input" id="id_is_publish">
                                         <span class="switch-state bg-primary"></span>
                                       </label>
                                     </div>
                                 </div>
                                 <div class="row">
                                   <div class="text-end">
-                                      <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                                      <a class="btn btn-danger btn-lg" href="{% url 'weekly_activities_list' %}">Cancel </a>
+                                      <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                      <a class="btn btn-danger btn-lg" href="{% url 'travel_post_list' %}">Cancel </a>
                                  </div>
                                 </div>
                             </form>

@@ -4,12 +4,12 @@
   <div class="page-title">
     <div class="row">
       <div class="col-sm-6 col-12">
-        <h2>Weekly Activity Edit</h2>
+        <h2>Travel Post Edit</h2>
       </div>
       <div class="col-sm-6 col-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'weekly_activities_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
-          <li class="breadcrumb-item">Weekly Activity</li>
+          <li class="breadcrumb-item"><a href="{% url 'travel_post_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+          <li class="breadcrumb-item">Travel Post</li>
           <li class="breadcrumb-item active">Edit</li>
         </ol>
       </div>
@@ -23,11 +23,28 @@
                 <div class="card-body">
                     <div class="form theme-form basic-form">
                         <div class="row">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'weekly_activity_edit' data.uuid %}">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'travel_post_edit' data.uuid %}">
                                 {% csrf_token %}
+                                <div class="mb-3">
+                                {% if parent_posts %}
+                                 <h5 class="f-w-600 mb-2">Parent Article (Optional)</h5>
+                                <select class="form-select"  name="parent_article">
+                                    <option value="" selected></option>
+                                 {% for post in parent_posts %}
+                                    <option value="{{ post.id }}" {% if post.id == data.parent %}selected{% endif %}>
+                                      {{ post.title }}
+                                    </option>
+                                 {% endfor %}
+                                </select>
+                                {% endif %}
+                              </div>
                                 <div class="mb-3">
                                     <label for="idTitle">Title</label>
                                     <input class="form-control" type="text" id="idTitle" name="title" placeholder=""  value="{{ data.title }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="idTitle">Short Description</label>
+                                    <textarea class="form-control" id="idShortDescription" name="short_description">{{ data.short_description }}</textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="id_cover_image">Cover image:</label>
@@ -65,7 +82,7 @@
                                 <div class="row">
                                   <div class="text-end">
                                       <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                                      <a class="btn btn-danger btn-lg" href="{% url 'weekly_activities_list' %}">Cancel </a>
+                                      <a class="btn btn-danger btn-lg" href="{% url 'travel_post_list' %}">Cancel </a>
                                  </div>
                                 </div>
                             </form>
