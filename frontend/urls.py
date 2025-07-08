@@ -12,4 +12,5 @@ urlpatterns = [
     path('notices/', include('frontend.notices.urls')),
     path('home-page/', include('frontend.homePage.urls')),
     path('subscribers/', include('frontend.subscribers.urls')),
+    path('memberships/', include('frontend.memberships.urls')),
 ]

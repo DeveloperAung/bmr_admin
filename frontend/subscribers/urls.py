@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [
-    path('', views.subscriber_list, name='subscriber_list'),
-    path('create', views.subscribers_bulk_create, name='subscribers_bulk_create'),
+app_name = 'subscribers'
 
-    # path('delete/id=?<uuid:uuid>', views.single_page_soft_delete, name='single_page_delete'),
+urlpatterns = [
+    path('', views.subscriber_list, name='list'),
+    path('create', views.subscribers_bulk_create, name='bulk_create'),
+    path('edit/<uuid:uuid>', views.subscriber_edit, name='edit'),
+    path('delete/<uuid:uuid>', views.subscriber_soft_delete, name='delete'),
 ]

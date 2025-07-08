@@ -8,7 +8,8 @@ from .models import SubscriberUser
 from .serializers import (
     SubscriberUserCreateSerializer,
     SubscriberUserListSerializer,
-    SubscriberUserRetrieveSerializer
+    SubscriberUserRetrieveSerializer,
+    SubscriberUserUpdateSerializer
 )
 from django.utils import timezone
 import logging
@@ -31,7 +32,7 @@ class SubscriberViewSet(BaseSoftDeleteViewSet):
             elif self.action == "create":
                 return SubscriberUserCreateSerializer
             elif self.action in ["update", "partial_update"]:
-                return SubscriberUserCreateSerializer
+                return SubscriberUserUpdateSerializer
             return SubscriberUserListSerializer
         except Exception as e:
             print('error', e)
@@ -92,6 +93,44 @@ class SubscriberViewSet(BaseSoftDeleteViewSet):
             data={'created': [s.email for s in subscribers]},
             status_code=status.HTTP_201_CREATED
         )
+
+    def update(self, request, *args, **kwargs):
+        """Update subscriber status"""
+        try:
+            subscriber_user = self.get_object()
+            subscrd_flag = request.data.get('subscrd_flag')
+            
+            if subscrd_flag not in ['Y', 'N']:
+                return custom_api_response(
+                    success=False,
+                    message="Invalid status value. Must be 'Y' or 'N'",
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+            
+            subscriber_user.subscrd_flag = subscrd_flag
+            subscriber_user.save()
+            
+            return custom_api_response(
+                success=True,
+                message="Subscriber updated successfully",
+                data={
+                    "id": subscriber_user.id,
+                    "uuid": subscriber_user.uuid,
+                    "email": subscriber_user.email,
+                    "subscrd_flag": subscriber_user.subscrd_flag,
+                    "created_at": subscriber_user.created_at
+                }
+            )
+            
+        except Exception as e:
+            error_title = type(e).__name__
+            print("update error:", error_title)
+            logger.error(f"Error updating subscriber: {error_title}")
+            return custom_api_response(
+                success=False,
+                message=error_title,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     @action(detail=True, methods=["patch"], url_path="publish-toggle")
     def status_toggle(self, request, uuid=None):

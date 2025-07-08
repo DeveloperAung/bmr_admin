@@ -91,14 +91,14 @@ def notice_edit(request, uuid):
             payload = {
                 "title": title,
                 "description": description,
-                "from_date": from_date,
-                "to_date": to_date
+                "from_date": from_date if from_date else None,
+                "to_date": to_date if to_date else None
             }
             response = check_auth_request("PUT", APIEndpoints.URL_NOICE_DETAILS(uuid), request, data=payload)
-            if response.status_code == 401 or response.status_code == 400:
+            if response.status_code == 401:
+                response_body = response.json()
                 return redirect("login")
             response_body = response.json()
-            print('response_body', response_body)
             if response.status_code == 200:
                 return redirect('notice_list')
             else:

@@ -6,7 +6,29 @@ from frontend.config.api_endpoints import APIEndpoints
 
 
 def home_setting_video_listing(request):
-    return render(request, 'homePage/home_settings.html')
+    try:
+        page = request.GET.get("page", 1)
+        search = request.GET.get("q", "")
+
+        params = {"page": page}
+        if search:
+            params["search"] = search
+
+        event_response = check_auth_request("GET", APIEndpoints.URL_EVENT_CATEGORY, request, params=params)
+        if event_response.status_code == 401:  # Unauthorized
+            return redirect("login")
+        event_response_body = event_response.json()
+        context = {
+            'messages': event_response_body["message"],
+            'data_header': event_response_body["data"],
+            'data_results': event_response_body["data"]["results"],
+            "request": request,
+            "query": search,
+        }
+        return render(request, "homePage/home_settings.html", context)
+    except Exception as e:
+        print('error', e)
+        return render(request, "homePage/home_settings.html", {"error": str(e), "request": request, })
 
 
 def home_setting_video_edit(request):

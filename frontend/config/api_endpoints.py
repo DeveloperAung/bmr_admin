@@ -24,6 +24,7 @@ class APIEndpoints:
     def URL_SUBSCRIBERS_DETAILS(uuid):
         return f"{API_BASE_URL}/api/sub/subscribers/{uuid}/"
 
+
     """ Subscribers END """
 
     """ Contact START """

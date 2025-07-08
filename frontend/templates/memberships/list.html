@@ -4,13 +4,13 @@
     <div class="page-title">
       <div class="row">
         <div class="col-sm-6 col-12">
-          <h2>Email Subscribers List</h2>
+          <h2>Membership List</h2>
         </div>
         <div class="col-sm-6 col-12">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
-            <li class="breadcrumb-item">Email Subscribers</li>
-            <li class="breadcrumb-item active">List</li>
+            <li class="breadcrumb-item">Membership</li>
+            <li class="breadcrumb-item active">All</li>
           </ol>
         </div>
       </div>
@@ -28,9 +28,6 @@
                   <i class="filter-icon show" data-feather="filter"></i>
                 </a>
               </div>
-              <a class="btn btn-primary justify-content-end" href="{% url 'subscribers:bulk_create' %}">
-                <i class="fa-solid fa-plus"></i> Add Subscriber
-              </a>
             </div>
           </div>
 
@@ -39,7 +36,7 @@
               <form method="get">
                 <div class="row g-3">
                   <div class="col-sm-4">
-                    <input name="q" class="form-control" placeholder="Search email or subscription code" value="{{ query }}">
+                    <input name="q" class="form-control" placeholder="Search member name or fin" value="{{ query }}">
                   </div>
                   <div class="col-sm-2">
                     <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
@@ -54,10 +51,14 @@
               <thead class="table-light">
                 <tr>
                   <th>#</th>
-                  <th>Email</th>
-                  <th>Subscription Code</th>
-                  <th>Status</th>
-                  <th>Subscribed on</th>
+                  <th>Name</th>
+                  <th>NRIC / FIN</th>
+                  <th>Membership Type</th>
+                  <th>Registration Date</th>
+                  <th>Membership Status</th>
+                  <th>Membership Type</th>
+                  <th>Membership No.</th>
+                  <th>Terminated Date</th>
                   <th class="text-end">Actions</th>
                 </tr>
               </thead>
@@ -66,30 +67,26 @@
                 {% for i in data_results %}
                   <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ i.email }}</td>
-                    <td>{{ i.uuid }}</td>
-                    <td>
-                      {% if i.subscrd_flag == 'P' %}
-                        <span class="badge bg-warning">Pending</span>
-                      {% elif i.subscrd_flag == 'Y' %}
-                        <span class="badge bg-success">Yes</span>
-                      {% elif i.subscrd_flag == 'N' %}
-                        <span class="badge bg-danger">No</span>
-                      {% else %}
-                        <span class="badge bg-secondary">{{ i.subscrd_flag }}</span>
-                      {% endif %}
-                    </td>
-                    <td>{{ i.created_at }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.nric_fin }}</td>
+                    <td>{{ i.membership_type }}</td>
+                    <td>{{ i.applied_date }}</td>
+                    <td>{{ i.membership_status }}</td>
+                    <td>{{ i.membership_type }}</td>
+                    <td>{{ i.membership_no }}</td>
+                    <td>{{ i.terminated_date }}</td>
                     <td class="text-end">
                       <div class="product-action justify-content-center">
-
-                        <a href="{% url 'subscribers:edit' i.uuid %}" title="Edit">
+                        <a href="" title="View Profile">
+                          <i class="iconly-Show icli"></i>
+                        </a>
+                        <a href="{% url 'notice_edit' i.uuid %}" title="Edit Status">
                           <i class="iconly-Edit-Square icli"></i>
                         </a>
-                        <a href="{% url 'subscribers:delete' i.uuid %}" title="Delete" 
-                           onclick="return confirm('Are you sure you want to delete this subscriber?')">
-                          <i class="iconly-Delete icli danger"></i>
+                        <a href="{% url 'notice_edit' i.uuid %}" title="Edit Profile">
+                          <i class="iconly-Edit-Square icli"></i>
                         </a>
+                        <button class="btn btn-danger btn-xs" id="idDeleteBtn" data-url="{% url 'notice_delete' i.uuid %}"><i class="iconly-Delete icli"> </i></button>
                       </div>
                     </td>
                   </tr>
@@ -109,5 +106,6 @@
   </div>
 </div>
 
+{% include 'includes/publish_toggle.html' %}
 {% include 'includes/soft_delete.html' %}
 {% endblock %}

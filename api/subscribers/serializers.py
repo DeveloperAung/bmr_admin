@@ -14,11 +14,18 @@ class SubscriberUserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriberUser
         fields = [
-            'id', 'uuid', 'email', 'subscrd_flag', 'last_sent_at'
+            'id', 'uuid', 'email', 'subscrd_flag', 'last_sent_at', 'created_at'
         ]
 
 
 class SubscriberUserCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubscriberUser
+        fields = ['subscrd_flag']
+
+
+class SubscriberUserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubscriberUser

@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from api.subscribers.models import SubscriberUser
 from frontend.adminUsers.views import check_auth_request
 from frontend.config.api_endpoints import APIEndpoints
+from django.conf import settings
+import json
 
 
 def subscriber_list(request):
@@ -69,9 +71,73 @@ def subscribers_bulk_create(request):
         return render(request, "subscribers/create.html", {"error": str(e)})
 
 
-def single_page_soft_delete(request, uuid):
+def subscriber_edit(request, uuid):    
+    try:
+        if request.method == "GET":
+            print('subscriber_get', uuid)
+            # Get subscriber details
+            response = check_auth_request("GET", APIEndpoints.URL_SUBSCRIBERS_DETAILS(uuid), request)
+            if response.status_code == 401 or response.status_code == 400:
+                return redirect("login")
+            print('response', response)
+            response_body = response.json()
+            print('response_body', response_body)
+            if response_body.get("success"):
+                print('response_body success', response_body)
+                context = {
+                    'subscriber_uuid': uuid,
+                    'subscriber_data': response_body.get("data"),
+                    'request': request,
+                    'API_BASE_URL': settings.API_BASE_URL
+                }
+
+                try:
+                    return render(request, "subscribers/edit.html", context)
+                except Exception as e:
+                    print('template error', e)
+                    return render(request, "subscribers/edit.html", {"error": str(e)})
+            else:
+                print('error response_body', response_body)
+                messages.error(request, "Failed to load subscriber data")
+                return redirect('subscribers:list')
+        
+        elif request.method == "POST":
+            print('subscriber_post', uuid)
+            # Update subscriber
+            subscrd_flag = request.POST.get('subscrd_flag')
+            
+            data = {
+                'subscrd_flag': subscrd_flag
+            }
+            
+            response = check_auth_request("PATCH", APIEndpoints.URL_SUBSCRIBERS_DETAILS(uuid), request, data=data)
+            if response.status_code == 401 or response.status_code == 400:
+                return redirect("login")
+            
+            response_body = response.json()
+            if response_body.get("success"):
+                return redirect('subscribers:list')
+            else:
+                context = {
+                    'subscriber_uuid': uuid,
+                    'subscriber_data': response_body.get("data", {}),
+                    'errors': response_body.get("errors", {}),
+                    'message': response_body.get("message", "Failed to update subscriber")
+                }
+                return render(request, "subscribers/edit.html", context)
+        
+        else:
+            return JsonResponse({"success": False, "message": "Invalid request method"}, status=405)
+            
+    except Exception as e:
+        print('error what', e)
+        messages.error(request, f"Error: {str(e)}")
+        return redirect('subscribers:list')
+
+
+def subscriber_soft_delete(request, uuid):
     if request.method == "DELETE":
-        response = check_auth_request("DELETE", APIEndpoints.URL_SINGLE_PAGE_DETAILS(uuid), request)
+        response = check_auth_request("DELETE", APIEndpoints.URL_SUBSCRIBERS_DETAILS(uuid), request)
         if response.status_code == 401 or response.status_code == 400:
             return redirect("login")
 

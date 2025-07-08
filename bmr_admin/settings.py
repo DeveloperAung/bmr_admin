@@ -67,8 +67,9 @@ INSTALLED_APPS = [
     'api.memberships',
     'api.medias',
     'api.siteInfo',
-    'api.core',
     'api.subscribers',
+    'api.core',
+    
 ]
 
 LOGIN_REDIRECT_URL = '/home/'
@@ -200,6 +201,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'api.adminUsers.context_processors.user_permissions',
             ],
         },
     },

@@ -30,7 +30,7 @@
                     <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Profile"></use>
                   </svg>
                 <h6 class="f-w-600">Admin Users </h6></a></li>
-            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'subscriber_list' %}">
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'subscribers:list' %}">
                 <svg class="stroke-icon">
                     <use href="{% static '/assets/svg/iconly-sprite.svg' %}#More-box"></use>
                   </svg>
@@ -60,13 +60,13 @@
                 </ul>
             </li>
 
-            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="file-manager.html">
+            <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link" href="{% url 'membership_list' %}">
                 <svg class="stroke-icon">
                     <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Category"></use>
                 </svg>
                 <h6 class="f-w-600">Memberships </h6></a></li>
             <li class="sidebar-list"><i class="fa-solid fa-thumbtack"></i><a class="sidebar-link"
-                                                                             href="file-manager.html">
+                                                                             href="{% url 'membership_list' %}">
                 <svg class="stroke-icon">
                     <use href="{% static '/assets/svg/iconly-sprite.svg' %}#Wallet"></use>
                 </svg>

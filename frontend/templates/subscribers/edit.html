@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Subscriber{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-sm-6 col-12">
+          <h2>Edit Subscriber</h2>
+        </div>
+        <div class="col-sm-6 col-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href=""><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscribers:list' %}">Subscribers</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="page-content">   
+    {% if message %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    
+    {% if errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul class="mb-0">
+            {% for field, error_list in errors.items %}
+                {% for error in error_list %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{% url 'subscribers:edit' subscriber_uuid %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ subscriber_data.email }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="subscribedDate" class="form-label">Subscribed Date</label>
+                                    <input type="text" class="form-control" id="subscribedDate" value="{{ subscriber_data.created_at }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="currentStatus" class="form-label">Current Status</label>
+                                    <input type="text" class="form-control" id="currentStatus" value="{% if subscriber_data.subscrd_flag == 'P' %}Pending{% elif subscriber_data.subscrd_flag == 'Y' %}Yes{% else %}No{% endif %}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Subscription Status</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="subscrd_flag" id="statusYes" value="Y" {% if subscriber_data.subscrd_flag == 'Y' %}checked{% endif %}>
+                                        <label class="form-check-label" for="statusYes">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="subscrd_flag" id="statusNo" value="N" {% if subscriber_data.subscrd_flag == 'N' %}checked{% endif %}>
+                                        <label class="form-check-label" for="statusNo">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a type="button" class="btn btn-danger" href="{% url 'subscribers:list' %}">
+                                        <i class="fas fa-arrow-left"></i> Back
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

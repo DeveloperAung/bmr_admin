@@ -22,6 +22,9 @@ class NoticeRetrieveSerializer(serializers.ModelSerializer):
 
 
 class NoticeCreateSerializer(serializers.ModelSerializer):
+    from_date = serializers.DateField(required=False, allow_null=True, input_formats=['%Y-%m-%d'])
+    to_date = serializers.DateField(required=False, allow_null=True, input_formats=['%Y-%m-%d'])
+    
     class Meta:
         model = Notice
         fields = ['title', 'description', 'from_date', 'to_date', 'is_published', 'published_at', 'published_by']
