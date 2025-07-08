@@ -46,11 +46,15 @@
                     <textarea rows="10" type="text" class="form-control" id="idReplyMessage" placeholder="Reply Message">{{ data.reply_message }}</textarea>
                   </div>
                 </div>
-                <div class="float-end mt-4">
+                <div class="d-flex justify-content-end gap-3 mt-4">
                   {% if not data.reply_message %}
-                  <button type="submit" class="btn btn-primary me-2"><i class="fa fa-save"></i> Reply</button>
+                  <button type="submit" class="btn btn-primary me-2">
+                    <i class="fa fa-save"></i> Reply
+                  </button>
                   {% endif %}
-                  <a href="{% url 'contact_us_list' %}" type="submit" class="btn btn-danger me-2"><i class="fa fa-times"></i> Cancel</a>
+                  <a href="{% url 'contact_us_list' %}" type="submit" class="btn btn-danger me-2">
+                    <i class="fa fa-times"></i> Cancel
+                  </a>
                 </div>
               </form>
             </div>

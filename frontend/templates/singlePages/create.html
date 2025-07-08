@@ -35,9 +35,9 @@
                         <div class="mb-3">
                             <label for="summernote">Content</label>
                             <textarea id="summernote" name="content">{{ data.content }}</textarea>
-                        </div>
+                        </div>                        
+                        <a href="{% url 'notice_list' %}" class="btn btn-danger">Cancel</a>
                         <button type="submit" class="btn btn-success">Save</button>
-                        <a href="{% url 'notice_list' %}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>

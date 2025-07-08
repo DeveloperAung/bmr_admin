@@ -154,9 +154,15 @@
                                 </div>
                             </div>
                             <button type="button" id="add-date-btn" class="btn btn-secondary">Add More Date</button>
-                            <br><br>
-                            <button type="submit" class="btn btn-success">Save</button>
-                            <a href="{% url 'dhamma_class_list' %}" class="btn btn-secondary">Cancel</a>
+                            <br><br>      
+                            <div class="d-flex justify-content-end gap-3 mt-4">                                
+                                <a href="{% url 'dhamma_class_list' %}" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>                                                      
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> Save
+                                </button>                                                      
+                            </div>
                         </form>
                     </div>
                 </div>

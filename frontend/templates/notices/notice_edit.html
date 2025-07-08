@@ -50,9 +50,13 @@
 
                   <div class="row">
                     <div class="col">
-                      <div class="text-end">
-                          <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                          <a class="btn btn-danger btn-lg" href="{% url 'notice_list' %}">Cancel </a>
+                      <div class="d-flex justify-content-end gap-3 mt-4">
+                          <a class="btn btn-danger" href="{% url 'notice_list' %}">
+                              <i class="fas fa-times"></i> Cancel
+                          </a>
+                          <button type="submit" class="btn btn-primary">
+                              <i class="fas fa-save"></i> Update
+                          </button>
                       </div>
                     </div>
                   </div>
