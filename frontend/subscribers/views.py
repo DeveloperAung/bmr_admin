@@ -41,34 +41,43 @@ def subscribers_bulk_create(request):
             email_list = request.POST.getlist('subscriber_email[]')
             email_list = [email.strip() for email in email_list if email.strip()]  # clean whitespace, remove empty
 
-            # Get already existing emails
-            existing_emails = set(
-                SubscriberUser.objects.filter(email__in=email_list).values_list('email', flat=True)
-            )
+            if not email_list:
+                return render(request, "subscribers/create.html", {
+                    'warning_message': "Please enter at least one email address."
+                })
 
-            # Filter out emails that already exist
-            new_emails = [email for email in email_list if email not in existing_emails]
-
-            if not new_emails:
-                messages.warning(request, "All entered emails already exist.")
-                return redirect('subscriber_create')
-
-            # Prepare Subscriber instances
-            new_subscribers = [SubscriberUser(email=email) for email in new_emails]
-
-            # Bulk create
-            SubscriberUser.objects.bulk_create(new_subscribers)
-
-            messages.success(request, f"{len(new_subscribers)} new subscriber(s) added.")
-            return redirect('subscriber_list')
-        else:
-            context = {
-
+            # Prepare data for API
+            data = {
+                'emails': email_list
             }
-        return render(request, "subscribers/create.html", context)
+            
+            # Call API to create subscribers
+            response = check_auth_request("POST", f"{APIEndpoints.URL_SUBSCRIBERS}bulk-create/", request, data=data)
+            
+            if response.status_code == 401 or response.status_code == 400:
+                return redirect("login")
+            
+            response_body = response.json()
+            
+            if response_body.get("success"):
+                messages.success(request, response_body.get("message", "Subscribers created successfully."))
+                return redirect('subscribers:list')
+            else:
+                # Handle errors
+                error_message = response_body.get("message", "Failed to create subscribers")
+                if response_body.get("errors"):
+                    error_message += ": " + ", ".join(response_body.get("errors", {}).values())
+                
+                return render(request, "subscribers/create.html", {
+                    'error_message': error_message,
+                    'submitted_emails': email_list
+                })
+        else:
+            context = {}
+            return render(request, "subscribers/create.html", context)
     except Exception as e:
         print('error', e)
-        return render(request, "subscribers/create.html", {"error": str(e)})
+        return render(request, "subscribers/create.html", {"error_message": str(e)})
 
 
 def subscriber_edit(request, uuid):    

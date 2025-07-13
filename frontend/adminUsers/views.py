@@ -224,16 +224,36 @@ def login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        response = requests.post(APIEndpoints.URL_LOGIN, json={"username": username, "password": password})
+        # Validate input
+        if not username or not password:
+            return render(request, "adminUsers/login.html", {
+                "error_message": "Username and password are required"
+            })
 
-        if response.status_code == 200:
-            tokens = response.json()
-            request.session["access_token"] = tokens["data"]["access"]
-            request.session["refresh_token"] = tokens["data"]["refresh"]
-            return redirect("dashboard")
-        else:
-            print('response', response)
-            return render(request, "adminUsers/login.html", {"error": "Invalid credentials"})
+        try:
+            response = requests.post(APIEndpoints.URL_LOGIN, json={"username": username, "password": password})
+            
+            if response.status_code == 200:
+                tokens = response.json()
+                request.session["access_token"] = tokens["data"]["access"]
+                request.session["refresh_token"] = tokens["data"]["refresh"]
+                return redirect("dashboard")
+            else:
+                # Handle different error responses
+                try:
+                    error_data = response.json()
+                    error_message = error_data.get("message", "Login failed")
+                except:
+                    error_message = "Login failed"
+                
+                return render(request, "adminUsers/login.html", {
+                    "error_message": error_message
+                })
+                
+        except requests.exceptions.RequestException as e:
+            return render(request, "adminUsers/login.html", {
+                "error_message": "Connection error. Please try again."
+            })
 
     return render(request, "adminUsers/login.html")
 

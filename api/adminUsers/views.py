@@ -26,6 +26,7 @@ from .serializers import (
 )
 import logging
 from django.utils.timezone import now
+from django.core.exceptions import ObjectDoesNotExist
 
 from ..custom_pagination import CustomPagination
 from ..services import BaseSoftDeleteViewSet
@@ -41,12 +42,63 @@ logger = logging.getLogger(__name__)
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         try:
+            # Get username and password from request
+            username = request.data.get('username')
+            password = request.data.get('password')
+            
+            if not username or not password:
+                return custom_api_response(
+                    success=False, 
+                    message="Username and password required", 
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Check if user exists and is active
+            try:
+                user = AdminUser.objects.get(username=username)
+                if not user.is_active:
+                    return custom_api_response(
+                        success=False, 
+                        message="Account deactivated", 
+                        status_code=status.HTTP_400_BAD_REQUEST
+                    )
+            except ObjectDoesNotExist:
+                return custom_api_response(
+                    success=False, 
+                    message="Invalid credentials", 
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Call parent method to validate credentials
             response = super().post(request, *args, **kwargs)
+            
             if response.status_code == 200:
-                return custom_api_response(success=True, message="Login successful", data=response.data)
+                return custom_api_response(
+                    success=True, 
+                    message="Login successful", 
+                    data=response.data
+                )
+            else:
+                # Handle other error responses from parent
+                return custom_api_response(
+                    success=False, 
+                    message="Invalid credentials", 
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+                
         except TokenError:
-            return custom_api_response(success=False, message="Invalid credentials", status_code=status.HTTP_400_BAD_REQUEST)
-        return custom_api_response(success=False, message="Invalid credentials", status_code=status.HTTP_400_BAD_REQUEST)
+            return custom_api_response(
+                success=False, 
+                message="Invalid credentials", 
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            logger.error(f"Login error: {str(e)}")
+            return custom_api_response(
+                success=False, 
+                message="Internal server error", 
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 @extend_schema(

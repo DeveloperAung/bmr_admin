@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-6 col-12">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'subscriber_list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscribers:list' %}"><i class="iconly-Home icli svg-color"></i></a></li>
             <li class="breadcrumb-item">Email Subscriber(s)</li>
             <li class="breadcrumb-item active">Create</li>
           </ol>
@@ -24,6 +24,7 @@
           <div class="row">
               <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                {% include 'includes/custom_alert.html' %}
                 <h3 class="mb-3">Subscribers' Email</h3>
                 <button type="button" id="add-subscriber-btn" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-1"></i> Add Another Subscriber
@@ -31,16 +32,32 @@
 
                 <br><br>
                 <div id="subscriber-list-container">
-                    <div class="subscriber-item mb-3 d-flex align-items-center gap-2 col-md-5">
-                        <input type="email" name="subscriber_email[]" class="form-control" placeholder="Email" required>
-                        <button type="button" class="btn btn-danger remove-subscriber-btn" title="Remove">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
+                    {% if submitted_emails %}
+                        {% for email in submitted_emails %}
+                        <div class="subscriber-item mb-3 d-flex align-items-center gap-2 col-md-5">
+                            <input type="email" name="subscriber_email[]" class="form-control" placeholder="Email" value="{{ email }}" required>
+                            <button type="button" class="btn btn-danger remove-subscriber-btn" title="Remove">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="subscriber-item mb-3 d-flex align-items-center gap-2 col-md-5">
+                            <input type="email" name="subscriber_email[]" class="form-control" placeholder="Email" required>
+                            <button type="button" class="btn btn-danger remove-subscriber-btn" title="Remove">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
                 
                 <a href="{% url 'subscribers:list' %}" class="btn btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    <span class="btn-text">Save</span>
+                    <span class="btn-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin me-2"></i>Processing...
+                    </span>
+                </button>
             </form>
           </div>
         </div>
@@ -52,8 +69,55 @@
 document.addEventListener("DOMContentLoaded", function() {
     const subscribersContainer = document.getElementById("subscriber-list-container");
     const addSubscriberBtn = document.getElementById("add-subscriber-btn");
+    const form = document.querySelector("form");
+    const submitBtn = document.getElementById("submit-btn");
+    const btnText = submitBtn.querySelector(".btn-text");
+    const btnLoading = submitBtn.querySelector(".btn-loading");
 
-    // Function to add new date fields
+    // Function to show loading state
+    function showLoading() {
+        console.log("showLoading called");
+        submitBtn.disabled = true;
+        btnText.style.display = "none";
+        btnLoading.style.display = "inline";
+        console.log("Loading state shown");
+    }
+
+    // Function to hide loading state
+    function hideLoading() {
+        console.log("hideLoading called");
+        submitBtn.disabled = false;
+        btnText.style.display = "inline";
+        btnLoading.style.display = "none";
+        console.log("Loading state hidden");
+    }
+
+    // Form submit handler
+    form.addEventListener("submit", function(e) {
+        console.log("Form submitted");
+        
+        // Validate form before showing loading
+        const emailInputs = form.querySelectorAll('input[name="subscriber_email[]"]');
+        let hasValidEmail = false;
+        
+        emailInputs.forEach(input => {
+            if (input.value.trim()) {
+                hasValidEmail = true;
+            }
+        });
+
+        if (!hasValidEmail) {
+            e.preventDefault();
+            alert("Please enter at least one email address.");
+            return;
+        }
+
+        console.log("Showing loading state");
+        // Show loading state
+        showLoading();
+    });
+
+    // Function to add new subscriber fields
     addSubscriberBtn.addEventListener("click", function() {
         const newSubscriberFields = document.querySelector(".subscriber-item").cloneNode(true);
 
@@ -66,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
         attachRemoveSubscriber(newSubscriberFields.querySelector(".remove-subscriber-btn"));
     });
 
-    // Function to remove date fields
+    // Function to remove subscriber fields
     function attachRemoveSubscriber(button) {
         button.addEventListener("click", function() {
             if (document.querySelectorAll(".subscriber-item").length > 1) {
@@ -77,6 +141,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Attach remove event to initial remove button
     attachRemoveSubscriber(document.querySelector(".remove-subscriber-btn"));
+
+    // Handle page unload to hide loading if user navigates away
+    window.addEventListener("beforeunload", function() {
+        hideLoading();
+    });
 });
 </script>
 

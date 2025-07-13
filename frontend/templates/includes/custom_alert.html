@@ -1,0 +1,152 @@
+{% if alert_message %}
+    <div class="alert alert-{{ alert_type|default:'info' }} alert-dismissible fade show mb-3" role="alert" id="custom-alert">
+        {% if alert_type == 'error' or alert_type == 'danger' %}
+            <i class="fa-solid fa-circle-exclamation"></i>
+        {% elif alert_type == 'warning' %}
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        {% elif alert_type == 'success' %}
+            <i class="fa-solid fa-circle-check"></i>
+        {% elif alert_type == 'info' %}
+            <i class="fa-solid fa-circle-info"></i>
+        {% else %}
+            <i class="fa-regular fa-heart"></i>
+        {% endif %}
+        <span class="ms-2">{{ alert_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if success_message %}
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" id="custom-alert">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="ms-2">{{ success_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if error_message %}
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" id="custom-alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span class="ms-2">{{ error_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if warning_message %}
+    <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert" id="custom-alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span class="ms-2">{{ warning_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if info_message %}
+    <div class="alert alert-info alert-dismissible fade show mb-3" role="alert" id="custom-alert">
+        <i class="fa-solid fa-circle-info"></i>
+        <span class="ms-2">{{ info_message }}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<!-- JavaScript for auto-dismiss and custom functions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-dismiss success messages after 5 seconds
+    const successAlerts = document.querySelectorAll('.alert-success');
+    successAlerts.forEach(function(alert) {
+        setTimeout(function() {
+            if (alert && alert.parentNode) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000);
+    });
+
+    // Auto-dismiss info messages after 7 seconds
+    const infoAlerts = document.querySelectorAll('.alert-info');
+    infoAlerts.forEach(function(alert) {
+        setTimeout(function() {
+            if (alert && alert.parentNode) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 7000);
+    });
+
+    // Auto-dismiss warning messages after 10 seconds
+    const warningAlerts = document.querySelectorAll('.alert-warning');
+    warningAlerts.forEach(function(alert) {
+        setTimeout(function() {
+            if (alert && alert.parentNode) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 10000);
+    });
+});
+
+// Custom function to show alert programmatically
+function showCustomAlert(message, type = 'info', duration = 0) {
+    // Remove existing custom alerts
+    const existingAlerts = document.querySelectorAll('#custom-alert');
+    existingAlerts.forEach(alert => alert.remove());
+
+    // Create new alert
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show mb-3`;
+    alertDiv.role = 'alert';
+    alertDiv.id = 'custom-alert';
+
+    // Set icon based on type
+    let icon = 'fa-regular fa-heart';
+    if (type === 'error' || type === 'danger') {
+        icon = 'fa-solid fa-circle-exclamation';
+    } else if (type === 'warning') {
+        icon = 'fa-solid fa-triangle-exclamation';
+    } else if (type === 'success') {
+        icon = 'fa-solid fa-circle-check';
+    } else if (type === 'info') {
+        icon = 'fa-solid fa-circle-info';
+    }
+
+    alertDiv.innerHTML = `
+        <i class="${icon}"></i>
+        <span class="ms-2">${message}</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Insert at the beginning of the form or container
+    const form = document.querySelector('form');
+    if (form) {
+        form.insertBefore(alertDiv, form.firstChild);
+    } else {
+        // If no form, insert at the beginning of the page
+        const container = document.querySelector('.content-wrapper') || document.body;
+        container.insertBefore(alertDiv, container.firstChild);
+    }
+
+    // Auto-dismiss if duration is set
+    if (duration > 0) {
+        setTimeout(function() {
+            if (alertDiv && alertDiv.parentNode) {
+                const bsAlert = new bootstrap.Alert(alertDiv);
+                bsAlert.close();
+            }
+        }, duration);
+    }
+
+    // Scroll to alert
+    alertDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Function to hide all custom alerts
+function hideCustomAlerts() {
+    const alerts = document.querySelectorAll('#custom-alert');
+    alerts.forEach(alert => {
+        if (alert && alert.parentNode) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }
+    });
+}
+</script> 
